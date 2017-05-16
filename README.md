@@ -2,4 +2,6 @@
 Tohoku University Spring Assisted Knee Exoskeleton
 
 
-Tests and functions
+Tests and Functions
+
+Authors: Vincent Babin and Michael Kentaro Cho
