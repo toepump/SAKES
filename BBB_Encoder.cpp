@@ -1,9 +1,10 @@
 //============================================================================
 // Name        : BBB_Encoder.cpp
-// Author      : Vincent Babin
+// Author      : Vincent Babin and Michael Kentaro Cho
 // Version     :
 // Copyright   : Free Software
-// Description : Hello World in C++, Ansi-style
+// Description : Test file for BBB interrupt handling and acheiving RT-Preempt
+//               low latency interrupts through BBB PRU pins
 //============================================================================
 
 #include<iostream>
