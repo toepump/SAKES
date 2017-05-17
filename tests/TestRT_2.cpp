@@ -27,8 +27,6 @@ using namespace std;
 
 #define NSEC_PER_SEC    (1000000000) /* The number of nsecs per sec. */
 
-
-
 void stack_prefault(void) {
 
         unsigned char dummy[MAX_SAFE_STACK];
@@ -43,6 +41,23 @@ int main(int argc, char* argv[])
         struct sched_param param;
         int interval = 1000000; /* 1ms*/
 
+        int i,j;
+
+        int tableTest1[1000][1000];
+        int tableTest2[1000][1000];
+
+
+        //Initialization of the table
+        for(i=0;i<1000;i++)
+        {
+        	for(j=0;j<1000;j++){
+        		tableTest1[i][j]=rand() % 1000;
+        		tableTest2[i][j]=rand() % 1000;
+        	}
+        }
+
+
+
         /* Declare ourself as a real time task */
 
         param.sched_priority = MY_PRIORITY;
@@ -52,14 +67,12 @@ int main(int argc, char* argv[])
         }
 
         /* Lock memory */
-
         if(mlockall(MCL_CURRENT|MCL_FUTURE) == -1) {
                 perror("mlockall failed");
                 exit(-2);
         }
 
         /* Pre-fault our stack */
-
         stack_prefault();
 
         clock_gettime(CLOCK_MONOTONIC ,&t);
@@ -77,10 +90,9 @@ int main(int argc, char* argv[])
 
             	if(ticks%1000==0){
             			cout << "Counter of ticks: " << ticks << endl;
-
             		}
 
-		ticks++;
+            	ticks++;
                 /* calculate next shot */
                 t.tv_nsec += interval;
 
@@ -88,7 +100,15 @@ int main(int argc, char* argv[])
                        t.tv_nsec -= NSEC_PER_SEC;
                         t.tv_sec++;
                 }
-   }
+
+
+        }
+
+
+
+
+
+
 }
 
 
