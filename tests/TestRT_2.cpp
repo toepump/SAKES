@@ -14,6 +14,7 @@
 #include <sched.h>
 #include <sys/mman.h>
 #include <string.h>
+#include <pthread.h>
 
 using namespace std;
 
@@ -33,83 +34,87 @@ void stack_prefault(void) {
 
         memset(dummy, 0, MAX_SAFE_STACK);
         return;
+        void *print_message_function( void *ptr );
+
 }
 
-int main(int argc, char* argv[])
-{
-        struct timespec t;
-        struct sched_param param;
-        int interval = 1000000; /* 1ms*/
-
-        int i,j;
-
-        int tableTest1[1000][1000];
-        int tableTest2[1000][1000];
-
-
-        //Initialization of the table
-        for(i=0;i<1000;i++)
+	int main(int argc, char* argv[])
         {
-        	for(j=0;j<1000;j++){
-        		tableTest1[i][j]=rand() % 1000;
-        		tableTest2[i][j]=rand() % 1000;
-        	}
+			//Creation of the thread
+			pthread_t thread1, thread2;
+			const char *message1 = "Thread 1";
+			const char *message2 = "Thread 2";
+			int  iret1, iret2;
+
+			/*set attribute */
+
+			pthread_attr_t attr1, attr2; //Creation of the variable for the attribute
+			struct sched_param parm1, parm2; //Creation of new sched_param
+			pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
+			pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
+
+
+			/* Create independent threads each of which will execute function */
+
+				pthread_attr_getschedparam(&attr1, &parm1); // put the scheduling param of att to parm
+				parm1.sched_priority = sched_get_priority_min(SCHED_FIFO); //return the minimum priority
+				pthread_attr_setschedpolicy(&attr1, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
+				pthread_attr_setschedparam(&attr1, &parm1); //set the scheduling parameter of attr1 as parm1
+
+				iret1 = pthread_create(&thread1, &attr1, (void*) print_message_function,(void*) message1);
+				pthread_setschedparam(thread1, SCHED_FIFO, &parm1);
+
+				//===============================================
+				pthread_attr_getschedparam(&attr2, &parm2);
+				parm2.sched_priority = sched_get_priority_min(SCHED_FIFO);
+				pthread_attr_setschedpolicy(&attr2, SCHED_FIFO);
+				pthread_attr_setschedparam(&attr2, &parm2);
+
+				iret2 = pthread_create(&thread2, &attr2, (void*) print_message_function,
+						(void*) message2);
+				pthread_setschedparam(thread2, SCHED_FIFO, &parm2);
+
+
+		/*
+	Function: pthread_create
+	Arguments:
+    	thread - returns the thread id. (unsigned long int defined in bits/pthreadtypes.h)
+    	attr - Set to NULL if default thread attributes are used. (else define members of the struct pthread_attr_t defined in bits/pthreadtypes.h) Attributes include:
+        	detached state (joinable? Default: PTHREAD_CREATE_JOINABLE. Other option: PTHREAD_CREATE_DETACHED)
+        	scheduling policy (real-time? PTHREAD_INHERIT_SCHED,PTHREAD_EXPLICIT_SCHED,SCHED_OTHER)
+        	scheduling parameter
+        	inheritsched attribute (Default: PTHREAD_EXPLICIT_SCHED Inherit from parent thread: PTHREAD_INHERIT_SCHED)
+        	scope (Kernel threads: PTHREAD_SCOPE_SYSTEM User threads: PTHREAD_SCOPE_PROCESS Pick one or the other not both.)
+        	guard size
+        	stack address (See unistd.h and bits/posix_opt.h _POSIX_THREAD_ATTR_STACKADDR)
+        	stack size (default minimum PTHREAD_STACK_SIZE set in pthread.h),
+		void * (*start_routine) - pointer to the function to be threaded. Function has a single argument: pointer to void.
+		*arg - pointer to argument of function. To pass multiple arguments, send a pointer to a structure.
+
+			*/
+
+			/* Create independent threads each of which will execute function */
+
+				//set priority each thread
+			pthread_setschedprio(thread1, 49);
+			pthread_setschedprio(thread2, 49);
+
+			printf("pthread_create() for thread 1 returns: %d\n",iret1);
+			printf("pthread_create() for thread 2 returns: %d\n",iret2);
+
+             /* Wait till threads are complete before main continues. Unless we  */
+             /* wait we run the risk of executing an exit which will terminate   */
+             /* the process and all threads before the threads have completed.   */
+
+             pthread_join( thread1, NULL);
+             pthread_join( thread2, NULL);
+
+             exit(EXIT_SUCCESS);
         }
 
-
-
-        /* Declare ourself as a real time task */
-
-        param.sched_priority = MY_PRIORITY;
-        if(sched_setscheduler(0, SCHED_FIFO, &param) == -1) {
-                perror("sched_setscheduler failed");
-                exit(-1);
+        void print_message_function( void *ptr )
+        {
+             char *message;
+             message = (char *) ptr;
+             printf("%s \n", message);
         }
-
-        /* Lock memory */
-        if(mlockall(MCL_CURRENT|MCL_FUTURE) == -1) {
-                perror("mlockall failed");
-                exit(-2);
-        }
-
-        /* Pre-fault our stack */
-        stack_prefault();
-
-        clock_gettime(CLOCK_MONOTONIC ,&t);
-        /* start after one second */
-        t.tv_sec++;
-
-        while(1) {
-
-        	static int ticks=0;
-
-                /* wait until next shot */
-                clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t, NULL);
-
-                /* do the stuff */
-
-            	if(ticks%1000==0){
-            			cout << "Counter of ticks: " << ticks << endl;
-            		}
-
-            	ticks++;
-                /* calculate next shot */
-                t.tv_nsec += interval;
-
-                while (t.tv_nsec >= NSEC_PER_SEC) {
-                       t.tv_nsec -= NSEC_PER_SEC;
-                        t.tv_sec++;
-                }
-
-
-        }
-
-
-
-
-
-
-}
-
-
-
