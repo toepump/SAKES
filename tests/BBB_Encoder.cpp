@@ -7,6 +7,8 @@
 //               low latency interrupts through BBB PRU pins
 //============================================================================
 
+//TODO: check that the channels arent being mixed or something
+
 #include<iostream>
 #include<unistd.h>
 #include<fstream>
@@ -22,11 +24,11 @@ double encfwd=0;
 double encbwd=0;
 int angle=0;
 int state=0;
+static int init=0;
 
-
+//prototypes
 static gboolean EventA( GIOChannel *channel, GIOCondition condition, gpointer user_data );
 static gboolean EventB( GIOChannel *channel, GIOCondition condition, gpointer user_data );
-
 void counter(int nb_signal);
 
 
@@ -58,10 +60,8 @@ static gboolean EventB( GIOChannel *channel, GIOCondition condition, gpointer us
   return 1;
 }
 
+//test counter function to determine which direction encoder is and how much
 void counter(int nb_signal) {
-
-  static int init=0;
-
   init++;
 
   if(init>2){
@@ -80,7 +80,8 @@ void counter(int nb_signal) {
 
 
 
-    }else if(state==2){
+    }
+    else if(state==2){
       if(nb_signal==1){
         encoder++;
         encfwd++;
@@ -94,7 +95,8 @@ void counter(int nb_signal) {
       }
 
 
-    }else if(state==3){
+    }
+    else if(state==3){
       if(nb_signal==2){
         encoder++;
         encfwd++;
@@ -106,7 +108,8 @@ void counter(int nb_signal) {
       }
 
 
-    }else if(state==4){
+    }
+    else if(state==4){
       if(nb_signal==1){
 
         encfwd++;	encoder++;
@@ -200,9 +203,10 @@ void initCounter(void){
 
 int main( int argc, char** argv )
 {
-
+  //get current value of both pins and store value to find initial state
   initCounter();
 
+  //initialize loops for both events
   GMainLoop* loopA = g_main_loop_new( 0, 0 );
   GMainLoop* loopB = g_main_loop_new( 0, 0 );
 
