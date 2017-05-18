@@ -111,8 +111,8 @@ void *testThread1(void *ptr) {
     	/* do the stuff */
     	addTest1=addTest;
     	if(addTest1%1000==0){
-    		cout << "Add 1, display by thread 1: " << addTest1 << endl;
-    		cout << "Add global, thread 1: " << addTest << endl;
+    		cout << "Add 1, thread 1: " << addTest1 << endl;
+    		cout << "Add g, thread 1: " << addTest << endl;
     	}
     	if(ticks_t1%5000==0){
     		cout << "Counter of ticks for the thread 1: " << ticks_t1 << endl;
@@ -158,8 +158,8 @@ void *testThread2(void *ptr) {
     	/* do the stuff */
     	addTest2=addTest;
     	if(addTest2%1000==0){
-    		cout << "Add 2, display by thread 2: " << addTest2 << endl;
-    		cout << "Add global, display by thread 2: " << addTest << endl;
+    		cout << "Add 2, thread 2: " << addTest2 << endl;
+    		cout << "Add g, thread 2: " << addTest << endl;
     	}
     	if(ticks_t2%5000==0){
     		cout << "Counter of ticks for the thread 2: " << ticks_t2 << endl;
