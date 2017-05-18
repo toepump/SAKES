@@ -262,8 +262,6 @@ int main(int argc, char* argv[]){
 
 	pthread_join( thread1, NULL);
 
-	cout << "Counter of ticks for the thread 1: " << ticks_t1 << endl;
-
 	exit(EXIT_SUCCESS);
 }
 
