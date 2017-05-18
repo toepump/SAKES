@@ -144,7 +144,9 @@ void counter(int nb_signal) {
 
         }
 
-    	if(indexOutput>MAX_PULSE){
+    	if(indexOutput+1>MAX_PULSE){
+
+    		cout << "Printing of the output starts" << endl;
 
     		int i=0;
     		FILE *fj1=fopen("outputEncoder.dat","w");
@@ -159,6 +161,8 @@ void counter(int nb_signal) {
     			}
     			i++ ;
     		}
+
+    		cout << "Printing of the output is done" << endl;
     	}
 
 
