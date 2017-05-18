@@ -21,11 +21,12 @@ using namespace std;
 #define NSEC_PER_SEC    (1000000000) /* The number of nsecs per sec. */
 
 
-const int TIME_MAX = 15000;
-const int INTERVAL =1000000;
+const int TIME_MAX = 60000; // time max for the loop in ms
+const int INTERVAL =1000000; // in nanosecond
 
-int ticks_t1=0;
-int ticks_t2=0;
+int ticks_t1=0; //Incremental value for the thread 1
+int ticks_t2=0; //Incremental value for the thread 1
+int addTest=0; //Incremental value for the thread 1
 
 void *testThread1(void *ptr);
 void *testThread2(void *ptr);
@@ -104,11 +105,18 @@ void *testThread1(void *ptr) {
     	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
 
     	/* do the stuff */
-    	if(ticks_t1%1000==0){
-    		cout << "Counter of ticks for the thread 2: " << ticks_t1 << endl;
+    	if(addTest%1000==0){
+    		cout << "Add counter, display by thread 1: " << addTest << endl;
+    	}
+    	if(ticks_t1%550==0){
+    		cout << "Counter of ticks for the thread 1: " << ticks_t1 << endl;
     	}
 
-    	ticks_t1++;
+    	ticks_t1++; // Increment the ticks value
+    	addTest++; //Increment the add test value
+
+
+
 		/* calculate next shot */
     	t_Thread1.tv_nsec += INTERVAL;
 
@@ -142,11 +150,16 @@ void *testThread2(void *ptr) {
     	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
 
     	/* do the stuff */
-    	if(ticks_t2%1000==0){
-    		cout << "Counter of ticks for the thread 1: " << ticks_t2 << endl;
+    	if(addTest%1000==0){
+    		cout << "Add counter, display by thread 2: " << addTest << endl;
+    	}
+    	if(ticks_t2%450==0){
+    		cout << "Counter of ticks for the thread 2: " << ticks_t2 << endl;
     	}
 
-    	ticks_t2++;
+    	ticks_t2++; // Increment the ticks value
+    	addTest++; //Increment the add test value
+
 		/* calculate next shot */
     	t_Thread2.tv_nsec += INTERVAL;
 
