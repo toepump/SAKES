@@ -27,8 +27,8 @@ const int INTERVAL =1;
 int ticks_t1=0;
 int ticks_t2=0;
 
-void *testThread1(void *ptr);
-void *testThread2(void *ptr);
+void testThread1(void *ptr);
+void testThread2(void *ptr);
 
 int main(int argc, char* argv[]){
 
@@ -52,7 +52,7 @@ int main(int argc, char* argv[]){
 	pthread_attr_setschedpolicy(&attr1, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
 	pthread_attr_setschedparam(&attr1, &parm1); //set the scheduling parameter of attr1 as parm1
 
-	iret1 = pthread_create(&thread1, &attr1, (void*) testThread1,(void*) message1); //create a thread that launch the print_message_function with the arguments  message1
+	iret1 = pthread_create(&thread1, &attr1, (void*) &testThread1,(void*) message1); //create a thread that launch the print_message_function with the arguments  message1
 	pthread_setschedparam(thread1, SCHED_FIFO, &parm1); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
 														// if it fails, return not 0
 
@@ -62,7 +62,7 @@ int main(int argc, char* argv[]){
 	pthread_attr_setschedpolicy(&attr2, SCHED_FIFO);
 	pthread_attr_setschedparam(&attr2, &parm2);
 
-	iret2 = pthread_create(&thread2, &attr2, (void*) testThread2, (void*) message2);
+	iret2 = pthread_create(&thread2, &attr2, (void*) &testThread2, (void*) message2);
 	pthread_setschedparam(thread2, SCHED_FIFO, &parm2);
 
 	//set priority each thread
