@@ -18,12 +18,16 @@
 
 using namespace std;
 
+const int TIME_MAX = 15000;
+
 int count1 = 0;
 int count2 = 0;
-int times = 100000;
+int ticks_t1=0;
+int ticks_t2=0;
 
 void *testThread1(void *ptr);
 void *testThread2(void *ptr);
+void stack_prefault(void);
 
 
 	int main(int argc, char* argv[])
@@ -81,14 +85,36 @@ void *testThread2(void *ptr);
 
 void *testThread1(void *ptr) {
 
-
-
-
 	char *message;
 	message = (char *) ptr;
+	struct timespec t_Thread1;
 
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
+
+    clock_gettime(CLOCK_MONOTONIC ,&t_Thread1);
+    /* start after one second */
+    t_Thread1.tv_sec++;
+
+    while(ticks_t1<TIME_MAX+1) {
+
+    	/* wait until next shot */
+    	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
+
+    	/* do the stuff */
+    	if(ticks_t1%1000==0){
+    		cout << "Counter of ticks: " << ticks_t1 << endl;
+    	}
+
+    	ticks_t1++;
+		/* calculate next shot */
+    	t_Thread1.tv_nsec += interval;
+
+    	while (t_Thread1.tv_nsec >= NSEC_PER_SEC) {
+    		t_Thread1.tv_nsec -= NSEC_PER_SEC;
+    		t_Thread1.tv_sec++;
+    	}
+    }
 
 	return (void*) NULL;
 }
@@ -96,6 +122,7 @@ void *testThread1(void *ptr) {
 
 
 void *testThread2(void *ptr) {
+
 	char *message;
 	message = (char *) ptr;
 
