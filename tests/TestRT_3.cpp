@@ -22,7 +22,7 @@ using namespace std;
 
 
 const int TIME_MAX = 15000;
-const int INTERVAL =1;
+const int INTERVAL =1000000;
 
 int ticks_t1=0;
 int ticks_t2=0;
