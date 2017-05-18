@@ -105,7 +105,7 @@ void *testThread1(void *ptr) {
 
     	/* do the stuff */
     	if(ticks_t1%1000==0){
-    		cout << "Counter of ticks for the thread 1: " << ticks_t1 << endl;
+    		cout << "Counter of ticks for the thread 2: " << ticks_t1 << endl;
     	}
 
     	ticks_t1++;
