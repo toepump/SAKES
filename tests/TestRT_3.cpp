@@ -27,6 +27,9 @@ const int INTERVAL =1000000; // in nanosecond
 int ticks_t1=0; //Incremental value for the thread 1
 int ticks_t2=0; //Incremental value for the thread 1
 int addTest=0; //Incremental value for the thread 1
+int addTest1=0;
+int addTest2=0;
+
 
 void *testThread1(void *ptr);
 void *testThread2(void *ptr);
@@ -92,6 +95,7 @@ void *testThread1(void *ptr) {
 	message = (char *) ptr;
 	struct timespec t_Thread1;
 
+
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
 
@@ -105,10 +109,12 @@ void *testThread1(void *ptr) {
     	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
 
     	/* do the stuff */
-    	if(addTest%1000==0){
-    		cout << "Add counter, display by thread 1: " << addTest << endl;
+    	addTest1=addTest;
+    	if(addTest1%1000==0){
+    		cout << "Add 1, display by thread 1: " << addTest1 << endl;
+    		cout << "Add global, thread 1: " << addTest << endl;
     	}
-    	if(ticks_t1%550==0){
+    	if(ticks_t1%5000==0){
     		cout << "Counter of ticks for the thread 1: " << ticks_t1 << endl;
     	}
 
@@ -150,10 +156,12 @@ void *testThread2(void *ptr) {
     	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
 
     	/* do the stuff */
-    	if(addTest%1000==0){
-    		cout << "Add counter, display by thread 2: " << addTest << endl;
+    	addTest2=addTest;
+    	if(addTest2%1000==0){
+    		cout << "Add 2, display by thread 2: " << addTest2 << endl;
+    		cout << "Add global, display by thread 2: " << addTest << endl;
     	}
-    	if(ticks_t2%450==0){
+    	if(ticks_t2%5000==0){
     		cout << "Counter of ticks for the thread 2: " << ticks_t2 << endl;
     	}
 
