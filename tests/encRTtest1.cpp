@@ -24,15 +24,11 @@ using namespace std;
 
 #define NSEC_PER_SEC    (1000000000) /* The number of nsecs per sec. */
 
-
-const int TIME_MAX = 60000; // time max for the loop in ms
-const int INTERVAL =1000000; // in nanosecond
-
-int ticks_t1=0; //Incremental value for the thread 1
-int ticks_t2=0; //Incremental value for the thread 1
-int addTest=0; //Incremental value for the thread 1
-int addTest1=0;
-int addTest2=0;
+const int MAX_PULSE = 500;
+int outputEncoder[MAX_PULSE]; //Store the value at each interrupt
+int outputEncfwd[MAX_PULSE]; //Store the value at each interrupt
+int outputEncbwd[MAX_PULSE]; //Store the value at each interrupt
+int indexOutput=0; //Incremented at each interrupt
 
 
 void *testThread1(void *ptr);
@@ -40,8 +36,8 @@ void *testThread2(void *ptr);
 
 
 int encoder=0;
-double encfwd=0;
-double encbwd=0;
+int encfwd=0;
+int encbwd=0;
 int angle=0;
 int state=0;
 static int init=0;
@@ -61,7 +57,6 @@ static gboolean EventA( GIOChannel *channel, GIOCondition condition, gpointer us
     g_io_channel_seek_position( channel, 0, G_SEEK_SET, 0 );
     GIOStatus rc = g_io_channel_read_chars( channel, buf,buf_sz - 1,&bytes_read,&error );
     counter(nb_signal);
-    //cout << "Event A" << endl;
     return 1;
 }
 
@@ -75,7 +70,6 @@ static gboolean EventB( GIOChannel *channel, GIOCondition condition, gpointer us
     g_io_channel_seek_position( channel, 0, G_SEEK_SET, 0 );
     GIOStatus rc = g_io_channel_read_chars( channel, buf,buf_sz - 1,&bytes_read,&error );
     counter(nb_signal);
-    //cout << "Event B" << endl;
     return 1;
 }
 
@@ -83,79 +77,89 @@ static gboolean EventB( GIOChannel *channel, GIOCondition condition, gpointer us
 void counter(int nb_signal) {
     init++;
 
-    if(init>2){
+
+    if(init>2 && indexOutput<MAX_PULSE){
 
         if(state==1){
             if(nb_signal==2){
                 encoder++;
-
-                encfwd++;	state=2;
+                encfwd++;
+                state=2;
             }else if(nb_signal==1){
-                encbwd++; encoder--;
+                encbwd++;
+                encoder--;
                 state=4;
             }else{
                 cout << "problem with the counter in case 1" << endl;
             }
-
-
-
         }
+
         else if(state==2){
             if(nb_signal==1){
-                encoder++;
-                encfwd++;
+            	encoder++;
+            	encfwd++;
                 state=3;
             }else if(nb_signal==2){
-                state=1;
-                encoder--;
-                encbwd++;
+            	state=1;
+            	encoder--;
+            	encbwd++;
             }else{
                 cout << "problem with the counter in case 2" << endl;
             }
-
-
         }
+
         else if(state==3){
             if(nb_signal==2){
                 encoder++;
                 encfwd++;
                 state=4;
             }else if(nb_signal==1){
-                encoder--; encbwd++;					state=2;
+                encoder--;
+				encbwd++;
+				state=2;
             }else{
                 cout << "problem with the counter in case 3" << endl;
             }
-
-
         }
+
         else if(state==4){
             if(nb_signal==1){
-
-                encfwd++;	encoder++;
+                encfwd++;
+                encoder++;
                 state=1;
             }else if(nb_signal==2){
-                encbwd++; encoder--;				state=3;
+            	encbwd++;
+                encoder--;
+                state=3;
             }else{
                 cout << "problem with the counter in case 4" << endl;
             }
 
         }
 
-
-        if(encoder%3000==0){
-            angle=encoder/1000;
-            angle++;
-            cout << "Counter: Value Angle " << angle << endl;
-            cout << "Coubter encoder : " << encoder << endl;
-            cout << "fwd  " << encfwd << " bwd" << encbwd<< endl;
+        outputEncoder[indexOutput]=encoder;
+        outputEncfwd[indexOutput]=encfwd;
+        outputEncbwd[indexOutput]=encbwd;
+        indexOutput++;
 
         }
 
-        if(encoder%3000==0){
-            cout << "Counter: State value" << state << endl;
-            cout << "  " << endl;
-        }
-    }
+    	if(indexOutput>MAX_PULSE){
+
+    		int i=0;
+    		FILE *fj1=fopen("outputEncoder.dat","w");
+
+    		fprintf(fj1,"indexOutput encoder EncoderForward EncoderBackward");
+
+    		while(i<MAX_PULSE){
+    			fprintf(fj1,"%d %d %d %d ", i+1, outputEncoder[i], outputEncfwd[i], outputEncbwd[i]);
+
+    			if(i==MAX_PULSE-1){
+    		        fclose(fj1);
+    			}
+    			i++ ;
+    		}
+
 
 }
 
@@ -165,8 +169,6 @@ void initCounter(void){
     //Declaration of the initial state of the encoder signal//
     int initA;
     int initB;
-    int initC;
-    int initD;
 
     //Operation for A - signal A
     int fd = open( "/sys/class/gpio/gpio66/value", O_RDONLY | O_NONBLOCK );
@@ -226,17 +228,16 @@ int main(int argc, char* argv[]){
 	initCounter();
 
 	//Creation of the thread
-	pthread_t thread1, thread2;
+	pthread_t thread1;
 	const char *message1 = "Thread 1";
-	const char *message2 = "Thread 2";
-	int  iret1, iret2;
+	int  iret1;
 
 	/*set attribute */
 
-	pthread_attr_t attr1, attr2; //Creation of the variable for the attribute
-	struct sched_param parm1, parm2; //Creation of new sched_param
+	pthread_attr_t attr1; //Creation of the variable for the attribute
+	struct sched_param parm1; //Creation of new sched_param
 	pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
-	pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
+
 
 	/* Create independent threads each of which will execute function */
 
@@ -248,31 +249,17 @@ int main(int argc, char* argv[]){
 	iret1 = pthread_create(&thread1, &attr1, testThread1,(void*) message1); //create a thread that launch the print_message_function with the arguments  message1
 	pthread_setschedparam(thread1, SCHED_FIFO, &parm1); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
 														// if it fails, return not 0
-
-	//===============================================
-	pthread_attr_getschedparam(&attr2, &parm2);
-	parm2.sched_priority = sched_get_priority_min(SCHED_FIFO);
-	pthread_attr_setschedpolicy(&attr2, SCHED_FIFO);
-	pthread_attr_setschedparam(&attr2, &parm2);
-
-	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
-	pthread_setschedparam(thread2, SCHED_FIFO, &parm2);
-
-
 	//set priority each thread
 	pthread_setschedprio(thread1, 49);
-	pthread_setschedprio(thread2, 49);
 
 	//
 	printf("pthread_create() for thread 1 returns: %d\n",iret1);
-	printf("pthread_create() for thread 2 returns: %d\n",iret2);
 
 	/* Wait till threads are complete before main continues. Unless we  */
 	/* wait we run the risk of executing an exit which will terminate   */
 	/* the process and all threads before the threads have completed.   */
 
 	pthread_join( thread1, NULL);
-	pthread_join( thread2, NULL);
 
 	cout << "Counter of ticks for the thread 1: " << ticks_t1 << endl;
 
@@ -317,46 +304,6 @@ void *testThread1(void *ptr) {
         g_main_loop_run( loopB );
 
     	}
-
-	return (void*) NULL;
-}
-
-
-
-void *testThread2(void *ptr) {
-
-	char *message;
-	message = (char *) ptr;
-	struct timespec t_Thread2;
-
-	/*Stuff I want to do*/
-	/*here should start the things used with the rt preempt patch*/
-
-    clock_gettime(CLOCK_MONOTONIC ,&t_Thread2);
-    /* start after one second */
-    t_Thread2.tv_sec++;
-
-    while(ticks_t2<TIME_MAX+1) {
-
-    	/* wait until next shot */
-    	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
-
-    	/* do the stuff */
-    	//if(ticks_t2%5000==0){
-    		//cout << "Counter of ticks for the thread 2: " << ticks_t2 << endl;
-    	//}
-
-    	ticks_t2++; // Increment the ticks value
-    	addTest++; //Increment the add test value
-
-		/* calculate next shot */
-    	t_Thread2.tv_nsec += INTERVAL;
-
-    	while (t_Thread2.tv_nsec >= NSEC_PER_SEC) {
-    		t_Thread2.tv_nsec -= NSEC_PER_SEC;
-    		t_Thread2.tv_sec++;
-    	}
-    }
 
 	return (void*) NULL;
 }
