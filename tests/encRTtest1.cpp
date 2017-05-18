@@ -151,10 +151,10 @@ void counter(int nb_signal) {
     		int i=0;
     		FILE *fj1=fopen("outputEncoder.dat","w");
 
-    		fprintf(fj1,"indexOutput encoder EncoderForward EncoderBackward");
+    		fprintf(fj1,"indexOutput encoder EncoderForward EncoderBackward \r\n");
 
     		while(i<MAX_PULSE){
-    			fprintf(fj1,"%d %d %d %d ", i+1, outputEncoder[i], outputEncfwd[i], outputEncbwd[i]);
+    			fprintf(fj1,"%d %d %d %d \r\n", i+1, outputEncoder[i], outputEncfwd[i], outputEncbwd[i]);
 
     			if(i==MAX_PULSE-1){
     		        fclose(fj1);
