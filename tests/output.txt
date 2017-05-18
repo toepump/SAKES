@@ -1,0 +1,297 @@
+pthread_create() for thread 1 returns: 0
+pthread_create() for thread 2 returns: 0
+Add 2, thread 2: 0
+Add g, thread 2: 0
+Counter of ticks for the thread 2: 0
+Counter of ticks for the thread 1: 0
+Add 1, thread 1: 1000
+Add g, thread 1: 1000
+Add 1, thread 1: 2000
+Add g, thread 1: 2000
+Add 2, thread 2: 3000
+Add g, thread 2: 3000
+Add 2, thread 2: 4000
+Add g, thread 2: 4000
+Add 2, thread 2: 5000
+Add g, thread 2: 5000
+Add 2, thread 2: 6000
+Add g, thread 2: 6000
+Add 1, thread 1: 7000
+Add g, thread 1: 7000
+Add 1, thread 1: 8000
+Add g, thread 1: 8000
+Add 2, thread 2: 8000
+Add g, thread 2: 8002
+Add 1, thread 1: 9000
+Add g, thread 1: 9000
+Add 2, thread 2: 10000
+Add g, thread 2: 10000
+Counter of ticks for the thread 2: 5000
+Counter of ticks for the thread 1: 5000
+Add 1, thread 1: 11000
+Add g, thread 1: 11000
+Add 2, thread 2: 12000
+Add g, thread 2: 12000
+Add 1, thread 1: 13000
+Add g, thread 1: 13000
+Add 1, thread 1: 14000
+Add g, thread 1: 14000
+Add 2, thread 2: 15000
+Add g, thread 2: 15000
+Add 2, thread 2: 16000
+Add g, thread 2: 16000
+Add 2, thread 2: 17000
+Add g, thread 2: 17000
+Add 2, thread 2: 18000
+Add g, thread 2: 18000
+Add 1, thread 1: 18000
+Add g, thread 1: 18001
+Add 2, thread 2: 19000
+Add g, thread 2: 19000
+Add 1, thread 1: 20000
+Add g, thread 1: 20000
+Counter of ticks for the thread 1: 10000
+Counter of ticks for the thread 2: 10000
+Add 2, thread 2: 21000
+Add g, thread 2: 21000
+Add 2, thread 2: 22000
+Add g, thread 2: 22000
+Add 2, thread 2: 23000
+Add g, thread 2: 23000
+Add 1, thread 1: 24000
+Add g, thread 1: 24000
+Add 1, thread 1: 25000
+Add g, thread 1: 25000
+Add 2, thread 2: 26000
+Add g, thread 2: 26000
+Add 1, thread 1: 27000
+Add g, thread 1: 27000
+Add 1, thread 1: 28000
+Add g, thread 1: 28000
+Add 2, thread 2: 28000
+Add g, thread 2: 28001
+Add 1, thread 1: 29000
+Add g, thread 1: 29000
+Counter of ticks for the thread 2: 15000
+Add 1, thread 1: 30000
+Add g, thread 1: 30000
+Counter of ticks for the thread 1: 15000
+Add 2, thread 2: 31000
+Add g, thread 2: 31000
+Add 2, thread 2: 32000
+Add g, thread 2: 32000
+Add 1, thread 1: 33000
+Add g, thread 1: 33000
+Add 2, thread 2: 34000
+Add g, thread 2: 34000
+Add 1, thread 1: 35000
+Add g, thread 1: 35000
+Add 1, thread 1: 36000
+Add g, thread 1: 36000
+Add 1, thread 1: 37000
+Add g, thread 1: 37000
+Add 2, thread 2: 38000
+Add g, thread 2: 38000
+Add 1, thread 1: 38000
+Add g, thread 1: 38001
+Add 2, thread 2: 39000
+Add g, thread 2: 39000
+Add 2, thread 2: 40000
+Add g, thread 2: 40000
+Counter of ticks for the thread 2: 20000
+Counter of ticks for the thread 1: 20000
+Add 1, thread 1: 41000
+Add g, thread 1: 41000
+Add 1, thread 1: 42000
+Add g, thread 1: 42000
+Add 1, thread 1: 43000
+Add g, thread 1: 43000
+Add 2, thread 2: 44000
+Add g, thread 2: 44000
+Add 1, thread 1: 45000
+Add g, thread 1: 45000
+Add 2, thread 2: 46000
+Add g, thread 2: 46000
+Add 1, thread 1: 47000
+Add g, thread 1: 47000
+Add 2, thread 2: 48000
+Add g, thread 2: 48000
+Add 1, thread 1: 48000
+Add g, thread 1: 48001
+Add 2, thread 2: 49000
+Add g, thread 2: 49000
+Add 2, thread 2: 50000
+Add g, thread 2: 50000
+Counter of ticks for the thread 2: 25000
+Counter of ticks for the thread 1: 25000
+Add 2, thread 2: 51000
+Add g, thread 2: 51000
+Add 1, thread 1: 52000
+Add g, thread 1: 52000
+Add 1, thread 1: 53000
+Add g, thread 1: 53000
+Add 1, thread 1: 54000
+Add g, thread 1: 54000
+Add 1, thread 1: 55000
+Add g, thread 1: 55000
+Add 2, thread 2: 56000
+Add g, thread 2: 56000
+Add 2, thread 2: 57000
+Add g, thread 2: 57000
+Add 2, thread 2: 58000
+Add g, thread 2: 58000
+Add 1, thread 1: 58000
+Add g, thread 1: 58001
+Add 1, thread 1: 59000
+Add g, thread 1: 59000
+Add 1, thread 1: 60000
+Add g, thread 1: 60000
+Counter of ticks for the thread 1: 30000
+Counter of ticks for the thread 2: 30000
+Add 1, thread 1: 61000
+Add g, thread 1: 61000
+Add 2, thread 2: 62000
+Add g, thread 2: 62000
+Add 1, thread 1: 62000
+Add g, thread 1: 62001
+Add 2, thread 2: 63000
+Add g, thread 2: 63000
+Add 2, thread 2: 64000
+Add g, thread 2: 64000
+Add 1, thread 1: 65000
+Add g, thread 1: 65000
+Add 1, thread 1: 66000
+Add g, thread 1: 66000
+Add 2, thread 2: 67000
+Add g, thread 2: 67000
+Add 1, thread 1: 68000
+Add 2, thread 2: 68000
+Add g, thread 2: 68000
+Add g, thread 1: 68001
+Add 2, thread 2: 69000
+Add g, thread 2: 69000
+Add 1, thread 1: 70000
+Add g, thread 1: 70000
+Counter of ticks for the thread 1: 35000
+Counter of ticks for the thread 2: 35000
+Add 2, thread 2: 71000
+Add g, thread 2: 71000
+Add 1, thread 1: 71000
+Add g, thread 1: 71001
+Add 1, thread 1: 72000
+Add g, thread 1: 72000
+Add 2, thread 2: 73000
+Add g, thread 2: 73000
+Add 1, thread 1: 74000
+Add g, thread 1: 74000
+Add 1, thread 1: 75000
+Add g, thread 1: 75000
+Add 2, thread 2: 76000
+Add g, thread 2: 76000
+Add 1, thread 1: 77000
+Add g, thread 1: 77000
+Add 1, thread 1: 78000
+Add g, thread 1: 78000
+Add 2, thread 2: 78000
+Add g, thread 2: 78001
+Add 1, thread 1: 79000
+Add g, thread 1: 79000
+Add 2, thread 2: 80000
+Add g, thread 2: 80000
+Counter of ticks for the thread 2: 40000
+Counter of ticks for the thread 1: 40000
+Add 1, thread 1: 81000
+Add g, thread 1: 81000
+Add 1, thread 1: 82000
+Add g, thread 1: 82000
+Add 1, thread 1: 83000
+Add g, thread 1: 83000
+Add 2, thread 2: 84000
+Add g, thread 2: 84000
+Add 1, thread 1: 85000
+Add g, thread 1: 85000
+Add 2, thread 2: 86000
+Add g, thread 2: 86000
+Add 1, thread 1: 87000
+Add g, thread 1: 87000
+Add 1, thread 1: 88000
+Add g, thread 1: 88000
+Add 2, thread 2: 88000
+Add g, thread 2: 88001
+Add 1, thread 1: 89000
+Add g, thread 1: 89000
+Add 2, thread 2: 90000
+Add g, thread 2: 90000
+Counter of ticks for the thread 2: 45000
+Counter of ticks for the thread 1: 45000
+Add 2, thread 2: 91000
+Add g, thread 2: 91000
+Add 1, thread 1: 92000
+Add g, thread 1: 92000
+Add 1, thread 1: 93000
+Add g, thread 1: 93000
+Add 1, thread 1: 94000
+Add g, thread 1: 94000
+Add 1, thread 1: 95000
+Add g, thread 1: 95000
+Add 2, thread 2: 96000
+Add g, thread 2: 96000
+Add 1, thread 1: 97000
+Add g, thread 1: 97000
+Add 1, thread 1: 98000
+Add g, thread 1: 98000
+Add 2, thread 2: 99000
+Add g, thread 2: 99000
+Add 1, thread 1: 100000
+Add g, thread 1: 100000
+Counter of ticks for the thread 1: 50000
+Counter of ticks for the thread 2: 50000
+Add 1, thread 1: 101000
+Add g, thread 1: 101000
+Add 2, thread 2: 102000
+Add g, thread 2: 102000
+Add 1, thread 1: 103000
+Add g, thread 1: 103000
+Add 1, thread 1: 104000
+Add g, thread 1: 104000
+Add 2, thread 2: 105000
+Add g, thread 2: 105000
+Add 1, thread 1: 106000
+Add g, thread 1: 106000
+Add 1, thread 1: 107000
+Add g, thread 1: 107000
+Add 2, thread 2: 108000
+Add g, thread 2: 108000
+Add 1, thread 1: 109000
+Add g, thread 1: 109000
+Add 1, thread 1: 110000
+Add g, thread 1: 110000
+Counter of ticks for the thread 1: 55000
+Counter of ticks for the thread 2: 55000
+Add 2, thread 2: 111000
+Add g, thread 2: 111000
+Add 2, thread 2: 112000
+Add g, thread 2: 112000
+Add 1, thread 1: 112000
+Add g, thread 1: 112002
+Add 2, thread 2: 113000
+Add g, thread 2: 113000
+Add 1, thread 1: 114000
+Add g, thread 1: 114000
+Add 2, thread 2: 115000
+Add g, thread 2: 115000
+Add 2, thread 2: 116000
+Add g, thread 2: 116000
+Add 1, thread 1: 117000
+Add g, thread 1: 117000
+Add 2, thread 2: 118000
+Add g, thread 2: 118000
+Add 1, thread 1: 119000
+Add g, thread 1: 119000
+Add 1, thread 1: 120000
+Add g, thread 1: 120000
+Counter of ticks for the thread 1: 60000
+Add 2, thread 2: 120000
+Add g, thread 2: 120001
+Counter of ticks for the thread 2: 60000
+Counter of ticks for the thread 1: 60001
