@@ -159,6 +159,7 @@ void counter(int nb_signal) {
     			}
     			i++ ;
     		}
+    	}
 
 
 }
