@@ -70,7 +70,7 @@ int main(int argc, char* argv[]){
 	pthread_setschedparam(thread2, SCHED_FIFO, &parm2);
 
 	//set priority each thread
-	pthread_setschedprio(thread1, 49);
+	pthread_setschedprio(thread1, 40);
 	pthread_setschedprio(thread2, 49);
 
 	//
