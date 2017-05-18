@@ -15,6 +15,10 @@
 #include <sys/mman.h>
 #include <string.h>
 #include <pthread.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<fcntl.h>
+#include<glib-2.0/glib.h>
 
 using namespace std;
 
