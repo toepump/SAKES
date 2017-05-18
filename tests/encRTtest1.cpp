@@ -342,9 +342,9 @@ void *testThread2(void *ptr) {
     	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
 
     	/* do the stuff */
-    	if(ticks_t2%5000==0){
-    		cout << "Counter of ticks for the thread 2: " << ticks_t2 << endl;
-    	}
+    	//if(ticks_t2%5000==0){
+    		//cout << "Counter of ticks for the thread 2: " << ticks_t2 << endl;
+    	//}
 
     	ticks_t2++; // Increment the ticks value
     	addTest++; //Increment the add test value
