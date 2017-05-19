@@ -24,10 +24,14 @@ using namespace std;
 
 #define NSEC_PER_SEC    (1000000000) /* The number of nsecs per sec. */
 
-const int MAX_PULSE = 500;
-int outputEncoder[MAX_PULSE]; //Store the value at each interrupt
+const int MAX_PULSE = 20000; //maximum number of pulse recorded
+const int PULSE_PER_TURN = 12000; //The number of pulse (interrupt) to complete one turn
+const double PULSE_PER_DEGREE = 360/ double(PULSE_PER_TURN); // The number of pulse (interrupt) to complete one degree
+int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
+double outputNetAngle[MAX_PULSE]; //Store the value at each interrupt
 int outputEncfwd[MAX_PULSE]; //Store the value at each interrupt
 int outputEncbwd[MAX_PULSE]; //Store the value at each interrupt
+int outputState[MAX_PULSE];
 int indexOutput=0; //Incremented at each interrupt
 
 
@@ -35,11 +39,11 @@ void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
 
-int encoder=0;
-int encfwd=0;
-int encbwd=0;
-int angle=0;
-int state=0;
+int netAngleIncrement=0; //the angle in encoder increment unit
+int encfwd=0; //number of pulse done in the forward direction
+int encbwd=0; //number of pulse done in the backward direction
+double netAngleDegree=0; //the net angle in degree
+int state=0; //the state of the encoder (1, 2, 3 or 4)
 static int init=0;
 
 //prototypes
@@ -82,12 +86,12 @@ void counter(int nb_signal) {
 
         if(state==1){
             if(nb_signal==2){
-                encoder++;
+            	netAngleIncrement++;
                 encfwd++;
                 state=2;
             }else if(nb_signal==1){
                 encbwd++;
-                encoder--;
+                netAngleIncrement--;
                 state=4;
             }else{
                 cout << "problem with the counter in case 1" << endl;
@@ -96,12 +100,12 @@ void counter(int nb_signal) {
 
         else if(state==2){
             if(nb_signal==1){
-            	encoder++;
+            	netAngleIncrement++;
             	encfwd++;
                 state=3;
             }else if(nb_signal==2){
             	state=1;
-            	encoder--;
+            	netAngleIncrement--;
             	encbwd++;
             }else{
                 cout << "problem with the counter in case 2" << endl;
@@ -110,11 +114,11 @@ void counter(int nb_signal) {
 
         else if(state==3){
             if(nb_signal==2){
-                encoder++;
+            	netAngleIncrement++;
                 encfwd++;
                 state=4;
             }else if(nb_signal==1){
-                encoder--;
+            	netAngleIncrement--;
 				encbwd++;
 				state=2;
             }else{
@@ -125,32 +129,30 @@ void counter(int nb_signal) {
         else if(state==4){
             if(nb_signal==1){
                 encfwd++;
-                encoder++;
+                netAngleIncrement++;
                 state=1;
             }else if(nb_signal==2){
             	encbwd++;
-                encoder--;
+            	netAngleIncrement--;
                 state=3;
             }else{
                 cout << "problem with the counter in case 4" << endl;
             }
 
         }
+        netAngleDegree=double(netAngleIncrement)/PULSE_PER_DEGREE;
 
-        outputEncoder[indexOutput]=encoder;
+        outputNetIncrement[indexOutput]=netAngleIncrement;
+        outputNetAngle[indexOutput]=netAngleDegree;
         outputEncfwd[indexOutput]=encfwd;
         outputEncbwd[indexOutput]=encbwd;
+        outputState[state];
         indexOutput++;
-
         }
 
     	if(indexOutput+1>MAX_PULSE){
-
-
     		printOutData();
-
     	}
-
 
 }
 
@@ -160,10 +162,10 @@ void printOutData(void){
 	int i=0;
 	FILE *fj1=fopen("outputEncoder.dat","w");
 
-	fprintf(fj1,"indexOutput encoder EncoderForward EncoderBackward \r\n");
+	fprintf(fj1,"indexOutput;Net Increment;Net Angle (degrees);State;EncoderForward;EncoderBackward;\r\n");
 
 	while(i<MAX_PULSE){
-	    fprintf(fj1,"%d %d %d %d \r\n", i+1, outputEncoder[i], outputEncfwd[i], outputEncbwd[i]);
+	    fprintf(fj1,"%d;%d;%d;%d;%d;%d;\r\n", i+1, outputNetIncrement[i], outputNetAngle[i],outputState[i], outputEncfwd[i], outputEncbwd[i]);
 
 	    if(i==MAX_PULSE-1){
 	    	fclose(fj1);
@@ -174,7 +176,6 @@ void printOutData(void){
 	cout << "Printing of the output is done" << endl;
 
 }
-
 
 void initCounter(void){
 
@@ -297,8 +298,8 @@ void *testThread1(void *ptr) {
 
     	/* do the stuff */
         //initialize loops for both events
-        GMainLoop* loopA = g_main_loop_new( 0, 0 );
-        GMainLoop* loopB = g_main_loop_new( 0, 0 );
+        GMainLoop* loopA = g_main_loop_new(0, 0);
+        GMainLoop* loopB = g_main_loop_new(0, 0);
 
 
         int fdA = open( "/sys/class/gpio/gpio66/value", O_RDONLY | O_NONBLOCK );
