@@ -26,7 +26,7 @@ using namespace std;
 
 const int MAX_PULSE = 20000; //maximum number of pulse recorded
 const int PULSE_PER_TURN = 12000; //The number of pulse (interrupt) to complete one turn
-const double PULSE_PER_DEGREE = 360/ double(PULSE_PER_TURN); // The number of pulse (interrupt) to complete one degree
+const double PULSE_PER_DEGREE = double(PULSE_PER_TURN)/360; // The number of pulse (interrupt) to complete one degree
 int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
 double outputNetAngle[MAX_PULSE]; //Store the value at each interrupt
 int outputEncfwd[MAX_PULSE]; //Store the value at each interrupt
