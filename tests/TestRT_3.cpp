@@ -41,6 +41,7 @@ int main(int argc, char* argv[]){
 	const char *message1 = "Thread 1";
 	const char *message2 = "Thread 2";
 	int  iret1, iret2;
+	int checkSetting; //Variable to check if the setting of the thread is okay
 
 	/*set attribute */
 
@@ -52,9 +53,14 @@ int main(int argc, char* argv[]){
 	/* Create independent threads each of which will execute function */
 
 	pthread_attr_getschedparam(&attr1, &parm1); // put the scheduling param of att to parm
-	parm1.sched_priority = sched_get_priority_min(SCHED_FIFO); //return the minimum priority
-	pthread_attr_setschedpolicy(&attr1, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
-	pthread_attr_setschedparam(&attr1, &parm1); //set the scheduling parameter of attr1 as parm1
+	checkSetting=parm1.sched_priority = 40; //return the minimum priority
+	checkSetting=pthread_attr_setschedpolicy(&attr1, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
+	checkSetting=pthread_attr_setschedparam(&attr1, &parm1); //set the scheduling parameter of attr1 as parm1
+
+	if(checkSetting!=0){
+		cout << "Problem in the initialization of the thread 1 : "<< endl;
+		checkSetting-0;
+	}
 
 	iret1 = pthread_create(&thread1, &attr1, testThread1,(void*) message1); //create a thread that launch the print_message_function with the arguments  message1
 	pthread_setschedparam(thread1, SCHED_FIFO, &parm1); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
@@ -62,16 +68,22 @@ int main(int argc, char* argv[]){
 
 	//===============================================
 	pthread_attr_getschedparam(&attr2, &parm2);
-	parm2.sched_priority = sched_get_priority_min(SCHED_FIFO);
+	parm2.sched_priority = 40;
 	pthread_attr_setschedpolicy(&attr2, SCHED_FIFO);
 	pthread_attr_setschedparam(&attr2, &parm2);
+
+	if(checkSetting!=0){
+			cout << "Problem in the initialization of the thread 2 : "<< endl;
+			checkSetting-0;
+	}
 
 	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
 	pthread_setschedparam(thread2, SCHED_FIFO, &parm2);
 
-	//set priority each thread
+	/* //set priority each thread
 	pthread_setschedprio(thread1, 40);
 	pthread_setschedprio(thread2, 49);
+	 */
 
 	//
 	printf("pthread_create() for thread 1 returns: %d\n",iret1);
