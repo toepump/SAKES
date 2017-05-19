@@ -46,6 +46,7 @@ static int init=0;
 static gboolean EventA( GIOChannel *channel, GIOCondition condition, gpointer user_data );
 static gboolean EventB( GIOChannel *channel, GIOCondition condition, gpointer user_data );
 void counter(int nb_signal);
+void printOutData(void);
 
 static gboolean EventA( GIOChannel *channel, GIOCondition condition, gpointer user_data )
 {
@@ -76,7 +77,6 @@ static gboolean EventB( GIOChannel *channel, GIOCondition condition, gpointer us
 //test counter function to determine which direction encoder is and how much
 void counter(int nb_signal) {
     init++;
-
 
     if(init>2 && indexOutput<MAX_PULSE){
 
@@ -146,27 +146,35 @@ void counter(int nb_signal) {
 
     	if(indexOutput+1>MAX_PULSE){
 
-    		cout << "Printing of the output starts" << endl;
 
-    		int i=0;
-    		FILE *fj1=fopen("outputEncoder.dat","w");
+    		printOutData();
 
-    		fprintf(fj1,"indexOutput encoder EncoderForward EncoderBackward \r\n");
-
-    		while(i<MAX_PULSE){
-    			fprintf(fj1,"%d %d %d %d \r\n", i+1, outputEncoder[i], outputEncfwd[i], outputEncbwd[i]);
-
-    			if(i==MAX_PULSE-1){
-    		        fclose(fj1);
-    			}
-    			i++ ;
-    		}
-
-    		cout << "Printing of the output is done" << endl;
     	}
 
 
 }
+
+void printOutData(void){
+	cout << "Printing of the output starts" << endl;
+
+	int i=0;
+	FILE *fj1=fopen("outputEncoder.dat","w");
+
+	fprintf(fj1,"indexOutput encoder EncoderForward EncoderBackward \r\n");
+
+	while(i<MAX_PULSE){
+	    fprintf(fj1,"%d %d %d %d \r\n", i+1, outputEncoder[i], outputEncfwd[i], outputEncbwd[i]);
+
+	    if(i==MAX_PULSE-1){
+	    	fclose(fj1);
+	    }
+	    i++ ;
+	}
+
+	cout << "Printing of the output is done" << endl;
+
+}
+
 
 void initCounter(void){
 
