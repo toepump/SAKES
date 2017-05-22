@@ -137,7 +137,6 @@ void counter(int nb_signal) {
             cout << "  " << endl;
         }
     }
-
 }
 
 void initCounter(void){
