@@ -24,15 +24,13 @@ using namespace std;
 
 #define NSEC_PER_SEC    (1000000000) /* The number of nsecs per sec. */
 
-struct timespec t_thread3; //the global time keeper
-
 const int MAX_PULSE = 20000; //maximum number of pulse recorded
 const int PULSE_PER_TURN = 12000; //The number of pulse (interrupt) to complete one turn
 const double PULSE_PER_DEGREE = double(PULSE_PER_TURN)/360; // The number of pulse (interrupt) to complete one degree
 int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
 
 double outputNetAngle[MAX_PULSE]; //Store the value at each interrupt
-double outputNetAngleCheck[MAX_PULSE]; //net angle check for the probing thread
+double outputNetAngleCheck[MAX_PULSE] //net angle check for the probing thread
 
 int outputEncfwd[MAX_PULSE]; //Store the value at each interrupt
 int outputEncbwd[MAX_PULSE]; //Store the value at each interrupt
@@ -301,15 +299,14 @@ void *testThread1(void *ptr) {
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
 
-    clock_gettime(CLOCK_MONOTONIC ,&t_thread3);
+    clock_gettime(CLOCK_MONOTONIC ,&t_Thread1);
     /* start after one second */
-    t_thread3.tv_sec++;
+    t_Thread1.tv_sec++;
 
     while(true) {
 
     	/* wait until next shot */
-    	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_thread3, NULL);
-        cout << "1: "<< t_thread3.tv_nsec;
+    	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
 
     	/* do the stuff */
         //initialize loops for both events
@@ -346,26 +343,26 @@ void *testThread2(void *ptr){
     /*Stuff I want to do*/
     /*here should start the things used with the rt preempt patch*/
 
-    // clock_gettime(CLOCK_MONOTONIC ,&t_thread3);
-    // /* start after one second */
-    // t_thread3.tv_sec++;
+    clock_gettime(CLOCK_MONOTONIC ,&t_Thread2);
+    /* start after one second */
+    t_Thread2.tv_sec++;
 
     while(true) {
 
         /* wait until next shot */
-        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_thread3, NULL);
-        cout << "2: " << t_thread3.tv_nsec << endl;
+        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
+
         /* do the stuff */
         //probe the encoder values every millisecond while the interrupts are happening
     	   //cout << t_Thread2.tv_nsec << endl;
         fprintf(fj2, "netAngleDegree: %f\n", netAngleDegree);
 
 		/* calculate next shot */
-    	t_thread3.tv_nsec += 1000000;
+    	t_Thread2.tv_nsec += 1000000;
 
-    	while (t_thread3.tv_nsec >= NSEC_PER_SEC) {
-    		t_thread3.tv_nsec -= NSEC_PER_SEC;
-    		t_thread3.tv_sec++;
+    	while (t_Thread2.tv_nsec >= NSEC_PER_SEC) {
+    		t_Thread2.tv_nsec -= NSEC_PER_SEC;
+    		t_Thread2.tv_sec++;
     	}
 
 
