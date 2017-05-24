@@ -341,7 +341,7 @@ void *testThread2(void *ptr){
         //probe the encoder values every millisecond while the interrupts are happening
     	//if(t_Thread2.tv_nsec%1000000==0){
     		//check value every 1 millisecond
-            cout << t_thread2.tv_nsec;
+            cout << t_Thread2.tv_nsec;
     	//}
 
 		/* calculate next shot */
