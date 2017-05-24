@@ -309,7 +309,7 @@ void *testThread1(void *ptr) {
 
     	/* wait until next shot */
     	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_thread3, NULL);
-        cout << t_thread3.tv_nsec;
+        cout << "1: "<< t_thread3.tv_nsec;
 
     	/* do the stuff */
         //initialize loops for both events
@@ -354,7 +354,7 @@ void *testThread2(void *ptr){
 
         /* wait until next shot */
         clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_thread3, NULL);
-        cout << t_thread3.tv_nsec;
+        cout << "2: " << t_thread3.tv_nsec << endl;
         /* do the stuff */
         //probe the encoder values every millisecond while the interrupts are happening
     	   //cout << t_Thread2.tv_nsec << endl;
