@@ -30,7 +30,7 @@ const double PULSE_PER_DEGREE = double(PULSE_PER_TURN)/360; // The number of pul
 int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
 
 double outputNetAngle[MAX_PULSE]; //Store the value at each interrupt
-double probeCheck[1000]; //net angle check for the probing thread
+double probeCheck[20000]; //net angle check for the probing thread
 
 int outputEncfwd[MAX_PULSE]; //Store the value at each interrupt
 int outputEncbwd[MAX_PULSE]; //Store the value at each interrupt
@@ -187,7 +187,7 @@ void printProbe(void){
 	int i=0;
 	FILE *fj2=fopen("probeCheck.dat","w");
 
-	while(i<1000){
+	while(i<20000){
 	    fprintf(fj2, "netAngleDegree: %f\n", probeCheck[i]);
 	    i++ ;
 	}
@@ -382,8 +382,9 @@ void *testThread2(void *ptr){
     	//printf("%f\n",netAngleDegree);
         probeCheck[index] = netAngleDegree;
         index++;
-        if(index > 1000){
+        if(index > 20000){
             printProbe();
+            return (void*) NULL;
         }
 
 		/* calculate next shot */
