@@ -338,10 +338,11 @@ void *testThread2(void *ptr){
         clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
 
         /* do the stuff */
-    	if(t_Thread2.tv_usec%1000==0){
+        //probe the encoder values every millisecond while the interrupts are happening
+    	//if(t_Thread2.tv_nsec%1000000==0){
     		//check value every 1 millisecond
-            cout << t_thread.tv_usec;
-    	}
+            cout << t_thread2.tv_nsec;
+    	//}
 
 		/* calculate next shot */
     	t_Thread2.tv_nsec += INTERVAL;
