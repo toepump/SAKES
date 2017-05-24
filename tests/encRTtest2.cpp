@@ -347,7 +347,7 @@ void *testThread2(void *ptr){
     struct timespec t_Thread2;
     int index = 0;
 
-    //FILE *fj2=fopen("probeCheck.dat","w");
+    FILE *fj2=fopen("probeCheck.dat","w");
 
     /*Stuff I want to do*/
     /*here should start the things used with the rt preempt patch*/
@@ -363,8 +363,8 @@ void *testThread2(void *ptr){
 
         /* do the stuff */
         //probe the encoder values every millisecond while the interrupts are happening
-    	printf("%f\n",netAngleDegree);
-        //fprintf(fj2, "netAngleDegree: %f\n", netAngleDegree);
+    	//printf("%f\n",netAngleDegree);
+        fprintf(fj2, "netAngleDegree: %f\n", netAngleDegree);
 
 		/* calculate next shot */
     	t_Thread2.tv_nsec += 1000000;
