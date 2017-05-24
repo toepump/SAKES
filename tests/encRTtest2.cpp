@@ -30,7 +30,7 @@ const double PULSE_PER_DEGREE = double(PULSE_PER_TURN)/360; // The number of pul
 int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
 
 double outputNetAngle[MAX_PULSE]; //Store the value at each interrupt
-double outputNetAngleCheck[MAX_PULSE]; //net angle check for the probing thread
+double probeCheck[1000]; //net angle check for the probing thread
 
 int outputEncfwd[MAX_PULSE]; //Store the value at each interrupt
 int outputEncbwd[MAX_PULSE]; //Store the value at each interrupt
@@ -54,6 +54,7 @@ static gboolean EventA( GIOChannel *channel, GIOCondition condition, gpointer us
 static gboolean EventB( GIOChannel *channel, GIOCondition condition, gpointer user_data );
 void counter(int nb_signal);
 void printOutData(void);
+void printProbe(void);
 
 static gboolean EventA( GIOChannel *channel, GIOCondition condition, gpointer user_data )
 {
@@ -173,6 +174,21 @@ void printOutData(void){
 	    if(i==MAX_PULSE-1){
 	    	fclose(fj1);
 	    }
+	    i++ ;
+	}
+
+	cout << "Printing of the output is done" << endl;
+
+}
+
+void printProbe(void){
+	cout << "Printing of the probe starts" << endl;
+
+	int i=0;
+	FILE *fj2=fopen("probeCheck.dat","w");
+
+	while(i<1000){
+	    fprintf(fj2, "netAngleDegree: %f\n", probeCheck[i]);
 	    i++ ;
 	}
 
@@ -364,7 +380,11 @@ void *testThread2(void *ptr){
         /* do the stuff */
         //probe the encoder values every millisecond while the interrupts are happening
     	//printf("%f\n",netAngleDegree);
-        fprintf(fj2, "ms: %f     netAngleDegree: %f\n", t_Thread2.tv_nsec, netAngleDegree);
+        probeCheck[index] = netAngleDegree;
+        index++;
+        if(index > 1000){
+            printProbe();
+        }
 
 		/* calculate next shot */
     	t_Thread2.tv_nsec += 1000000;
