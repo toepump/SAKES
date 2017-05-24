@@ -345,7 +345,7 @@ void *testThread2(void *ptr){
     	//}
 
 		/* calculate next shot */
-    	t_Thread2.tv_nsec += INTERVAL;
+    	t_Thread2.tv_nsec += 1000000;
 
     	while (t_Thread2.tv_nsec >= NSEC_PER_SEC) {
     		t_Thread2.tv_nsec -= NSEC_PER_SEC;
