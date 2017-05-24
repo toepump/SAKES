@@ -384,7 +384,7 @@ void *testThread2(void *ptr){
         index++;
         if(index > 20000){
             printProbe();
-            return (void*) NULL;
+            break;
         }
 
 		/* calculate next shot */
