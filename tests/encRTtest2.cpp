@@ -315,7 +315,7 @@ void *testThread1(void *ptr) {
     while(true) {
 
     	/* wait until next shot */
-    	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
+    	//clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
 
     	/* do the stuff */
         //initialize loops for both events
