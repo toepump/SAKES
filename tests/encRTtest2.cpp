@@ -254,10 +254,10 @@ int main(int argc, char* argv[]){
 	int  iret2;
 	/*set attribute */
 
-	pthread_attr_t attr1; //Creation of the variable for the attribute
-	struct sched_param parm1; //Creation of new sched_param
+	pthread_attr_t attr1, attr2; //Creation of the variable for the attribute
+	struct sched_param parm1, parm2; //Creation of new sched_param
 	pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
-
+	pthread_attr_init(&attr2);
 
 	/* Create independent thread which will execute function */
 
@@ -267,10 +267,19 @@ int main(int argc, char* argv[]){
 	pthread_attr_setschedparam(&attr1, &parm1); //set the scheduling parameter of attr1 as parm1
 
 	iret1 = pthread_create(&thread1, &attr1, testThread1,(void*) message1); //create a thread that launch the print_message_function with the arguments  message1
-    iret2 = pthread_create(&thread2, &attr1, testThread2,(void*) message2);
     pthread_setschedparam(thread1, SCHED_FIFO, &parm1); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
 														// if it fails, return not 0
-    pthread_setschedparam(thread2, SCHED_FIFO, &parm1);
+
+    //===========================================================
+    pthread_attr_getschedparam(&attr2, &parm2);
+    parm2.sched_priority = sched_get_priority_min(SCHED_FIFO);
+    pthread_attr_setschedpolicy(&attr2, SCHED_FIFO);
+    pthread_attr_setschedparam(&attr2, &parm2);
+
+    iret2 = pthread_create(&thread2, &attr2, (void*) print_message_function, (void*) message2);
+    pthread_setschedparam(thread2, SCHED_FIFO, &parm2);
+
+
 
 	//set priority each thread
 	pthread_setschedprio(thread1, 49);
