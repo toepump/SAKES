@@ -276,7 +276,7 @@ int main(int argc, char* argv[]){
     pthread_attr_setschedpolicy(&attr2, SCHED_FIFO);
     pthread_attr_setschedparam(&attr2, &parm2);
 
-    iret2 = pthread_create(&thread2, &attr2, (void*) print_message_function, (void*) message2);
+    iret1 = pthread_create(&thread1, &attr1, testThread2,(void*) message2);
     pthread_setschedparam(thread2, SCHED_FIFO, &parm2);
 
 
