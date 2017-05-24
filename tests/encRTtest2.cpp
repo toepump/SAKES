@@ -32,7 +32,7 @@ const double PULSE_PER_DEGREE = double(PULSE_PER_TURN)/360; // The number of pul
 int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
 
 double outputNetAngle[MAX_PULSE]; //Store the value at each interrupt
-double outputNetAngleCheck[MAX_PULSE] //net angle check for the probing thread
+double outputNetAngleCheck[MAX_PULSE]; //net angle check for the probing thread
 
 int outputEncfwd[MAX_PULSE]; //Store the value at each interrupt
 int outputEncbwd[MAX_PULSE]; //Store the value at each interrupt
