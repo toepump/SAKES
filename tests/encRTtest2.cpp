@@ -151,7 +151,7 @@ void counter(int nb_signal) {
         }
 
     	if(indexOutput+1>MAX_PULSE){
-    		printOutData();
+    		//printOutData();
     	}
 
 }
@@ -318,4 +318,41 @@ void *testThread1(void *ptr) {
     	}
 
 	return (void*) NULL;
+}
+
+void *testThread2(void *ptr){
+    char *message;
+    message = (char *) ptr;
+    struct timespec t_Thread2;
+
+    /*Stuff I want to do*/
+    /*here should start the things used with the rt preempt patch*/
+
+    clock_gettime(CLOCK_MONOTONIC ,&t_Thread2);
+    /* start after one second */
+    t_Thread2.tv_sec++;
+
+    while(true) {
+
+        /* wait until next shot */
+        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
+
+        /* do the stuff */
+    	if(t_Thread2.tv_usec%1000==0){
+    		//check value every 1 millisecond
+            cout << t_thread.tv_usec;
+    	}
+
+		/* calculate next shot */
+    	t_Thread1.tv_nsec += INTERVAL;
+
+    	while (t_Thread1.tv_nsec >= NSEC_PER_SEC) {
+    		t_Thread1.tv_nsec -= NSEC_PER_SEC;
+    		t_Thread1.tv_sec++;
+    	}
+
+
+    }
+
+    return (void*) NULL;
 }
