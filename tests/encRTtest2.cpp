@@ -363,7 +363,7 @@ void *testThread2(void *ptr){
 
         /* do the stuff */
         //probe the encoder values every millisecond while the interrupts are happening
-    	cout << netAngleDegree << endl;
+    	printf("%f\n",netAngleDegree);
         //fprintf(fj2, "netAngleDegree: %f\n", netAngleDegree);
 
 		/* calculate next shot */
