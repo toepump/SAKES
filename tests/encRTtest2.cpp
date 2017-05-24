@@ -364,7 +364,7 @@ void *testThread2(void *ptr){
         /* do the stuff */
         //probe the encoder values every millisecond while the interrupts are happening
     	//printf("%f\n",netAngleDegree);
-        fprintf(fj2, "netAngleDegree: %f\n", netAngleDegree);
+        fprintf(fj2, "ms: %f     netAngleDegree: %f\n", t_Thread2.tv_nsec / 1000, netAngleDegree);
 
 		/* calculate next shot */
     	t_Thread2.tv_nsec += 1000000;
