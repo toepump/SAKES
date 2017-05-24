@@ -253,7 +253,7 @@ int main(int argc, char* argv[]){
 	pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
 
 
-	/* Create independent threads each of which will execute function */
+	/* Create independent thread which will execute function */
 
 	pthread_attr_getschedparam(&attr1, &parm1); // put the scheduling param of att to parm
 	parm1.sched_priority = sched_get_priority_min(SCHED_FIFO); //return the minimum priority
@@ -319,4 +319,3 @@ void *testThread1(void *ptr) {
 
 	return (void*) NULL;
 }
-
