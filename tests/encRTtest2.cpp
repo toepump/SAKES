@@ -23,14 +23,16 @@
 using namespace std;
 
 #define NSEC_PER_SEC    (1000000000) /* The number of nsecs per sec. */
+#define NSEC_PER_MSEC   (1000000)   //number of nsecs in milliseconds
 
 const int MAX_PULSE = 20000; //maximum number of pulse recorded
 const int PULSE_PER_TURN = 12000; //The number of pulse (interrupt) to complete one turn
+const int PROBE_STORAGE_SIZE = 15000;
 const double PULSE_PER_DEGREE = double(PULSE_PER_TURN)/360; // The number of pulse (interrupt) to complete one degree
 int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
 
 double outputNetAngle[MAX_PULSE]; //Store the value at each interrupt
-double probeCheck[1000]; //net angle check for the probing thread
+double probeCheck[PROBE_STORAGE_SIZE]; //net angle check for the probing thread
 
 int outputEncfwd[MAX_PULSE]; //Store the value at each interrupt
 int outputEncbwd[MAX_PULSE]; //Store the value at each interrupt
@@ -360,41 +362,40 @@ void *testThread1(void *ptr) {
 void *testThread2(void *ptr){
     char *message;
     message = (char *) ptr;
-    struct timespec t_Thread2;
-    int index = 0;
-
-    FILE *fj2=fopen("probeCheck.dat","w");
+    struct timespec t_Thread2;  //struct for keeping time (not actual monotonic clock)
+    int index = 0;              //index for the probe getting and storing encoder info
 
     /*Stuff I want to do*/
     /*here should start the things used with the rt preempt patch*/
 
-    clock_gettime(CLOCK_MONOTONIC ,&t_Thread2);
-    /* start after one second */
-    t_Thread2.tv_sec++;
+    clock_gettime(CLOCK_MONOTONIC ,&t_Thread2);     //get the current time and store in the timespec struct
+
+                                                    /* start after one second */
+    t_Thread2.tv_sec++;                             //increment the timespec struct time by one full second so that
+                                                    //we can get a delay in the next step
 
     while(true) {
 
         /* wait until next shot */
-        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
+        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);  //delay until time stored in the timespec
 
         /* do the stuff */
         //probe the encoder values every millisecond while the interrupts are happening
     	//printf("%f\n",netAngleDegree);
-        probeCheck[index] = netAngleDegree;
-        index++;
-        if(index > 1000){
+        probeCheck[index] = netAngleDegree; //store current netAngleDegree
+        index++;                            //increment index
+        if(index > PROBE_STORAGE_SIZE){                   //if index is past storage limit, print
             printProbe();
+            return (void*) NULL;
         }
 
 		/* calculate next shot */
-    	t_Thread2.tv_nsec += 1000000;
+    	t_Thread2.tv_nsec += NSEC_PER_SEC;      //wait another millisecond so that delay will happen again before next probe
 
     	while (t_Thread2.tv_nsec >= NSEC_PER_SEC) {
     		t_Thread2.tv_nsec -= NSEC_PER_SEC;
     		t_Thread2.tv_sec++;
     	}
-
-
     }
 
     return (void*) NULL;
