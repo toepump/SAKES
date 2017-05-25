@@ -304,7 +304,7 @@ int main(int argc, char* argv[]){
     pthread_setschedprio(thread2, 49);
 	//
 	printf("pthread_create() for thread 1 returns: %d\n",iret1);
-    printf("pthread_create() for thread 2 returns: %d\n",iret2);
+    printf("pthread_create() for thread 2 returns: %d\n",iret2); //TODO some error number returns
 
 	/* Wait till threads are complete before main continues. Unless we  */
 	/* wait we run the risk of executing an exit which will terminate   */
