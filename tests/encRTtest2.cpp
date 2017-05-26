@@ -29,7 +29,7 @@ const int INTERVAL =1000000; // in nanosecond
 const int MAX_PULSE = 50000; //maximum number of pulse recorded
 const int PULSE_PER_TURN = 12000; //The number of pulse (interrupt) to complete one turn
 const int PROBE_STORAGE_SIZE = 30000; //in ms
-const double PULSE_PER_DEGREE = double(PULSE_PER_TURN)/360; // The number of pulse (interrupt) to complete one degree
+const double PULSE_PER_DEGREE = double(PULSE_PER_TURN)/360.0; // The number of pulse (interrupt) to complete one degree
 int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
 
 double outputNetAngle[MAX_PULSE]; //Store the value at each interrupt
@@ -95,10 +95,10 @@ void counter(int nb_signal) {
         if(state==1){
             if(nb_signal==2){
             	netAngleIncrement++;
-                encfwd++;
+                //encfwd++;
                 state=2;
             }else if(nb_signal==1){
-                encbwd++;
+                //encbwd++;
                 netAngleIncrement--;
                 state=4;
             }else{
@@ -109,12 +109,12 @@ void counter(int nb_signal) {
         else if(state==2){
             if(nb_signal==1){
             	netAngleIncrement++;
-            	encfwd++;
+            	//encfwd++;
                 state=3;
             }else if(nb_signal==2){
             	state=1;
             	netAngleIncrement--;
-            	encbwd++;
+            	//encbwd++;
             }else{
                 cout << "problem with the counter in case 2" << endl;
             }
@@ -123,11 +123,11 @@ void counter(int nb_signal) {
         else if(state==3){
             if(nb_signal==2){
             	netAngleIncrement++;
-                encfwd++;
+               // encfwd++;
                 state=4;
             }else if(nb_signal==1){
             	netAngleIncrement--;
-				encbwd++;
+				//encbwd++;
 				state=2;
             }else{
                 cout << "problem with the counter in case 3" << endl;
@@ -136,11 +136,11 @@ void counter(int nb_signal) {
 
         else if(state==4){
             if(nb_signal==1){
-                encfwd++;
+                //encfwd++;
                 netAngleIncrement++;
                 state=1;
             }else if(nb_signal==2){
-            	encbwd++;
+            	//encbwd++;
             	netAngleIncrement--;
                 state=3;
             }else{
@@ -150,16 +150,18 @@ void counter(int nb_signal) {
         }
         netAngleDegree=double(netAngleIncrement)/PULSE_PER_DEGREE;
 
+        	/*
         outputNetIncrement[indexOutput]=netAngleIncrement;
         outputNetAngle[indexOutput]=netAngleDegree;
         outputEncfwd[indexOutput]=encfwd;
         outputEncbwd[indexOutput]=encbwd;
         outputState[state];
         indexOutput++;
+        */
         }
 
-	if(indexOutput%1000==0){
-		cout << "5000 int reached" << endl;
+	if(indexOutput%10000==0){
+		cout << "10000" << endl;
 	}
 
     	if(indexOutput+1>MAX_PULSE){
