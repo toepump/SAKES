@@ -160,11 +160,8 @@ void counter(int nb_signal) {
         */
         }
 
-	if(indexOutput%10000==0){
-		cout << "10000" << endl;
-	}
-
     	if(indexOutput+1>MAX_PULSE){
+    		cout << "printOutStarted" << endl;
     		printOutData();
     	}
 
