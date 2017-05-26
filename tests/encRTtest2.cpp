@@ -24,15 +24,17 @@ using namespace std;
 
 #define NSEC_PER_SEC    (1000000000) /* The number of nsecs per sec. */
 #define NSEC_PER_MSEC   (1000000)   //number of nsecs in milliseconds
+const int INTERVAL =1000000; // in nanosecond
 
-const int MAX_PULSE = 20000; //maximum number of pulse recorded
+const int MAX_PULSE = 50000; //maximum number of pulse recorded
 const int PULSE_PER_TURN = 12000; //The number of pulse (interrupt) to complete one turn
-const int PROBE_STORAGE_SIZE = 15000;
-const double PULSE_PER_DEGREE = double(PULSE_PER_TURN)/360; // The number of pulse (interrupt) to complete one degree
+const int PROBE_STORAGE_SIZE = 30000; //in ms
+const double PULSE_PER_DEGREE = double(PULSE_PER_TURN)/360.0; // The number of pulse (interrupt) to complete one degree
 int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
 
 double outputNetAngle[MAX_PULSE]; //Store the value at each interrupt
-double probeCheck[PROBE_STORAGE_SIZE]; //net angle check for the probing thread
+double probeAngleDeg[PROBE_STORAGE_SIZE]; //net angle check for the probing thread
+double probeIncrement[PROBE_STORAGE_SIZE]; //net angle check for the probing thread
 
 int outputEncfwd[MAX_PULSE]; //Store the value at each interrupt
 int outputEncbwd[MAX_PULSE]; //Store the value at each interrupt
@@ -95,10 +97,10 @@ void counter(int nb_signal) {
         if(state==1){
             if(nb_signal==2){
             	netAngleIncrement++;
-                encfwd++;
+                //encfwd++;
                 state=2;
             }else if(nb_signal==1){
-                encbwd++;
+                //encbwd++;
                 netAngleIncrement--;
                 state=4;
             }else{
@@ -109,12 +111,12 @@ void counter(int nb_signal) {
         else if(state==2){
             if(nb_signal==1){
             	netAngleIncrement++;
-            	encfwd++;
+            	//encfwd++;
                 state=3;
             }else if(nb_signal==2){
             	state=1;
             	netAngleIncrement--;
-            	encbwd++;
+            	//encbwd++;
             }else{
                 cout << "problem with the counter in case 2" << endl;
             }
@@ -123,11 +125,11 @@ void counter(int nb_signal) {
         else if(state==3){
             if(nb_signal==2){
             	netAngleIncrement++;
-                encfwd++;
+               // encfwd++;
                 state=4;
             }else if(nb_signal==1){
             	netAngleIncrement--;
-				encbwd++;
+				//encbwd++;
 				state=2;
             }else{
                 cout << "problem with the counter in case 3" << endl;
@@ -136,11 +138,11 @@ void counter(int nb_signal) {
 
         else if(state==4){
             if(nb_signal==1){
-                encfwd++;
+                //encfwd++;
                 netAngleIncrement++;
                 state=1;
             }else if(nb_signal==2){
-            	encbwd++;
+            	//encbwd++;
             	netAngleIncrement--;
                 state=3;
             }else{
@@ -150,15 +152,18 @@ void counter(int nb_signal) {
         }
         netAngleDegree=double(netAngleIncrement)/PULSE_PER_DEGREE;
 
+        	/*
         outputNetIncrement[indexOutput]=netAngleIncrement;
         outputNetAngle[indexOutput]=netAngleDegree;
         outputEncfwd[indexOutput]=encfwd;
         outputEncbwd[indexOutput]=encbwd;
         outputState[state];
         indexOutput++;
+        */
         }
 
     	if(indexOutput+1>MAX_PULSE){
+    		cout << "printOutStarted" << endl;
     		printOutData();
     	}
 
@@ -191,8 +196,10 @@ void printProbe(void){
 	int i=0;
 	FILE *fj2=fopen("probeCheck.dat","w");
 
-	while(i<1000){
-	    fprintf(fj2, "netAngleDegree: %f\n", probeCheck[i]);
+	fprintf(fj2, "Time (ms); Net Angle (degree); net Increment;\n");
+
+	while(i<PROBE_STORAGE_SIZE){
+	    fprintf(fj2,  "%d;%f;%d; \r\n", i, probeAngleDeg[i],probeIncrement[i]);
 	    i++ ;
 	}
 
@@ -323,22 +330,9 @@ void *testThread1(void *ptr) {
 
 	char *message;
 	message = (char *) ptr;
-	struct timespec t_Thread1;
-
-	/*Stuff I want to do*/
-	/*here should start the things used with the rt preempt patch*/
-
-    clock_gettime(CLOCK_MONOTONIC ,&t_Thread1);
-    /* start after one second */
-    t_Thread1.tv_sec++;
 
     while(true) {
 
-    	/* wait until next shot */
-    	//clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
-
-    	/* do the stuff */
-        //initialize loops for both events
         GMainLoop* loopA = g_main_loop_new(0, 0);
         GMainLoop* loopB = g_main_loop_new(0, 0);
 
@@ -371,8 +365,7 @@ void *testThread2(void *ptr){
     /*here should start the things used with the rt preempt patch*/
 
     clock_gettime(CLOCK_MONOTONIC ,&t_Thread2);     //get the current time and store in the timespec struct
-
-                                                    /* start after one second */
+                                                   /* start after one second */
     t_Thread2.tv_sec++;                             //increment the timespec struct time by one full second so that
                                                     //we can get a delay in the next step
 
@@ -384,15 +377,19 @@ void *testThread2(void *ptr){
         /* do the stuff */
         //probe the encoder values every millisecond while the interrupts are happening
     	//printf("%f\n",netAngleDegree);
-        probeCheck[index] = netAngleDegree; //store current netAngleDegree
+
+        probeAngleDeg[index] = netAngleDegree; //store current netAngleDegree
+        probeIncrement[index] = netAngleIncrement;
         index++;                            //increment index
+
         if(index > PROBE_STORAGE_SIZE){                   //if index is past storage limit, print
-            printProbe();
+        	printProbe();
             return (void*) NULL;
         }
 
+
 		/* calculate next shot */
-    	t_Thread2.tv_nsec += NSEC_PER_SEC;      //wait another millisecond so that delay will happen again before next probe
+    	t_Thread2.tv_nsec += INTERVAL;      //wait another millisecond so that delay will happen again before next probe
 
     	while (t_Thread2.tv_nsec >= NSEC_PER_SEC) {
     		t_Thread2.tv_nsec -= NSEC_PER_SEC;

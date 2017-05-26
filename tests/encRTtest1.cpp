@@ -284,17 +284,8 @@ void *testThread1(void *ptr) {
 	message = (char *) ptr;
 	struct timespec t_Thread1;
 
-	/*Stuff I want to do*/
-	/*here should start the things used with the rt preempt patch*/
-
-    clock_gettime(CLOCK_MONOTONIC ,&t_Thread1);
-    /* start after one second */
-    t_Thread1.tv_sec++;
 
     while(true) {
-
-    	/* wait until next shot */
-    	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
 
     	/* do the stuff */
         //initialize loops for both events
