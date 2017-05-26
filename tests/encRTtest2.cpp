@@ -26,7 +26,7 @@ using namespace std;
 #define NSEC_PER_MSEC   (1000000)   //number of nsecs in milliseconds
 const int INTERVAL =1000000; // in nanosecond
 
-const int MAX_PULSE = 50000; //maximum number of pulse recorded
+const int MAX_PULSE = 36000; //maximum number of pulse recorded
 const int PULSE_PER_TURN = 12000; //The number of pulse (interrupt) to complete one turn
 const int PROBE_STORAGE_SIZE = 20000; //in ms
 const double PULSE_PER_DEGREE = 12000.0/360.0; // The number of pulse (interrupt) to complete one degree
