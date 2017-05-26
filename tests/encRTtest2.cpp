@@ -29,7 +29,7 @@ const int INTERVAL =1000000; // in nanosecond
 const int MAX_PULSE = 50000; //maximum number of pulse recorded
 const int PULSE_PER_TURN = 12000; //The number of pulse (interrupt) to complete one turn
 const int PROBE_STORAGE_SIZE = 30000; //in ms
-const double PULSE_PER_DEGREE = double(PULSE_PER_TURN)/360.0; // The number of pulse (interrupt) to complete one degree
+const double PULSE_PER_DEGREE = 12000.0/360.0; // The number of pulse (interrupt) to complete one degree
 int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
 
 double outputNetAngle[MAX_PULSE]; //Store the value at each interrupt
@@ -40,6 +40,7 @@ int outputEncfwd[MAX_PULSE]; //Store the value at each interrupt
 int outputEncbwd[MAX_PULSE]; //Store the value at each interrupt
 int outputState[MAX_PULSE];
 int indexOutput=0; //Incremented at each interrupt
+int failInt=0;
 
 
 void *testThread1(void *ptr);
@@ -104,7 +105,8 @@ void counter(int nb_signal) {
                 netAngleIncrement--;
                 state=4;
             }else{
-                cout << "problem with the counter in case 1" << endl;
+            	failInt++;
+                //cout << "problem with the counter in case 1" << endl;
             }
         }
 
@@ -118,7 +120,8 @@ void counter(int nb_signal) {
             	netAngleIncrement--;
             	//encbwd++;
             }else{
-                cout << "problem with the counter in case 2" << endl;
+            	failInt++;
+                //cout << "problem with the counter in case 1" << endl;
             }
         }
 
@@ -132,7 +135,8 @@ void counter(int nb_signal) {
 				//encbwd++;
 				state=2;
             }else{
-                cout << "problem with the counter in case 3" << endl;
+            	failInt++;
+                //cout << "problem with the counter in case 1" << endl;
             }
         }
 
@@ -146,7 +150,8 @@ void counter(int nb_signal) {
             	netAngleIncrement--;
                 state=3;
             }else{
-                cout << "problem with the counter in case 4" << endl;
+            	failInt++;
+                //cout << "problem with the counter in case 1" << endl;
             }
 
         }
@@ -199,7 +204,7 @@ void printProbe(void){
 	fprintf(fj2, "Time (ms); Net Angle (degree); net Increment;\n");
 
 	while(i<PROBE_STORAGE_SIZE){
-	    fprintf(fj2,  "%d;%lf;%d; \r\n", i, probeAngleDeg[i], probeIncrement[i]);
+	    fprintf(fj2,  "%d;%f;%d; \r\n", i, probeAngleDeg[i], probeIncrement[i]);
 	    i++ ;
 	}
 
@@ -333,7 +338,6 @@ void *testThread1(void *ptr) {
         GMainLoop* loopA = g_main_loop_new(0, 0);
         GMainLoop* loopB = g_main_loop_new(0, 0);
 
-
         int fdA = open( "/sys/class/gpio/gpio66/value", O_RDONLY | O_NONBLOCK );
         GIOChannel* channelA = g_io_channel_unix_new(fdA);
         GIOCondition condA = GIOCondition(G_IO_PRI);
@@ -380,6 +384,7 @@ void *testThread2(void *ptr){
         index++;                            //increment index
 
         if(index > PROBE_STORAGE_SIZE){                   //if index is past storage limit, print
+        	cout << "number of failure: " << failInt << endl;
         	printProbe();
             return (void*) NULL;
         }
