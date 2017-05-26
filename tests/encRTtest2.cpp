@@ -24,8 +24,9 @@ using namespace std;
 
 #define NSEC_PER_SEC    (1000000000) /* The number of nsecs per sec. */
 #define NSEC_PER_MSEC   (1000000)   //number of nsecs in milliseconds
+const int INTERVAL =1000000; // in nanosecond
 
-const int MAX_PULSE = 100000; //maximum number of pulse recorded
+const int MAX_PULSE = 50000; //maximum number of pulse recorded
 const int PULSE_PER_TURN = 12000; //The number of pulse (interrupt) to complete one turn
 const int PROBE_STORAGE_SIZE = 30000; //in ms
 const double PULSE_PER_DEGREE = double(PULSE_PER_TURN)/360; // The number of pulse (interrupt) to complete one degree
@@ -155,6 +156,10 @@ void counter(int nb_signal) {
         outputState[state];
         indexOutput++;
         }
+
+	if(indexOutput==5000){
+		cout << "5000 int reached" << endl;
+	}
 
     	if(indexOutput+1>MAX_PULSE){
     		printOutData();
@@ -323,22 +328,9 @@ void *testThread1(void *ptr) {
 
 	char *message;
 	message = (char *) ptr;
-	struct timespec t_Thread1;
-
-	/*Stuff I want to do*/
-	/*here should start the things used with the rt preempt patch*/
-
-    clock_gettime(CLOCK_MONOTONIC ,&t_Thread1);
-    /* start after one second */
-    t_Thread1.tv_sec++;
 
     while(true) {
 
-    	/* wait until next shot */
-    	//clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
-
-    	/* do the stuff */
-        //initialize loops for both events
         GMainLoop* loopA = g_main_loop_new(0, 0);
         GMainLoop* loopB = g_main_loop_new(0, 0);
 
@@ -396,7 +388,7 @@ void *testThread2(void *ptr){
 
 
 		/* calculate next shot */
-    	t_Thread2.tv_nsec += NSEC_PER_SEC;      //wait another millisecond so that delay will happen again before next probe
+    	t_Thread2.tv_nsec += INTERVAL;      //wait another millisecond so that delay will happen again before next probe
 
     	while (t_Thread2.tv_nsec >= NSEC_PER_SEC) {
     		t_Thread2.tv_nsec -= NSEC_PER_SEC;
