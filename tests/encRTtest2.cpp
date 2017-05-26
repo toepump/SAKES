@@ -25,9 +25,9 @@ using namespace std;
 #define NSEC_PER_SEC    (1000000000) /* The number of nsecs per sec. */
 #define NSEC_PER_MSEC   (1000000)   //number of nsecs in milliseconds
 
-const int MAX_PULSE = 20000; //maximum number of pulse recorded
+const int MAX_PULSE = 100000; //maximum number of pulse recorded
 const int PULSE_PER_TURN = 12000; //The number of pulse (interrupt) to complete one turn
-const int PROBE_STORAGE_SIZE = 15000;
+const int PROBE_STORAGE_SIZE = 30000; //in ms
 const double PULSE_PER_DEGREE = double(PULSE_PER_TURN)/360; // The number of pulse (interrupt) to complete one degree
 int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
 
@@ -189,8 +189,10 @@ void printProbe(void){
 	int i=0;
 	FILE *fj2=fopen("probeCheck.dat","w");
 
-	while(i<1000){
-	    fprintf(fj2, "netAngleDegree: %f\n", probeCheck[i]);
+	fprintf(fj2, "Time (ms); Net Angle (degree);\n");
+
+	while(i<PROBE_STORAGE_SIZE-1){
+	    fprintf(fj2,  "%d;%f;\r\n", i, probeCheck[i]);
 	    i++ ;
 	}
 
@@ -382,12 +384,16 @@ void *testThread2(void *ptr){
         /* do the stuff */
         //probe the encoder values every millisecond while the interrupts are happening
     	//printf("%f\n",netAngleDegree);
+
         probeCheck[index] = netAngleDegree; //store current netAngleDegree
         index++;                            //increment index
+
+
         if(index > PROBE_STORAGE_SIZE){                   //if index is past storage limit, print
-            printProbe();
+        	printProbe();
             return (void*) NULL;
         }
+
 
 		/* calculate next shot */
     	t_Thread2.tv_nsec += NSEC_PER_SEC;      //wait another millisecond so that delay will happen again before next probe
