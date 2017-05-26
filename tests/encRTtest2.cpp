@@ -158,7 +158,7 @@ void counter(int nb_signal) {
         indexOutput++;
         }
 
-	if(indexOutput==5000){
+	if(indexOutput%1000==0){
 		cout << "5000 int reached" << endl;
 	}
 
@@ -198,7 +198,7 @@ void printProbe(void){
 	fprintf(fj2, "Time (ms); Net Angle (degree); net Increment;\n");
 
 	while(i<PROBE_STORAGE_SIZE){
-	    fprintf(fj2,  "%d;%f;\%d;r\n", i, probeAngleDeg[i],probeIncrement[i]);
+	    fprintf(fj2,  "%d;%f;%d; \r\n", i, probeAngleDeg[i],probeIncrement[i]);
 	    i++ ;
 	}
 
@@ -364,8 +364,7 @@ void *testThread2(void *ptr){
     /*here should start the things used with the rt preempt patch*/
 
     clock_gettime(CLOCK_MONOTONIC ,&t_Thread2);     //get the current time and store in the timespec struct
-
-                                                    /* start after one second */
+                                                   /* start after one second */
     t_Thread2.tv_sec++;                             //increment the timespec struct time by one full second so that
                                                     //we can get a delay in the next step
 
@@ -381,7 +380,6 @@ void *testThread2(void *ptr){
         probeAngleDeg[index] = netAngleDegree; //store current netAngleDegree
         probeIncrement[index] = netAngleIncrement;
         index++;                            //increment index
-
 
         if(index > PROBE_STORAGE_SIZE){                   //if index is past storage limit, print
         	printProbe();
