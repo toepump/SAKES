@@ -199,12 +199,12 @@ void printProbe(void){
 	cout << "Printing of the probe starts" << endl;
 
 	int i=0;
-	FILE *fj2=fopen("probeCheck.dat","w");
+	FILE *fj2=fopen("probeCheck.data","w");
 
 	fprintf(fj2, "Time (ms); Net Angle (degree); net Increment;\n");
 
 	while(i<PROBE_STORAGE_SIZE){
-	    fprintf(fj2,  "%d;%f;%d; \r\n", i, probeAngleDeg[i], probeIncrement[i]);
+	    fprintf(fj2,  "%d;%f;%d\n", i, probeAngleDeg[i], probeIncrement[i]);
 	    i++ ;
 	}
 
