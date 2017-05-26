@@ -33,7 +33,8 @@ const double PULSE_PER_DEGREE = double(PULSE_PER_TURN)/360; // The number of pul
 int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
 
 double outputNetAngle[MAX_PULSE]; //Store the value at each interrupt
-double probeCheck[PROBE_STORAGE_SIZE]; //net angle check for the probing thread
+double probeAngleDeg[PROBE_STORAGE_SIZE]; //net angle check for the probing thread
+double probeIncrement[PROBE_STORAGE_SIZE]; //net angle check for the probing thread
 
 int outputEncfwd[MAX_PULSE]; //Store the value at each interrupt
 int outputEncbwd[MAX_PULSE]; //Store the value at each interrupt
@@ -194,10 +195,10 @@ void printProbe(void){
 	int i=0;
 	FILE *fj2=fopen("probeCheck.dat","w");
 
-	fprintf(fj2, "Time (ms); Net Angle (degree);\n");
+	fprintf(fj2, "Time (ms); Net Angle (degree); net Increment;\n");
 
-	while(i<PROBE_STORAGE_SIZE-1){
-	    fprintf(fj2,  "%d;%f;\r\n", i, probeCheck[i]);
+	while(i<PROBE_STORAGE_SIZE){
+	    fprintf(fj2,  "%d;%f;\%d;r\n", i, probeAngleDeg[i],probeIncrement[i]);
 	    i++ ;
 	}
 
@@ -377,7 +378,8 @@ void *testThread2(void *ptr){
         //probe the encoder values every millisecond while the interrupts are happening
     	//printf("%f\n",netAngleDegree);
 
-        probeCheck[index] = netAngleDegree; //store current netAngleDegree
+        probeAngleDeg[index] = netAngleDegree; //store current netAngleDegree
+        probeIncrement[index] = netAngleIncrement;
         index++;                            //increment index
 
 
