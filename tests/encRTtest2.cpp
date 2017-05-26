@@ -28,7 +28,7 @@ const int INTERVAL =1000000; // in nanosecond
 
 const int MAX_PULSE = 50000; //maximum number of pulse recorded
 const int PULSE_PER_TURN = 12000; //The number of pulse (interrupt) to complete one turn
-const int PROBE_STORAGE_SIZE = 30000; //in ms
+const int PROBE_STORAGE_SIZE = 20000; //in ms
 const double PULSE_PER_DEGREE = 12000.0/360.0; // The number of pulse (interrupt) to complete one degree
 int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
 
@@ -315,7 +315,7 @@ int main(int argc, char* argv[]){
     pthread_setschedprio(thread2, 49);
 	//
 	printf("pthread_create() for thread 1 returns: %d\n",iret1);
-    printf("pthread_create() for thread 2 returns: %d\n",iret2); //TODO some error number returns
+    printf("pthread_create() for thread 2 returns: %d\n",iret2);
 
 	/* Wait till threads are complete before main continues. Unless we  */
 	/* wait we run the risk of executing an exit which will terminate   */
