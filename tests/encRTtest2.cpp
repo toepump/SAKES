@@ -90,6 +90,8 @@ static gboolean EventB( GIOChannel *channel, GIOCondition condition, gpointer us
 void counter(int nb_signal) {
     init++;
 
+
+    //TODO change condition so that if condition is met, launch counter() function and consolidate into external function.
     if(init>2 && indexOutput<MAX_PULSE){
 
         if(state==1){
