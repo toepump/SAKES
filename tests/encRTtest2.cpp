@@ -311,8 +311,8 @@ int main(int argc, char* argv[]){
     pthread_setschedparam(thread2, SCHED_FIFO, &parm2);
 
 	//set priority each thread
-	pthread_setschedprio(thread1, 49);
-    pthread_setschedprio(thread2, 49);
+	pthread_setschedprio(thread1, 40);
+    pthread_setschedprio(thread2, 45);
 	//
 	printf("pthread_create() for thread 1 returns: %d\n",iret1);
     printf("pthread_create() for thread 2 returns: %d\n",iret2);
@@ -324,6 +324,7 @@ int main(int argc, char* argv[]){
 	pthread_join( thread1, NULL);
     pthread_join( thread2, NULL);
 
+    printf("Finished: %d\n");
 
 	exit(EXIT_SUCCESS);
 }
