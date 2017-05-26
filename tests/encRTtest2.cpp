@@ -34,7 +34,7 @@ int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
 
 double outputNetAngle[MAX_PULSE]; //Store the value at each interrupt
 double probeAngleDeg[PROBE_STORAGE_SIZE]; //net angle check for the probing thread
-double probeIncrement[PROBE_STORAGE_SIZE]; //net angle check for the probing thread
+int probeIncrement[PROBE_STORAGE_SIZE]; //net angle check for the probing thread
 
 int outputEncfwd[MAX_PULSE]; //Store the value at each interrupt
 int outputEncbwd[MAX_PULSE]; //Store the value at each interrupt
@@ -197,7 +197,7 @@ void printProbe(void){
 	fprintf(fj2, "Time (ms); Net Angle (degree); net Increment;\n");
 
 	while(i<PROBE_STORAGE_SIZE){
-	    fprintf(fj2,  "%d;%f;%d; \r\n", i, probeAngleDeg[i],probeIncrement[i]);
+	    fprintf(fj2,  "%d;%lf;%d; \r\n", i, probeAngleDeg[i], probeIncrement[i]);
 	    i++ ;
 	}
 
@@ -285,7 +285,6 @@ int main(int argc, char* argv[]){
 	pthread_attr_init(&attr2);
 
 	/* Create independent thread which will execute function */
-
 	pthread_attr_getschedparam(&attr1, &parm1); // put the scheduling param of att to parm
 	parm1.sched_priority = sched_get_priority_min(SCHED_FIFO); //return the minimum priority
 	pthread_attr_setschedpolicy(&attr1, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
@@ -303,8 +302,6 @@ int main(int argc, char* argv[]){
 
     iret1 = pthread_create(&thread1, &attr1, testThread2,(void*) message2);
     pthread_setschedparam(thread2, SCHED_FIFO, &parm2);
-
-
 
 	//set priority each thread
 	pthread_setschedprio(thread1, 49);
@@ -374,7 +371,7 @@ void *testThread2(void *ptr){
 
         /* do the stuff */
         //probe the encoder values every millisecond while the interrupts are happening
-    	//printf("%f\n",netAngleDegree);
+    	//printf("%lf\n",netAngleDegree);
 
         probeAngleDeg[index] = netAngleDegree; //store current netAngleDegree
         probeIncrement[index] = netAngleIncrement;
