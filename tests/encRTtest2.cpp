@@ -296,7 +296,7 @@ int main(int argc, char* argv[]){
     pthread_attr_setschedpolicy(&attr2, SCHED_FIFO);
     pthread_attr_setschedparam(&attr2, &parm2);
 
-    iret1 = pthread_create(&thread1, &attr1, testThread2,(void*) message2);
+    iret2 = pthread_create(&thread1, &attr1, testThread2,(void*) message2);
     pthread_setschedparam(thread2, SCHED_FIFO, &parm2);
 
 
@@ -384,8 +384,8 @@ void *testThread2(void *ptr){
         /* do the stuff */
         //probe the encoder values every millisecond while the interrupts are happening
     	//printf("%f\n",netAngleDegree);
-        probeCheck[index] = netAngleDegree; //store current netAngleDegree
-        index++;                            //increment index
+        // probeCheck[index] = netAngleDegree; //store current netAngleDegree
+        // index++;                            //increment index
         // if(index > PROBE_STORAGE_SIZE){                   //if index is past storage limit, print
         //     printProbe();
         //     return (void*) NULL;
