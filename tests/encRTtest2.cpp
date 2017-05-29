@@ -311,22 +311,22 @@ int main(int argc, char* argv[]){
     pthread_attr_setschedpolicy(&attr2, SCHED_FIFO);
     pthread_attr_setschedparam(&attr2, &parm2);
 
-    iret2 = pthread_create(&thread2, &attr2, testThread2,(void*) message2);
-    pthread_setschedparam(thread2, SCHED_FIFO, &parm2);
+    //iret2 = pthread_create(&thread2, &attr2, testThread2,(void*) message2);
+    //pthread_setschedparam(thread2, SCHED_FIFO, &parm2);
 
 	//set priority each thread
 	pthread_setschedprio(thread1, 40);
-    pthread_setschedprio(thread2, 45);
+    //pthread_setschedprio(thread2, 45);
 	//
 	printf("pthread_create() for thread 1 returns: %d\n",iret1);
-    printf("pthread_create() for thread 2 returns: %d\n",iret2);
+    //printf("pthread_create() for thread 2 returns: %d\n",iret2);
 
 	/* Wait till threads are complete before main continues. Unless we  */
 	/* wait we run the risk of executing an exit which will terminate   */
 	/* the process and all threads before the threads have completed.   */
 
 	pthread_join( thread1, NULL);
-    pthread_join( thread2, NULL);
+    //pthread_join( thread2, NULL);
 
     printf("Finished: %d\n");
 
