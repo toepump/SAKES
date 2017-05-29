@@ -158,8 +158,8 @@ void counter(int nb_signal) {
         else{
             cout<<"state is fucked" << endl;
         }
-        netAngleDegree=double(netAngleIncrement)/PULSE_PER_DEGREE;
-        //netAngleDegree=double(netAngleIncrement);
+        //netAngleDegree=double(netAngleIncrement)/PULSE_PER_DEGREE;
+        netAngleDegree=double(netAngleIncrement);
 
 
         outputNetIncrement[indexOutput]=netAngleIncrement;
@@ -184,7 +184,7 @@ void printOutData(void){
 	int i=0;
 	FILE *fj1=fopen("outputEncoder.dat","w");
 
-    //fprintf(fj1,"PULSE_PER_DEGREE = %f\r\n", PULSE_PER_DEGREE);
+    fprintf(fj1,"PULSE_PER_DEGREE = %f\r\n", PULSE_PER_DEGREE);
 	fprintf(fj1,"indexOutput;Net Increment;Net Angle (degrees);State;EncoderForward;EncoderBackward;\r\n");
 
 	while(i<MAX_PULSE){
