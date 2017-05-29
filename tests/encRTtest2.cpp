@@ -26,7 +26,7 @@ using namespace std;
 #define NSEC_PER_MSEC   (1000000)   //number of nsecs in milliseconds
 const int INTERVAL =1000000; // in nanosecond
 
-const int MAX_PULSE = 36000; //maximum number of pulse recorded
+const int MAX_PULSE = 30000; //maximum number of pulse recorded
 const int PULSE_PER_TURN = 12000; //The number of pulse (interrupt) to complete one turn
 const int PROBE_STORAGE_SIZE = 20000; //in ms
 const double PULSE_PER_DEGREE = 12000.0/360.0; // The number of pulse (interrupt) to complete one degree
@@ -157,14 +157,14 @@ void counter(int nb_signal) {
         }
         netAngleDegree=double(netAngleIncrement)/PULSE_PER_DEGREE;
 
-        	/*
+
         outputNetIncrement[indexOutput]=netAngleIncrement;
         outputNetAngle[indexOutput]=netAngleDegree;
         outputEncfwd[indexOutput]=encfwd;
         outputEncbwd[indexOutput]=encbwd;
         outputState[state];
         indexOutput++;
-        */
+
         }
 
     	if(indexOutput+1>MAX_PULSE){
@@ -380,15 +380,15 @@ void *testThread2(void *ptr){
         //probe the encoder values every millisecond while the interrupts are happening
     	//printf("%lf\n",netAngleDegree);
 
-        probeAngleDeg[index] = netAngleDegree; //store current netAngleDegree
-        probeIncrement[index] = netAngleIncrement;
-        index++;                            //increment index
-
-        if(index > PROBE_STORAGE_SIZE){                   //if index is past storage limit, print
-        	cout << "number of failure: " << failInt << endl;
-        	printProbe();
-            return (void*) NULL;
-        }
+        // probeAngleDeg[index] = netAngleDegree; //store current netAngleDegree
+        // probeIncrement[index] = netAngleIncrement;
+        // index++;                            //increment index
+        //
+        // if(index > PROBE_STORAGE_SIZE){                   //if index is past storage limit, print
+        // 	cout << "number of failure: " << failInt << endl;
+        // 	printProbe();
+        //     return (void*) NULL;
+        // }
 
 
 		/* calculate next shot */
