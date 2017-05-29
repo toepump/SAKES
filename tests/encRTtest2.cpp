@@ -24,23 +24,20 @@ using namespace std;
 
 #define NSEC_PER_SEC    (1000000000) /* The number of nsecs per sec. */
 #define NSEC_PER_MSEC   (1000000)   //number of nsecs in milliseconds
-const int INTERVAL =1000000; // in nanosecond
 
-const int MAX_PULSE = 36000; //maximum number of pulse recorded
+const int MAX_PULSE = 20000; //maximum number of pulse recorded
 const int PULSE_PER_TURN = 12000; //The number of pulse (interrupt) to complete one turn
-const int PROBE_STORAGE_SIZE = 20000; //in ms
-const double PULSE_PER_DEGREE = 12000.0/360.0; // The number of pulse (interrupt) to complete one degree
+const int PROBE_STORAGE_SIZE = 15000;
+const double PULSE_PER_DEGREE = double(PULSE_PER_TURN)/360; // The number of pulse (interrupt) to complete one degree
 int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
 
 double outputNetAngle[MAX_PULSE]; //Store the value at each interrupt
-double probeAngleDeg[PROBE_STORAGE_SIZE]; //net angle check for the probing thread
-int probeIncrement[PROBE_STORAGE_SIZE]; //net angle check for the probing thread
+double probeCheck[PROBE_STORAGE_SIZE]; //net angle check for the probing thread
 
 int outputEncfwd[MAX_PULSE]; //Store the value at each interrupt
 int outputEncbwd[MAX_PULSE]; //Store the value at each interrupt
 int outputState[MAX_PULSE];
 int indexOutput=0; //Incremented at each interrupt
-int failInt=0;
 
 
 void *testThread1(void *ptr);
@@ -98,77 +95,70 @@ void counter(int nb_signal) {
         if(state==1){
             if(nb_signal==2){
             	netAngleIncrement++;
-                //encfwd++;
+                encfwd++;
                 state=2;
             }else if(nb_signal==1){
-                //encbwd++;
+                encbwd++;
                 netAngleIncrement--;
                 state=4;
             }else{
-            	failInt++;
-                //cout << "problem with the counter in case 1" << endl;
+                cout << "problem with the counter in case 1" << endl;
             }
         }
 
         else if(state==2){
             if(nb_signal==1){
             	netAngleIncrement++;
-            	//encfwd++;
+            	encfwd++;
                 state=3;
             }else if(nb_signal==2){
             	state=1;
             	netAngleIncrement--;
-            	//encbwd++;
+            	encbwd++;
             }else{
-            	failInt++;
-                //cout << "problem with the counter in case 1" << endl;
+                cout << "problem with the counter in case 2" << endl;
             }
         }
 
         else if(state==3){
             if(nb_signal==2){
             	netAngleIncrement++;
-               // encfwd++;
+                encfwd++;
                 state=4;
             }else if(nb_signal==1){
             	netAngleIncrement--;
-				//encbwd++;
+				encbwd++;
 				state=2;
             }else{
-            	failInt++;
-                //cout << "problem with the counter in case 1" << endl;
+                cout << "problem with the counter in case 3" << endl;
             }
         }
 
         else if(state==4){
             if(nb_signal==1){
-                //encfwd++;
+                encfwd++;
                 netAngleIncrement++;
                 state=1;
             }else if(nb_signal==2){
-            	//encbwd++;
+            	encbwd++;
             	netAngleIncrement--;
                 state=3;
             }else{
-            	failInt++;
-                //cout << "problem with the counter in case 1" << endl;
+                cout << "problem with the counter in case 4" << endl;
             }
 
         }
         netAngleDegree=double(netAngleIncrement)/PULSE_PER_DEGREE;
 
-        	/*
         outputNetIncrement[indexOutput]=netAngleIncrement;
         outputNetAngle[indexOutput]=netAngleDegree;
         outputEncfwd[indexOutput]=encfwd;
         outputEncbwd[indexOutput]=encbwd;
         outputState[state];
         indexOutput++;
-        */
         }
 
     	if(indexOutput+1>MAX_PULSE){
-    		cout << "printOutStarted" << endl;
     		printOutData();
     	}
 
@@ -199,12 +189,10 @@ void printProbe(void){
 	cout << "Printing of the probe starts" << endl;
 
 	int i=0;
-	FILE *fj2=fopen("probeCheck.data","w");
+	FILE *fj2=fopen("probeCheck.dat","w");
 
-	fprintf(fj2, "Time (ms); Net Angle (degree); net Increment;\n");
-
-	while(i<PROBE_STORAGE_SIZE){
-	    fprintf(fj2,  "%d;%f;%d\n", i, probeAngleDeg[i], probeIncrement[i]);
+	while(i<1000){
+	    fprintf(fj2, "netAngleDegree: %f\n", probeCheck[i]);
 	    i++ ;
 	}
 
@@ -292,6 +280,7 @@ int main(int argc, char* argv[]){
 	pthread_attr_init(&attr2);
 
 	/* Create independent thread which will execute function */
+
 	pthread_attr_getschedparam(&attr1, &parm1); // put the scheduling param of att to parm
 	parm1.sched_priority = sched_get_priority_min(SCHED_FIFO); //return the minimum priority
 	pthread_attr_setschedpolicy(&attr1, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
@@ -307,15 +296,17 @@ int main(int argc, char* argv[]){
     pthread_attr_setschedpolicy(&attr2, SCHED_FIFO);
     pthread_attr_setschedparam(&attr2, &parm2);
 
-    iret2 = pthread_create(&thread2, &attr2, testThread2,(void*) message2);
+    iret1 = pthread_create(&thread1, &attr1, testThread2,(void*) message2);
     pthread_setschedparam(thread2, SCHED_FIFO, &parm2);
 
+
+
 	//set priority each thread
-	pthread_setschedprio(thread1, 40);
-    pthread_setschedprio(thread2, 45);
+	pthread_setschedprio(thread1, 49);
+    pthread_setschedprio(thread2, 49);
 	//
 	printf("pthread_create() for thread 1 returns: %d\n",iret1);
-    printf("pthread_create() for thread 2 returns: %d\n",iret2);
+    printf("pthread_create() for thread 2 returns: %d\n",iret2); //TODO some error number returns
 
 	/* Wait till threads are complete before main continues. Unless we  */
 	/* wait we run the risk of executing an exit which will terminate   */
@@ -324,7 +315,6 @@ int main(int argc, char* argv[]){
 	pthread_join( thread1, NULL);
     pthread_join( thread2, NULL);
 
-    printf("Finished: %d\n");
 
 	exit(EXIT_SUCCESS);
 }
@@ -333,11 +323,25 @@ void *testThread1(void *ptr) {
 
 	char *message;
 	message = (char *) ptr;
+	struct timespec t_Thread1;
+
+	/*Stuff I want to do*/
+	/*here should start the things used with the rt preempt patch*/
+
+    clock_gettime(CLOCK_MONOTONIC ,&t_Thread1);
+    /* start after one second */
+    t_Thread1.tv_sec++;
 
     while(true) {
 
+    	/* wait until next shot */
+    	//clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
+
+    	/* do the stuff */
+        //initialize loops for both events
         GMainLoop* loopA = g_main_loop_new(0, 0);
         GMainLoop* loopB = g_main_loop_new(0, 0);
+
 
         int fdA = open( "/sys/class/gpio/gpio66/value", O_RDONLY | O_NONBLOCK );
         GIOChannel* channelA = g_io_channel_unix_new(fdA);
@@ -367,7 +371,8 @@ void *testThread2(void *ptr){
     /*here should start the things used with the rt preempt patch*/
 
     clock_gettime(CLOCK_MONOTONIC ,&t_Thread2);     //get the current time and store in the timespec struct
-                                                   /* start after one second */
+
+                                                    /* start after one second */
     t_Thread2.tv_sec++;                             //increment the timespec struct time by one full second so that
                                                     //we can get a delay in the next step
 
@@ -378,21 +383,16 @@ void *testThread2(void *ptr){
 
         /* do the stuff */
         //probe the encoder values every millisecond while the interrupts are happening
-    	//printf("%lf\n",netAngleDegree);
-
-        probeAngleDeg[index] = netAngleDegree; //store current netAngleDegree
-        probeIncrement[index] = netAngleIncrement;
+    	//printf("%f\n",netAngleDegree);
+        probeCheck[index] = netAngleDegree; //store current netAngleDegree
         index++;                            //increment index
-
-        if(index > PROBE_STORAGE_SIZE){                   //if index is past storage limit, print
-        	cout << "number of failure: " << failInt << endl;
-        	printProbe();
-            return (void*) NULL;
-        }
-
+        // if(index > PROBE_STORAGE_SIZE){                   //if index is past storage limit, print
+        //     printProbe();
+        //     return (void*) NULL;
+        // }
 
 		/* calculate next shot */
-    	t_Thread2.tv_nsec += INTERVAL;      //wait another millisecond so that delay will happen again before next probe
+    	t_Thread2.tv_nsec += NSEC_PER_SEC;      //wait another millisecond so that delay will happen again before next probe
 
     	while (t_Thread2.tv_nsec >= NSEC_PER_SEC) {
     		t_Thread2.tv_nsec -= NSEC_PER_SEC;
