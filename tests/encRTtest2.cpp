@@ -171,7 +171,8 @@ void counter(int nb_signal) {
 
         }
 
-    	if(indexOutput==MAX_PULSE){
+        //TODO: why the FUCK is this printing so many times
+    	if(indexOutput-1==MAX_PULSE){
     		cout << "printOutStarted" << endl;
     		printOutData();
     	}
