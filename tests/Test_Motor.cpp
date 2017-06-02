@@ -24,7 +24,7 @@ const int TIME_MAX = 60000; // time max for the loop in ms
 const int INTERVAL_1MS =1000000; // in nanosecond
 
 
-int paramThread(pthread_t thread, int priority, int iret, void *function, char *message);
+int paramThread(pthread_t thread, int priority, int iret, void *function(void *ptr), char *message);
 
 int ticks_t1=0; //Incremental value for the thread 1
 int ticks_t2=0; //Incremental value for the thread 1
@@ -60,7 +60,7 @@ int paramThread(pthread_t thread, int priority, int iret, void *function(void *p
 	}
 
 
-	iret = pthread_create(&thread, &attr, function,(void*) message); //create a thread that launch the print_message_function with the arguments  message1
+	iret = pthread_create(&thread, &attr, function,(void*) &message); //create a thread that launch the print_message_function with the arguments  message1
 	pthread_setschedparam(thread, SCHED_FIFO, &parm); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
 														// if it fails, return not 0
 
