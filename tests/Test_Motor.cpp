@@ -77,7 +77,7 @@ int setParamThreadFIFO2(pthread_attr_t attr, struct sched_param parm, int priori
 		checkParam=0;
 	}
 
-	iret = pthread_create(&thread, &attr, function, message);
+	iret = pthread_create(&thread, &attr, function,(void*) message);
 
 	return checkParam;
 }
