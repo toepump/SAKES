@@ -78,8 +78,8 @@ int main(int argc, char* argv[]){
 	int  iret1, iret2;
 	int checkInitThread;
 
-	checkInitThread=paramThread(thread1, 40, iret1, *testThread1, *message1);
-	checkInitThread=paramThread(thread2, 40, iret2, *testThread2, *message2);
+	checkInitThread=paramThread(thread1, 40, iret1, testThread1, *message1);
+	checkInitThread=paramThread(thread2, 40, iret2, testThread2, *message2);
 
 	/* Wait till threads are complete before main continues. Unless we  */
 	/* wait we run the risk of executing an exit which will terminate   */
