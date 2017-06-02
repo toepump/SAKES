@@ -57,16 +57,16 @@ double coeffs1[57]={ 2161704178.57744, -7678966834.50137, 7321336263.45535, 0.0,
 
 
 
-void polyEval(double coeffs[], double x, double output){
+void polyEval(double coeffs[], double *x, double *output){
 
 	int degreeOfPoly=sizeof(coeffs); //The degree of the polynum
 	int i;
 	double result=0;
 
 	for(i=0;i++;i<=degreeOfPoly){
-		result+=coeffs[i]*pow(x,degreeOfPoly-i);
+		result+=coeffs[i]*pow(*x,degreeOfPoly-i);
 	}
-	output=result;
+	*output=result;
 }
 
 int setParamThreadFIFO(pthread_attr_t attr, struct sched_param param, int priority){
@@ -152,7 +152,7 @@ void *testThread1(void *ptr) {
 
   	/* do the stuff */
   	if(ticks_t1%500==0){
-  		polyEval(coeffs1, timePolyEval, angleTest);
+  		polyEval(coeffs1, &timePolyEval, &angleTest);
   		cout << "Time:  " << timePolyEval << " Angle:  " << angleTest << endl;
   		timePolyEval+=0.05;
   		if(timePolyEval>0.99){
