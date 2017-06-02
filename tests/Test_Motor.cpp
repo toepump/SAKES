@@ -98,7 +98,7 @@ int main(int argc, char* argv[]){
 	pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
 	pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
 
-	checkInitThread=setParamThreadFIFO2(attr1, parm1, 49, &thread1, iret1, testThread1, (void*) message1 );
+	checkInitThread=setParamThreadFIFO2(attr1, parm1, 49, thread1, iret1, testThread1, message1 );
 	checkInitThread=setParamThreadFIFO1(attr2, parm2, 49);
 
 	//iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
