@@ -24,7 +24,7 @@ const int TIME_MAX = 60000; // time max for the loop in ms
 const int INTERVAL_1MS =1000000; // in nanosecond
 
 
-int setParamThread(int priority);
+int setParamThread(pthread_attr_t attr, struct sched_param parm, int priority);
 
 int ticks_t1=0; //Incremental value for the thread 1
 int ticks_t2=0; //Incremental value for the thread 1
@@ -46,9 +46,9 @@ int setParamThread(pthread_attr_t attr, struct sched_param parm, int priority){
 
 	/* Create independent threads each of which will execute function */
 	pthread_attr_getschedparam(&attr, &parm); // put the scheduling param of att to parm
-	checkSetting=parm.sched_priority = priority; //return the minimum priority
-	checkSetting=pthread_attr_setschedpolicy(&attr, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
-	checkSetting=pthread_attr_setschedparam(&attr, &parm); //set the scheduling parameter of attr1 as parm1
+	checkParam=parm.sched_priority = priority; //return the minimum priority
+	checkParam=pthread_attr_setschedpolicy(&attr, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
+	checkParam=pthread_attr_setschedparam(&attr, &parm); //set the scheduling parameter of attr1 as parm1
 
 	if(checkParam!=0){
 		cout << "Problem in the initialization of a thread "<< endl;
@@ -79,10 +79,12 @@ int main(int argc, char* argv[]){
 	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
 
 	//create a thread that launch the print_message_function with the arguments  message1
-	pthread_setschedparam(thread, SCHED_FIFO, &parm); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
+	pthread_setschedparam(thread1, SCHED_FIFO, &parm1);
+	pthread_setschedparam(thread2, SCHED_FIFO, &parm2); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
 														// if it fails, return not 0
 
-	printf("pthread_create() for returns: %d\n", iret);
+	printf("pthread_create() for returns: %d\n", iret1);
+	printf("pthread_create() for returns: %d\n", iret2);
 
 	/* Wait till threads are complete before main continues. Unless we  */
 	/* wait we run the risk of executing an exit which will terminate   */
