@@ -83,6 +83,9 @@ int main(int argc, char* argv[]){
 	pthread_setschedparam(thread2, SCHED_FIFO, &parm2); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
 														// if it fails, return not 0
 
+
+	cout << "Ici 1 " << < endl;
+
 	printf("pthread_create() for returns: %d\n", iret1);
 	printf("pthread_create() for returns: %d\n", iret2);
 
@@ -90,8 +93,12 @@ int main(int argc, char* argv[]){
 	/* wait we run the risk of executing an exit which will terminate   */
 	/* the process and all threads before the threads have completed.   */
 
+	cout << "Ici 2 " << < endl;
+
 	pthread_join( thread1, NULL);
 	pthread_join( thread2, NULL);
+
+	cout << "Ici 3 " << < endl;
 
 	exit(EXIT_SUCCESS);
 }
