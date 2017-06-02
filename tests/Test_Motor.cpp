@@ -60,7 +60,7 @@ int paramThread(pthread_t thread, int priority, int iret, void *function(void *p
 	}
 
 
-	iret = pthread_create(&thread, &attr, function,(void*) &message); //create a thread that launch the print_message_function with the arguments  message1
+	iret = pthread_create(&thread, &attr, function,(void*) message); //create a thread that launch the print_message_function with the arguments  message1
 	pthread_setschedparam(thread, SCHED_FIFO, &parm); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
 														// if it fails, return not 0
 
@@ -78,8 +78,8 @@ int main(int argc, char* argv[]){
 	int  iret1, iret2;
 	int checkInitThread;
 
-	checkInitThread=paramThread(thread1, 40, iret1, testThread1, *message1);
-	checkInitThread=paramThread(thread2, 40, iret2, testThread2, *message2);
+	checkInitThread=paramThread(thread1, 40, iret1, testThread1, &message1);
+	checkInitThread=paramThread(thread2, 40, iret2, testThread2, &message2);
 
 	/* Wait till threads are complete before main continues. Unless we  */
 	/* wait we run the risk of executing an exit which will terminate   */
