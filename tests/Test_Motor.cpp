@@ -24,7 +24,7 @@ const int TIME_MAX = 60000; // time max for the loop in ms
 const int INTERVAL_1MS =1000000; // in nanosecond
 
 
-int paramThread(pthread_t thread, int priority, int iret, void *function(void *ptr), const char *message);
+int setParamThread(int priority);
 
 int ticks_t1=0; //Incremental value for the thread 1
 int ticks_t2=0; //Incremental value for the thread 1
@@ -34,19 +34,15 @@ void *testThread2(void *ptr);
 
 
 
-int paramThread(pthread_t thread, int priority, int iret, void *function(void *ptr), const char *message){
+int setParamThread(pthread_attr_t attr, struct sched_param parm, int priority){
 	/*Function: Set the parameters
 	 * Create the thread @thread, with the priority @priority
 	 * associated with the iret @iret, the function @function and the message @*message
 	 */
 
-	int checkSetting; //Variable to check if the setting of the thread is okay
+	int checkParam; //Variable to check if the setting of the thread is okay
 
-	/*set attribute */
-	pthread_attr_t attr; //Creation of the variable for the attribute
-	struct sched_param parm; //Creation of new sched_param
 	pthread_attr_init(&attr); //Initialize the thread attributes with default attribute
-
 
 	/* Create independent threads each of which will execute function */
 	pthread_attr_getschedparam(&attr, &parm); // put the scheduling param of att to parm
@@ -54,19 +50,12 @@ int paramThread(pthread_t thread, int priority, int iret, void *function(void *p
 	checkSetting=pthread_attr_setschedpolicy(&attr, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
 	checkSetting=pthread_attr_setschedparam(&attr, &parm); //set the scheduling parameter of attr1 as parm1
 
-	if(checkSetting!=0){
-		cout << "Problem in the initialization of the thread 1 : "<< endl;
-		checkSetting=0;
+	if(checkParam!=0){
+		cout << "Problem in the initialization of a thread "<< endl;
+		checkParam=0;
 	}
 
-
-	iret = pthread_create(&thread, &attr, function,(void*) message); //create a thread that launch the print_message_function with the arguments  message1
-	pthread_setschedparam(thread, SCHED_FIFO, &parm); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
-														// if it fails, return not 0
-
-	printf("pthread_create() for returns: %d\n", iret);
-
-	return checkSetting;
+	return checkParam;
 }
 
 int main(int argc, char* argv[]){
@@ -75,13 +64,25 @@ int main(int argc, char* argv[]){
 	pthread_t thread1, thread2;
 	const char *message1 = "Thread 1";
 	const char *message2 = "Thread 2";
-	int  iret1=0;
-	int iret2=0;
+	int  iret1, iret2;
+
+	pthread_attr_t attr1, attr2; //Creation of the variable for the attribute
+	struct sched_param parm1, parm2; //Creation of new sched_param
+
 	int checkInitThread;
 
-	checkInitThread=paramThread(thread1, 49, iret1, testThread1, message1);
+	checkInitThread=setParamThread(attr1, parm1, 49);
+	checkInitThread=setParamThread(attr2, parm2, 49);
 
-	checkInitThread=paramThread(thread2, 49, iret2, testThread2, message2);
+
+	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
+	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
+
+	//create a thread that launch the print_message_function with the arguments  message1
+	pthread_setschedparam(thread, SCHED_FIFO, &parm); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
+														// if it fails, return not 0
+
+	printf("pthread_create() for returns: %d\n", iret);
 
 	/* Wait till threads are complete before main continues. Unless we  */
 	/* wait we run the risk of executing an exit which will terminate   */
