@@ -156,13 +156,11 @@ void *testThread1(void *ptr) {
   	/* do the stuff */
   	if(ticks_t1%500==0){
   		polyEval(coeffs1, &timePolyEval, &angleTest);
+  		test1=coeffs[0]*pow(timePolyEval,57);
   		cout << "Degree of polynom:  " << MAXDEGREEPOLY << endl;
-  		cout << "Time:  " << timePolyEval << " Angle:  " << angleTest << endl;
+  		cout << "Time:  " << timePolyEval << " Angle:  " << angleTest << " Value of test1:  " << test1 << endl;
 
-  		test1=pow(timePolyEval,57);
-  		cout << "Time:  " << timePolyEval << " Value of test1:  " << test1 << endl;
-
-  		timePolyEval+=0.05;
+  		timePolyEval=timePolyEval+0.05;
   		if(timePolyEval>0.99){
   			timePolyEval=0.0;
   		}
