@@ -44,7 +44,7 @@ int setParamThreadFIFO(pthread_attr_t attr, struct sched_param param, int priori
 
 	//Create independent threads each of which will execute function
 	pthread_attr_getschedparam(&attr, &param); // put the scheduling param of att to parm
-	checkParam=parm.sched_priority = priority; //return the minimum priority
+	checkParam=param.sched_priority = priority; //return the minimum priority
 	checkParam=pthread_attr_setschedpolicy(&attr, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
 	checkParam=pthread_attr_setschedparam(&attr, &param); //set the scheduling parameter of attr1 as parm1
 
