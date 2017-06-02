@@ -134,9 +134,11 @@ void *testThread1(void *ptr) {
 	message = (char *) ptr;
 	struct timespec t_Thread1;
 
+	//Variable for testi
 	int testPolyEval=0;
 	double timePolyEval=0;
 	double angleTest;
+	int degreeOfPoly=sizeof(coeffs1);
 
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
@@ -153,6 +155,7 @@ void *testThread1(void *ptr) {
   	/* do the stuff */
   	if(ticks_t1%500==0){
   		polyEval(coeffs1, &timePolyEval, &angleTest);
+  		cout << "Degree of polynom:  " << degreeOfPoly << endl;
   		cout << "Time:  " << timePolyEval << " Angle:  " << angleTest << endl;
   		timePolyEval+=0.05;
   		if(timePolyEval>0.99){
