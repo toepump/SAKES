@@ -24,7 +24,7 @@ const int TIME_MAX = 60000; // time max for the loop in ms
 const int INTERVALMS =1000000; // in nanosecond
 
 
-int setParamThreadFIFO(pthread_attr_t attr, struct sched_param parm, int priority);
+int setParamThreadFIFO(pthread_attr_t attr, struct sched_param param, int priority);
 void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
@@ -36,17 +36,17 @@ int ticks_t2=0; //Incremental value for the thread 2
 
 
 
-int setParamThreadFIFO(pthread_attr_t attr, struct sched_param parm, int priority){
+int setParamThreadFIFO(pthread_attr_t attr, struct sched_param param, int priority){
 	//Function: Set the attr and parm as a FIFO function with priority
 
 
 	int checkParam; //Variable to check if the setting of the thread is okay
 
 	//Create independent threads each of which will execute function
-	pthread_attr_getschedparam(&attr, &parm); // put the scheduling param of att to parm
+	pthread_attr_getschedparam(&attr, &param); // put the scheduling param of att to parm
 	checkParam=parm.sched_priority = priority; //return the minimum priority
 	checkParam=pthread_attr_setschedpolicy(&attr, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
-	checkParam=pthread_attr_setschedparam(&attr, &parm); //set the scheduling parameter of attr1 as parm1
+	checkParam=pthread_attr_setschedparam(&attr, &param); //set the scheduling parameter of attr1 as parm1
 
 	if(checkParam!=0){
 		cout << "Problem in the initialization of a thread "<< endl;
@@ -65,22 +65,22 @@ int main(int argc, char* argv[]){
 	int  iret1, iret2;
 
 	pthread_attr_t attr1, attr2; //Creation of the variable for the attribute
-	struct sched_param parm1, parm2; //Creation of new sched_param
+	struct sched_param param1, param2; //Creation of new sched_param
 
 	int checkInitThread;
 
 	pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
 	pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
 
-	checkInitThread=setParamThreadFIFO(attr1, parm1, 49);
-	checkInitThread=setParamThreadFIFO(attr2, parm2, 49);
+	checkInitThread=setParamThreadFIFO(attr1, param1, 49);
+	checkInitThread=setParamThreadFIFO(attr2, param2, 49);
 
 	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
 	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
 
 	//create a thread that launch the print_message_function with the arguments  message1
-	pthread_setschedparam(thread1, SCHED_FIFO, &parm1);
-	pthread_setschedparam(thread2, SCHED_FIFO, &parm2); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
+	pthread_setschedparam(thread1, SCHED_FIFO, &param1);
+	pthread_setschedparam(thread2, SCHED_FIFO, &param2); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
 														// if it fails, return not 0
 	printf("pthread_create() for returns: %d\n", iret1);
 	printf("pthread_create() for returns: %d\n", iret2);
@@ -100,7 +100,6 @@ void *testThread1(void *ptr) {
 	char *message;
 	message = (char *) ptr;
 	struct timespec t_Thread1;
-
 
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
