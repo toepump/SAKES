@@ -24,7 +24,7 @@ const int TIME_MAX = 60000; // time max for the loop in ms
 const int INTERVALMS =1000000; // in nanosecond
 
 
-int setParamThread(pthread_attr_t attr, struct sched_param parm, int priority);
+int setParamThreadFIFO(pthread_attr_t attr, struct sched_param parm, int priority);
 void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
@@ -35,11 +35,9 @@ int ticks_t2=0; //Incremental value for the thread 2
 
 
 
-int setParamThread(pthread_attr_t attr, struct sched_param parm, int priority){
-	/*Function: Set the parameters
-	 * Create the thread @thread, with the priority @priority
-	 * associated with the iret @iret, the function @function and the message @*message
-	 */
+int setParamThreadFIFO(pthread_attr_t attr, struct sched_param parm, int priority){
+	/*Function: Set the attr and parm as a FIFO function with priority */
+
 
 	int checkParam; //Variable to check if the setting of the thread is okay
 
@@ -76,8 +74,8 @@ int main(int argc, char* argv[]){
 	pthread_attr_init(&attr1);
 	pthread_attr_init(&attr2);
 
-	checkInitThread=setParamThread(attr1, parm1, 49);
-	checkInitThread=setParamThread(attr2, parm2, 49);
+	checkInitThread=setParamThreadFIFO(attr1, parm1, 49);
+	checkInitThread=setParamThreadFIFO(attr2, parm2, 49);
 
 	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
 	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
