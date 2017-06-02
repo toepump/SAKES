@@ -24,7 +24,8 @@ const int TIME_MAX = 60000; // time max for the loop in ms
 const int INTERVALMS =1000000; // in nanosecond
 
 
-int setParamThreadFIFO(pthread_attr_t attr, struct sched_param parm, int priority);
+//int setParamThreadFIFO(pthread_attr_t attr, struct sched_param parm, int priority);
+int setParamThreadFIFO(pthread_attr_t attr, struct sched_param parm, int priority, pthread_t thread, int iret, void *function(void *ptr), const char *message);
 void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
@@ -35,13 +36,14 @@ int ticks_t2=0; //Incremental value for the thread 2
 
 
 
+/*
 int setParamThreadFIFO(pthread_attr_t attr, struct sched_param parm, int priority){
-	/*Function: Set the attr and parm as a FIFO function with priority */
+	/*Function: Set the attr and parm as a FIFO function with priority
 
 
 	int checkParam; //Variable to check if the setting of the thread is okay
 
-	/* Create independent threads each of which will execute function */
+	/* Create independent threads each of which will execute function
 	pthread_attr_getschedparam(&attr, &parm); // put the scheduling param of att to parm
 	checkParam=parm.sched_priority = priority; //return the minimum priority
 	checkParam=pthread_attr_setschedpolicy(&attr, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
@@ -51,6 +53,31 @@ int setParamThreadFIFO(pthread_attr_t attr, struct sched_param parm, int priorit
 		cout << "Problem in the initialization of a thread "<< endl;
 		checkParam=0;
 	}
+
+	return checkParam;
+}
+*/
+
+
+
+int setParamThreadFIFO(pthread_attr_t attr, struct sched_param parm, int priority, pthread_t thread, int iret, void *function(void *ptr), const char *message){
+	//Function: Set the attr and parm as a FIFO function with priority
+
+
+	int checkParam; //Variable to check if the setting of the thread is okay
+
+	// Create independent threads each of which will execute function
+	pthread_attr_getschedparam(&attr, &parm); // put the scheduling param of att to parm
+	checkParam=parm.sched_priority = priority; //return the minimum priority
+	checkParam=pthread_attr_setschedpolicy(&attr, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
+	checkParam=pthread_attr_setschedparam(&attr, &parm); //set the scheduling parameter of attr1 as parm1
+
+	if(checkParam!=0){
+		cout << "Problem in the initialization of a thread "<< endl;
+		checkParam=0;
+	}
+
+	iret = pthread_create(&thread, &attr, function, message);
 
 	return checkParam;
 }
@@ -68,16 +95,13 @@ int main(int argc, char* argv[]){
 
 	int checkInitThread;
 
-	//pthread_attr_init(&attr1);//Initialize the thread attributes with default attribute
-	//pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
+	pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
+	pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
 
-	pthread_attr_init(&attr1);
-	pthread_attr_init(&attr2);
-
-	checkInitThread=setParamThreadFIFO(attr1, parm1, 49);
+	checkInitThread=setParamThreadFIFO(attr1, parm1, 49, &thread1, iret1, testThread1, (void*) message1 );
 	checkInitThread=setParamThreadFIFO(attr2, parm2, 49);
 
-	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
+	//iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
 	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
 
 	//create a thread that launch the print_message_function with the arguments  message1
