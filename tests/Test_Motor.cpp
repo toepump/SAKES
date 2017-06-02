@@ -75,12 +75,13 @@ int main(int argc, char* argv[]){
 	pthread_t thread1, thread2;
 	const char *message1 = "Thread 1";
 	const char *message2 = "Thread 2";
-	int  iret1, iret2;
+	int  iret1=0;
+	int iret2=0;
 	int checkInitThread;
 
-	checkInitThread=paramThread(thread1, 60, iret1, testThread1, message1);
+	checkInitThread=paramThread(thread1, 49, iret1, testThread1, message1);
 
-	checkInitThread=paramThread(thread2, 60, iret2, testThread2, message2);
+	checkInitThread=paramThread(thread2, 49, iret2, testThread2, message2);
 
 	/* Wait till threads are complete before main continues. Unless we  */
 	/* wait we run the risk of executing an exit which will terminate   */
