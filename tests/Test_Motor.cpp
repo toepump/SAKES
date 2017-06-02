@@ -64,7 +64,7 @@ void polyEval(double coeffs[], double *x, double *output){
 	double result=0;
 
 	for(i=0;i++;i<=MAXDEGREEPOLY){
-		result+=coeffs[i]*pow(*x,MAXDEGREEPOLY-i);
+		result=result+coeffs[i]*pow(*x,MAXDEGREEPOLY-i);
 	}
 	*output=result;
 }
@@ -138,6 +138,7 @@ void *testThread1(void *ptr) {
 	int testPolyEval=0;
 	double timePolyEval=0;
 	double angleTest;
+	double test1;
 
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
@@ -156,6 +157,10 @@ void *testThread1(void *ptr) {
   		polyEval(coeffs1, &timePolyEval, &angleTest);
   		cout << "Degree of polynom:  " << MAXDEGREEPOLY << endl;
   		cout << "Time:  " << timePolyEval << " Angle:  " << angleTest << endl;
+
+  		test1=pow(timePolyEval,57);
+  		cout << "Time:  " << timePolyEval << " Value of test1:  " << test1 << endl;
+
   		timePolyEval+=0.05;
   		if(timePolyEval>0.99){
   			timePolyEval=0.0;
