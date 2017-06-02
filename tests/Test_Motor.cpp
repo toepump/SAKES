@@ -31,6 +31,28 @@ void *testThread2(void *ptr);
 int ticks_t1=0; //Incremental value for the thread 1
 int ticks_t2=0; //Incremental value for the thread 2
 
+struct encoder{
+	int angIinc; //value of the angle in increment
+	double angDeg; //value of the angle in degree
+	int pulsePerTurn; //number of increment to make one turn
+	int numOfChannel; //number of channel used for this encoder
+	int numOfEdge; //number of edge detected for this encoder for one channel (either 1 or 2)
+	double velDegSec; //the velocity in deg/sec
+	double accDegSec; //the acceleration in deg/secˆ2
+};
+
+
+struct motor{
+	const double dutyMin=0.0; //Value of duty min set in the maxon board
+	const double dutyMax=0.0; //Value of duty max set in the maxon board
+	const double velMotorMin=0.0; //Value of the velocity min set on the maxon board in rpm
+	const double velMotorax=0.0; //Value of the velocity max set on the maxon board in rpm
+	double currentVelocity=0.0; //Value of the current velocity in rpm
+	double currentDuty=0.0; //Value of the current duty
+	double desiredVelocity=0.0; //Value of the desired velocity in rpm
+	double desiredDuty=0.0; //Value of the desired duty
+
+};
 
 
 
