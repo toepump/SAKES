@@ -61,7 +61,7 @@ void polyEval(double coeffs[], double *x, double *output){
 	double result=5.0;
 	double test1;
 
-	for(i=0;i++;i<MAXDEGREEPOLY){
+	for(i=0;i++;i<57){
 		test1=coeffs[i]*pow(*x,MAXDEGREEPOLY-i);
 		cout << "RCoeff " << test1<< endl;
 
