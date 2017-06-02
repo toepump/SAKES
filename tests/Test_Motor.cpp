@@ -62,7 +62,10 @@ void polyEval(double coeffs[], double *x, double *output){
 	double test1;
 
 	for(i=0;i++;i<MAXDEGREEPOLY){
-		result=result+coeffs[i]*pow(*x,MAXDEGREEPOLY-i);
+		test1=coeffs[i]*pow(*x,MAXDEGREEPOLY-i);
+		cout << "RCoeff " << test1<< endl;
+
+		result=result+test1;
 	}
 	result=result+coeffs1[56];
 	test1=*x;
@@ -157,8 +160,6 @@ void *testThread1(void *ptr) {
   	/* do the stuff */
   	if(ticks_t1%500==0){
   		polyEval(coeffs1, &timePolyEval, &angleTest);
-  		test1=coeffs1[0]*pow(timePolyEval,MAXDEGREEPOLY);
-  		cout << "Time:  " << timePolyEval << "     Angle:  " << angleTest << "     Value of test1:  " << test1 << endl;
   		cout << "    "  << endl;
 
   		timePolyEval=timePolyEval+0.05;
