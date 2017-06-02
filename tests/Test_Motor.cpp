@@ -43,6 +43,7 @@ int setParamThread(pthread_attr_t attr, struct sched_param parm, int priority){
 
 	int checkParam; //Variable to check if the setting of the thread is okay
 
+	pthread_attr_init(attr);
 	/* Create independent threads each of which will execute function */
 	pthread_attr_getschedparam(&attr, &parm); // put the scheduling param of att to parm
 	checkParam=parm.sched_priority = priority; //return the minimum priority
@@ -70,8 +71,8 @@ int main(int argc, char* argv[]){
 
 	int checkInitThread;
 
-	pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
-	pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
+	//pthread_attr_init(&attr1);//Initialize the thread attributes with default attribute
+	//pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
 
 	checkInitThread=setParamThread(attr1, parm1, 49);
 	checkInitThread=setParamThread(attr2, parm2, 49);
