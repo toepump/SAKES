@@ -59,13 +59,11 @@ void polyEval(double coeffs[], double *x, double *output){
 
 	int i=0;
 	double result=0.0;
-	double test1;
 
 	for(i=0;i<MAXDEGREEPOLY-1;i++){
-		result=result+coeffs[i]*pow(*x,MAXDEGREEPOLY-i);
+		result+=coeffs[i]*pow(*x,MAXDEGREEPOLY-i);
 	}
-	result=result+coeffs[MAXDEGREEPOLY-1];
-	cout << "Results in function  " << result << "      Value of test:  " << test1<< endl;
+	result+=coeffs[MAXDEGREEPOLY-1];
 
 	*output=result;
 }
@@ -135,11 +133,9 @@ void *testThread1(void *ptr) {
 	message = (char *) ptr;
 	struct timespec t_Thread1;
 
-	//Variable for testi
-	int testPolyEval=0;
+	//Variable for the polynomial function
 	double timePolyEval=0;
 	double angleTest;
-	double test1;
 
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
@@ -154,9 +150,10 @@ void *testThread1(void *ptr) {
   	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
 
   	/* do the stuff */
-  	if(ticks_t1%500==0){
+  	if(ticks_t1%100==0){
   		polyEval(coeffs1, &timePolyEval, &angleTest);
-  		cout << "    "  << endl;
+
+  		cout << "Time : " << timePolyEval << "   Angle :" << angleTest << endl;
 
   		timePolyEval=timePolyEval+0.05;
   		if(timePolyEval>0.99){
