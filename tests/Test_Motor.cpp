@@ -71,50 +71,31 @@ int main(int argc, char* argv[]){
 	int checkInitThread;
 
 	pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
+	pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
 
 	checkInitThread=setParamThread(attr1, parm1, 49);
-	//checkInitThread=setParamThread(attr2, parm2, 49);
-
-	/*pthread_attr_getschedparam(&attr1, &parm1); // put the scheduling param of att to parm
-	checkInitThread=parm1.sched_priority = 40; //return the minimum priority
-	checkInitThread=pthread_attr_setschedpolicy(&attr1, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
-	checkInitThread=pthread_attr_setschedparam(&attr1, &parm1); //set the scheduling parameter of attr1 as parm1
-	if(checkInitThread!=0){
-		cout << "Problem in the initialization of the thread 1 : "<< endl;
-		checkInitThread=0;
-	}
-	 */
-
-	cout << "Ici 0025 " << endl;
-
+	checkInitThread=setParamThread(attr2, parm2, 49);
 
 	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
-	cout << "Ici 003 " << endl;
-	//iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
-
-	cout << "Ici 004 " << endl;
+	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
 
 	//create a thread that launch the print_message_function with the arguments  message1
 	pthread_setschedparam(thread1, SCHED_FIFO, &parm1);
-	//pthread_setschedparam(thread2, SCHED_FIFO, &parm2); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
+	pthread_setschedparam(thread2, SCHED_FIFO, &parm2); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
 														// if it fails, return not 0
 
 
 	cout << "Ici 1 " << endl;
 
 	printf("pthread_create() for returns: %d\n", iret1);
-	//printf("pthread_create() for returns: %d\n", iret2);
+	printf("pthread_create() for returns: %d\n", iret2);
 
 	/* Wait till threads are complete before main continues. Unless we  */
 	/* wait we run the risk of executing an exit which will terminate   */
 	/* the process and all threads before the threads have completed.   */
 
-	cout << "Ici 2 " << endl;
-
 	pthread_join( thread1, NULL);
-	//pthread_join( thread2, NULL);
-
-	cout << "Ici 3 " << endl;
+	pthread_join( thread2, NULL);
 
 	exit(EXIT_SUCCESS);
 }
