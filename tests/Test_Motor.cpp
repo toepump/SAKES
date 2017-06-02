@@ -43,7 +43,7 @@ int setParamThread(pthread_attr_t attr, struct sched_param parm, int priority){
 
 	int checkParam; //Variable to check if the setting of the thread is okay
 
-	pthread_attr_init(attr);
+	pthread_attr_init(&attr);
 	/* Create independent threads each of which will execute function */
 	pthread_attr_getschedparam(&attr, &parm); // put the scheduling param of att to parm
 	checkParam=parm.sched_priority = priority; //return the minimum priority
@@ -84,9 +84,6 @@ int main(int argc, char* argv[]){
 	pthread_setschedparam(thread1, SCHED_FIFO, &parm1);
 	pthread_setschedparam(thread2, SCHED_FIFO, &parm2); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
 														// if it fails, return not 0
-
-
-	cout << "Ici 1 " << endl;
 
 	printf("pthread_create() for returns: %d\n", iret1);
 	printf("pthread_create() for returns: %d\n", iret2);
