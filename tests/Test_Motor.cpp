@@ -29,8 +29,8 @@ int paramThread(pthread_t thread, int priority, int iret, void *function, char *
 int ticks_t1=0; //Incremental value for the thread 1
 int ticks_t2=0; //Incremental value for the thread 1
 
-void *testThread1(void *ptr);
-void *testThread2(void *ptr);
+void* testThread1(void *ptr);
+void* testThread2(void *ptr);
 
 
 
