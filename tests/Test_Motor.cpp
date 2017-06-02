@@ -25,12 +25,13 @@ const int INTERVAL_1MS =1000000; // in nanosecond
 
 
 int setParamThread(pthread_attr_t attr, struct sched_param parm, int priority);
+void *testThread1(void *ptr);
+void *testThread2(void *ptr);
 
 int ticks_t1=0; //Incremental value for the thread 1
 int ticks_t2=0; //Incremental value for the thread 1
 
-void *testThread1(void *ptr);
-void *testThread2(void *ptr);
+
 
 
 
@@ -46,7 +47,7 @@ int setParamThread(pthread_attr_t attr, struct sched_param parm, int priority){
 
 	/* Create independent threads each of which will execute function */
 	pthread_attr_getschedparam(&attr, &parm); // put the scheduling param of att to parm
-	checkParam=parm.sched_priority = priority; //return the minimum priority
+	checkParam=parm.sched_priority = 49; //return the minimum priority
 	checkParam=pthread_attr_setschedpolicy(&attr, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
 	checkParam=pthread_attr_setschedparam(&attr, &parm); //set the scheduling parameter of attr1 as parm1
 
