@@ -80,7 +80,10 @@ int main(int argc, char* argv[]){
 
 
 	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
+	cout << "Ici 003 " << endl;
 	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
+
+	cout << "Ici 004 " << endl;
 
 	//create a thread that launch the print_message_function with the arguments  message1
 	pthread_setschedparam(thread1, SCHED_FIFO, &parm1);
