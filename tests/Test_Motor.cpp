@@ -74,23 +74,26 @@ int main(int argc, char* argv[]){
 
 	cout << "Ici 001 " << endl;
 
-	checkInitThread=setParamThread(attr1, parm1, 49);
+	//checkInitThread=setParamThread(attr1, parm1, 49);
 	checkInitThread=setParamThread(attr2, parm2, 49);
 
 	cout << "Ici 002 " << endl;
 
 	pthread_attr_getschedparam(&attr1, &parm1); // put the scheduling param of att to parm
+	cout << "Ici 0021 " << endl;
 	checkInitThread=parm1.sched_priority = 40; //return the minimum priority
+	cout << "Ici 0022 " << endl;
 	checkInitThread=pthread_attr_setschedpolicy(&attr1, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
+	cout << "Ici 0023 " << endl;
 	checkInitThread=pthread_attr_setschedparam(&attr1, &parm1); //set the scheduling parameter of attr1 as parm1
-
+	cout << "Ici 0024 " << endl;
 	if(checkInitThread!=0){
 		cout << "Problem in the initialization of the thread 1 : "<< endl;
 		checkInitThread=0;
 	}
 
 
-
+	cout << "Ici 0025 " << endl;
 
 
 	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
