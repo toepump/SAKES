@@ -58,13 +58,16 @@ double coeffs1[MAXDEGREEPOLY]={ 2161704178.57744, -7678966834.50137, 7321336263.
 void polyEval(double coeffs[], double *x, double *output){
 
 	int i;
-	double result=0;
+	double result=5.0;
+	double test1;
 
 	for(i=0;i++;i<MAXDEGREEPOLY){
 		result=result+coeffs[i]*pow(*x,MAXDEGREEPOLY-i);
 	}
 	result=result+coeffs1[56];
-	cout << "Print Of Result:  " << result << endl;
+	test1=*x;
+	cout << "Print Of Result:  " << result << "Print Of Result:  " << test1<< endl;
+
 	*output=result;
 }
 
