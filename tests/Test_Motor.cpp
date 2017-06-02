@@ -21,7 +21,7 @@ using namespace std;
 #define NSEC_PER_SEC    (1000000000) /* The number of nsecs per sec. */
 
 const int TIME_MAX = 60000; // time max for the loop in ms
-const int INTERVAL_1MS =1000000; // in nanosecond
+const int INTERVALMS =1000000; // in nanosecond
 
 
 int setParamThread(pthread_attr_t attr, struct sched_param parm, int priority);
@@ -29,7 +29,7 @@ void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
 int ticks_t1=0; //Incremental value for the thread 1
-int ticks_t2=0; //Incremental value for the thread 1
+int ticks_t2=0; //Incremental value for the thread 2
 
 
 
@@ -147,14 +147,16 @@ void *testThread1(void *ptr) {
     	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
 
     	/* do the stuff */
-    	if(ticks_t1%1000==0){
-    		cout << "Add 1, thread 1: " << ticks_t1 << endl;
+
+
+    	if(ticks_t1%5000==0){
+    		cout << "Counter of ticks for the thread 1: " << ticks_t1 << endl;
     	}
 
     	ticks_t1++; // Increment the ticks value
 
 		/* calculate next shot */
-    	t_Thread1.tv_nsec += INTERVAL_1MS;
+    	t_Thread1.tv_nsec += INTERVALMS;
 
     	while (t_Thread1.tv_nsec >= NSEC_PER_SEC) {
     		t_Thread1.tv_nsec -= NSEC_PER_SEC;
@@ -193,7 +195,7 @@ void *testThread2(void *ptr) {
     	ticks_t2++; // Increment the ticks value
 
 		/* calculate next shot */
-    	t_Thread2.tv_nsec += INTERVAL_1MS;
+    	t_Thread2.tv_nsec += INTERVALMS;
 
     	while (t_Thread2.tv_nsec >= NSEC_PER_SEC) {
     		t_Thread2.tv_nsec -= NSEC_PER_SEC;
