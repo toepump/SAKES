@@ -43,8 +43,6 @@ int setParamThread(pthread_attr_t attr, struct sched_param parm, int priority){
 
 	int checkParam; //Variable to check if the setting of the thread is okay
 
-	pthread_attr_init(&attr); //Initialize the thread attributes with default attribute
-
 	/* Create independent threads each of which will execute function */
 	pthread_attr_getschedparam(&attr, &parm); // put the scheduling param of att to parm
 	checkParam=parm.sched_priority = priority; //return the minimum priority
@@ -74,10 +72,10 @@ int main(int argc, char* argv[]){
 
 	pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
 
-	//checkInitThread=setParamThread(attr1, parm1, 49);
-	checkInitThread=setParamThread(attr2, parm2, 49);
+	checkInitThread=setParamThread(attr1, parm1, 49);
+	//checkInitThread=setParamThread(attr2, parm2, 49);
 
-	pthread_attr_getschedparam(&attr1, &parm1); // put the scheduling param of att to parm
+	/*pthread_attr_getschedparam(&attr1, &parm1); // put the scheduling param of att to parm
 	checkInitThread=parm1.sched_priority = 40; //return the minimum priority
 	checkInitThread=pthread_attr_setschedpolicy(&attr1, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
 	checkInitThread=pthread_attr_setschedparam(&attr1, &parm1); //set the scheduling parameter of attr1 as parm1
@@ -85,7 +83,7 @@ int main(int argc, char* argv[]){
 		cout << "Problem in the initialization of the thread 1 : "<< endl;
 		checkInitThread=0;
 	}
-
+	 */
 
 	cout << "Ici 0025 " << endl;
 
