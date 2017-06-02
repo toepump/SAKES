@@ -71,8 +71,12 @@ int main(int argc, char* argv[]){
 
 	int checkInitThread;
 
+	cout << "Ici 001 " << endl;
+
 	checkInitThread=setParamThread(attr1, parm1, 49);
 	checkInitThread=setParamThread(attr2, parm2, 49);
+
+	cout << "Ici 002 " << endl;
 
 
 	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
