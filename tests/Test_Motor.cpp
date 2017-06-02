@@ -57,7 +57,7 @@ double coeffs1[MAXDEGREEPOLY]={ 2161704178.57744, -7678966834.50137, 7321336263.
 
 void polyEval(double coeffs[], double *x, double *output){
 
-	int i;
+	int i=0;
 	double result=5.0;
 	double test1;
 
