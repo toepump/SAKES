@@ -105,7 +105,7 @@ int main(int argc, char* argv[]){
 	cout << "Ici 1 " << endl;
 
 	printf("pthread_create() for returns: %d\n", iret1);
-	printf("pthread_create() for returns: %d\n", iret2);
+	//printf("pthread_create() for returns: %d\n", iret2);
 
 	/* Wait till threads are complete before main continues. Unless we  */
 	/* wait we run the risk of executing an exit which will terminate   */
@@ -114,7 +114,7 @@ int main(int argc, char* argv[]){
 	cout << "Ici 2 " << endl;
 
 	pthread_join( thread1, NULL);
-	pthread_join( thread2, NULL);
+	//pthread_join( thread2, NULL);
 
 	cout << "Ici 3 " << endl;
 
