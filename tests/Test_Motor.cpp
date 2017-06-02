@@ -37,14 +37,14 @@ struct encoder{
 };
 
 struct motor{
-	const double dutyMin=0.0; //Value of duty min set in the maxon board
-	const double dutyMax=0.0; //Value of duty max set in the maxon board
-	const double velMotorMin=0.0; //Value of the velocity min set on the maxon board in rpm
-	const double velMotorax=0.0; //Value of the velocity max set on the maxon board in rpm
-	double currentVelocity=0.0; //Value of the current velocity in rpm
-	double currentDuty=0.0; //Value of the current duty
-	double desiredVelocity=0.0; //Value of the desired velocity in rpm
-	double desiredDuty=0.0; //Value of the desired duty
+	const double dutyMin; //Value of duty min set in the maxon board
+	const double dutyMax; //Value of duty max set in the maxon board
+	const double velMotorMin; //Value of the velocity min set on the maxon board in rpm
+	const double velMotorax; //Value of the velocity max set on the maxon board in rpm
+	double currentVelocity; //Value of the current velocity in rpm
+	double currentDuty; //Value of the current duty
+	double desiredVelocity; //Value of the desired velocity in rpm
+	double desiredDuty; //Value of the desired duty
 };
 
 const int TIME_MAX = 60000; // time max for the loop in ms
