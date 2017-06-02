@@ -67,7 +67,7 @@ void polyEval(double coeffs[], double *x, double *output){
 
 		result=result+test1;
 	}
-	result=result+coeffs1[56];
+	result=result+coeffs[56];
 	test1=*x;
 	cout << "Results in function  " << result << "      Value of test:  " << test1<< endl;
 
