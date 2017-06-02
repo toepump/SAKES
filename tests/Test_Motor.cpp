@@ -150,12 +150,12 @@ void *testThread1(void *ptr) {
   	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
 
   	/* do the stuff */
-  	if(ticks_t1%100==0){
+  	if(ticks_t1%200==0){
   		polyEval(coeffs1, &timePolyEval, &angleTest);
 
   		cout << "Time : " << timePolyEval << "   Angle :" << angleTest << endl;
 
-  		timePolyEval=timePolyEval+0.05;
+  		timePolyEval=timePolyEval+0.025;
   		if(timePolyEval>0.99){
   			timePolyEval=0.0;
   		}
