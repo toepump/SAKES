@@ -80,13 +80,13 @@ int main(int argc, char* argv[]){
 	cout << "Ici 002 " << endl;
 
 	pthread_attr_getschedparam(&attr1, &parm1); // put the scheduling param of att to parm
-	checkSetting=parm1.sched_priority = 40; //return the minimum priority
-	checkSetting=pthread_attr_setschedpolicy(&attr1, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
-	checkSetting=pthread_attr_setschedparam(&attr1, &parm1); //set the scheduling parameter of attr1 as parm1
+	checkInitThread=parm1.sched_priority = 40; //return the minimum priority
+	checkInitThread=pthread_attr_setschedpolicy(&attr1, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
+	checkInitThread=pthread_attr_setschedparam(&attr1, &parm1); //set the scheduling parameter of attr1 as parm1
 
-	if(checkSetting!=0){
+	if(checkInitThread!=0){
 		cout << "Problem in the initialization of the thread 1 : "<< endl;
-		checkSetting-0;
+		checkInitThread=0;
 	}
 
 
