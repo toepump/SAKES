@@ -47,7 +47,7 @@ struct motor{
 	double desiredDuty; //Value of the desired duty
 };
 
-const int TIME_MAX = 60000; // time max for the loop in ms
+const int TIME_MAX = 100000; // time max for the loop in ms
 const int INTERVALMS =1000000; // in nanosecond
 
 int ticks_t1=0; //Incremental value for the thread 1
@@ -151,17 +151,14 @@ void *testThread1(void *ptr) {
   	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
 
   	/* do the stuff */
-
-
   	if(ticks_t1%500==0){
   		polyEval(coeffs1, timePolyEval, angleTest);
-  		cout << "Time:  " << timePolyEval << "Angle:  " << angleTest << endl;
+  		cout << "Time:  " << timePolyEval << " Angle:  " << angleTest << endl;
   		timePolyEval+=0.05;
-  		if(timePolyEval==1){
+  		if(timePolyEval>0.99){
   			timePolyEval=0.0;
   		}
   	}
-
   	ticks_t1++; // Increment the ticks value
 
 		/* calculate next shot */
@@ -195,7 +192,7 @@ void *testThread2(void *ptr) {
   	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
 
   	/* do the stuff */
-  	if(ticks_t2%1000==0){
+  	if(ticks_t2%5000==0){
   		cout << "Add 2, thread 2: " << ticks_t2 << endl;
   	}
 
