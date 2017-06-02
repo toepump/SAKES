@@ -24,7 +24,7 @@ const int TIME_MAX = 60000; // time max for the loop in ms
 const int INTERVAL_1MS =1000000; // in nanosecond
 
 
-int paramThread(pthread_t thread, int priority, int iret, void *function(void *ptr), char *message);
+int paramThread(pthread_t thread, int priority, int iret, void *function(void *ptr), const char *message);
 
 int ticks_t1=0; //Incremental value for the thread 1
 int ticks_t2=0; //Incremental value for the thread 1
@@ -34,7 +34,7 @@ void *testThread2(void *ptr);
 
 
 
-int paramThread(pthread_t thread, int priority, int iret, void *function(void *ptr), char *message){
+int paramThread(pthread_t thread, int priority, int iret, void *function(void *ptr), const char *message){
 	/*Function: Set the parameters
 	 * Create the thread @thread, with the priority @priority
 	 * associated with the iret @iret, the function @function and the message @*message
