@@ -22,7 +22,7 @@ using namespace std;
 #define NSEC_PER_SEC  (1000000000) /* The number of nsecs per sec. */
 
 int setParamThreadFIFO(pthread_attr_t attr, struct sched_param param, int priority);
-void polyEval(double coeffs[], double x, double output);
+void polyEval(float coeffs[], float x, float output);
 void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
@@ -53,12 +53,12 @@ const int INTERVALMS =1000000; // in nanosecond
 int ticks_t1=0; //Incremental value for the thread 1
 int ticks_t2=0; //Incremental value for the thread 2
 const int MAXDEGREEPOLY=57;
-double coeffs1[MAXDEGREEPOLY]={ 2161704178.57744, -7678966834.50137, 7321336263.45535, 0.0, 0.0, 0.0, -4367145721.75599, 0.0, 0.0, 3978221771.45533, 0.0, 0.0, -985186083.378593, 0.0, 0.0, 0.0, 0.0, -2539164036.74563, 0.0, 0.0, 0.0, 5490325943.05484, 0.0, 0.0, 0.0, -7322471014.88356, 0.0, 0.0, 0.0, 8222278890.26401, 0.0, 0.0, 0.0, -10920714548.7223, 0.0, 0.0,16644524938.8166, 0.0, -16364372664.7029, 0.0,8080579968.97197, 0.0, 0.0, -2834740327.51965, 0.0,  1331213566.8815,  1010961461.3028, -2387418495.97765,1659337298.89251, -622192768.04629, 138921217.362358, -18305060.8984875,1320820.91241054, -50395.6593240169, 1594.07054186194, 38.7663699452653,11.8011809149536};
+float coeffs1[MAXDEGREEPOLY]={ 2161704178.57744, -7678966834.50137, 7321336263.45535, 0.0, 0.0, 0.0, -4367145721.75599, 0.0, 0.0, 3978221771.45533, 0.0, 0.0, -985186083.378593, 0.0, 0.0, 0.0, 0.0, -2539164036.74563, 0.0, 0.0, 0.0, 5490325943.05484, 0.0, 0.0, 0.0, -7322471014.88356, 0.0, 0.0, 0.0, 8222278890.26401, 0.0, 0.0, 0.0, -10920714548.7223, 0.0, 0.0,16644524938.8166, 0.0, -16364372664.7029, 0.0,8080579968.97197, 0.0, 0.0, -2834740327.51965, 0.0,  1331213566.8815,  1010961461.3028, -2387418495.97765,1659337298.89251, -622192768.04629, 138921217.362358, -18305060.8984875,1320820.91241054, -50395.6593240169, 1594.07054186194, 38.7663699452653,11.8011809149536};
 
-void polyEval(double coeffs[], double *x, double *output){
+void polyEval(float coeffs[], float *x, float *output){
 
 	int i=0;
-	double result=0.0;
+	float result=0.0;
 
 	for(i=0;i<MAXDEGREEPOLY-1;i++){
 		result+=coeffs[i]*pow(*x,MAXDEGREEPOLY-i);
@@ -134,8 +134,8 @@ void *testThread1(void *ptr) {
 	struct timespec t_Thread1;
 
 	//Variable for the polynomial function
-	double timePolyEval=0;
-	double angleTest;
+	float timePolyEval=0.0;
+	float angleTest;
 
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
@@ -150,7 +150,7 @@ void *testThread1(void *ptr) {
   	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
 
   	/* do the stuff */
-  	if(ticks_t1%200==0){
+  	if(ticks_t1%100==0){
   		polyEval(coeffs1, &timePolyEval, &angleTest);
 
   		cout << "Time : " << timePolyEval << "   Angle :" << angleTest << endl;
