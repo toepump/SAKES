@@ -60,14 +60,7 @@ double coeffs1[MAXDEGREEPOLY]={ 2161704178.57744, -7678966834.50137, 7321336263.
 //double coeffs3[MAXDEGREEPOLY]={-5568914.69050683, 0, 18550269.9593775, 0, 0, -23986691.8154377, 0, 0, 0, 0, 0, 0, 0, 49531094.6617748, 0, 0, 0, 0, -80515111.3284084, 0, 0, 0, 0, 0, 61150107.658354, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -52944834.5893432, 0, 0, 0, 0, 0, 0, 0, 0, 0, 88145386.7882361, 0, 0, 0, 0, 0, 0, 0, 0, 0, -156446891.058224, 0, 0, 0, 0, 0, 0, 0, 0, 0, 533593350.532314, 0, 0, 0, 0, -1048894258.17445, 0, 0, 0, 0, 1199016711.57069, 0, 0, 0, 0, -1033184989.92329, 0, 0, 0, 0, 862028565.726653, 0, 0, 0, -705213545.729899, 0, 0, 0, 614832548.422423, 0, 0, -746208588.092968, 0, 791392111.350242, 0, -947590096.72696, 914359301.492975, -436255303.466556, 123792199.437433, -21816443.1312183, 2387498.2633569, -158624.061403544, 4988.62315434288, 158.259318872659, 11.4720337508105};
 
 //Specification of the knee encoder E30S4-3000-6-L-5 from Autonics, with channel A and B activated
-struct encoder kneeTwoAuto;
-kneeTwoAuto.angInc=0;
-kneeTwoAuto.angDeg=0.0;
-kneeTwoAuto.pulsePerTurn=12000;
-kneeTwoAuto.numOfChannel=2;
-kneeTwoAuto.numOfEdge=2;
-kneeTwoAuto.velDegSec=0.0;
-kneeTwoAuto.accDegSec=0.0;
+struct encoder kneeTwoAuto={.angInc=0, .angDeg=0.0, .pulsePerTurn=12000, .numOfChannel=2, .numOfEdge=2, .velDegSec=0.0, .accDegSec=0.0};
 
 void polyEval(double coeffs[], double *time, double *angle){
 
@@ -83,7 +76,7 @@ void polyEval(double coeffs[], double *time, double *angle){
 }
 
 void polyAngToIncAng(double *polyAng, struct encoder *polyEnc){
-	*polyEnc->angInc=*polyAng**polyEnc->pulsePerTurn/360;
+	*polyEnc->angInc=int(*polyAng**polyEnc->pulsePerTurn/360.0);
 }
 
 int setParamThreadFIFO(pthread_attr_t attr, struct sched_param param, int priority){
