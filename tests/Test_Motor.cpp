@@ -24,7 +24,7 @@ using namespace std;
 int setParamThreadFIFO(pthread_attr_t attr, struct sched_param param, int priority);
 void polyEval(double coeffs[], double *time, double *angle);
 void polyAngToIncAng(double *polyAng, struct encoder *encoder);
-int fetchAngInc(int sourceAngInc, struct encoder *current);
+int fetchAngInc(int *sourceAngInc, struct encoder *current);
 int angleIncToDeg (struct encoder *current);
 void *testThread1(void *ptr);
 void *testThread2(void *ptr);
@@ -62,8 +62,9 @@ double coeffs1[MAXDEGREEPOLY]={ 2161704178.57744, -7678966834.50137, 7321336263.
 //double coeffs3[MAXDEGREEPOLY]={-5568914.69050683, 0, 18550269.9593775, 0, 0, -23986691.8154377, 0, 0, 0, 0, 0, 0, 0, 49531094.6617748, 0, 0, 0, 0, -80515111.3284084, 0, 0, 0, 0, 0, 61150107.658354, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -52944834.5893432, 0, 0, 0, 0, 0, 0, 0, 0, 0, 88145386.7882361, 0, 0, 0, 0, 0, 0, 0, 0, 0, -156446891.058224, 0, 0, 0, 0, 0, 0, 0, 0, 0, 533593350.532314, 0, 0, 0, 0, -1048894258.17445, 0, 0, 0, 0, 1199016711.57069, 0, 0, 0, 0, -1033184989.92329, 0, 0, 0, 0, 862028565.726653, 0, 0, 0, -705213545.729899, 0, 0, 0, 614832548.422423, 0, 0, -746208588.092968, 0, 791392111.350242, 0, -947590096.72696, 914359301.492975, -436255303.466556, 123792199.437433, -21816443.1312183, 2387498.2633569, -158624.061403544, 4988.62315434288, 158.259318872659, 11.4720337508105};
 
 //Specification of the knee encoder E30S4-3000-6-L-5 from Autonics, with channel A and B activated
-struct encoder kneeTwoAutoPoly={.angInc=0, .angDeg=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .velDegSec=0.0, .accDegSec=0.0}; //for the polynomial function
-struct encoder kneeTwoAuto={.angInc=0, .angDeg=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .velDegSec=0.0, .accDegSec=0.0}; //to be use for real
+struct encoder kneePoly={.angInc=0, .angDeg=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .velDegSec=0.0, .accDegSec=0.0}; //for the polynomial function
+struct encoder kneeCurrent={.angInc=0, .angDeg=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .velDegSec=0.0, .accDegSec=0.0}; //to be use for real
+struct encoder kneePrevious={.angInc=0, .angDeg=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .velDegSec=0.0, .accDegSec=0.0}; //to be use for real
 
 void polyEval(double coeffs[], double *time, double *angle){
 	//from the coefficient in coeffs[] and the time in @time, give the angle in @angle
@@ -82,7 +83,7 @@ void polyAngToIncAng(double *polyAng, struct encoder *polyEnc){
 	polyEnc->angInc=int(*polyAng*polyEnc->pulsePerTurn*polyEnc->numOfChannel*polyEnc->numOfEdge/360.0);
 }
 
-int fetchAngInc(int sourceAngInc, struct encoder *current){
+int fetchAngInc(int *sourceAngInc, struct encoder *current){
 	//Copy the value of @sourceAngInc into @incoder.angInc
 	current->angInc=sourceAngInc;
 	return 0;
@@ -95,7 +96,6 @@ int angleIncToDeg (struct encoder *current){
 	current->angDeg=double(*current->angInc/current->pulsePerTurn/current->numOfChannel/current->numOfEdge*360.0);
 	return 0;
 }
-
 
 int
 
@@ -187,13 +187,13 @@ void *testThread1(void *ptr) {
   	/* do the stuff */
 
   	if(ticks_t1%500==0){
-  		polyEval(coeffs1, &timeTestPoly, &angTestPoly);
-  		polyAngToIncAng(&angTestPoly, &kneeTwoAutoPoly);
+  		polyEval(coeffs1, &timeTestPoly, &angTestPoly); //put the value in angTestPoly
+  		polyAngToIncAng(&angTestPoly, &kneePoly); //Copy it into kneePoly
 
-  		fetchAngInc(angIncTestPoly, &kneeTwoAuto);
-  		angleIncToDeg(&kneeTwoAuto);
+  		fetchAngInc(&kneePoly.angInc, &kneeCurrent); //take the value in kneeCurrent
+  		angleIncToDeg(&kneeCurrent); //convert the value from inc to deg
 
-  		testValue2=kneeTwoAuto.angDeg;
+  		testValue2=kneePoly.angDeg;
   		cout << "Time: "<< timeTestPoly << endl;
   		cout << "Angle in degree (polynomial): "<< angTestPoly << endl;
   		cout << "Angle in degree (after fetch, in the encoder): "<< testValue2 << endl;
