@@ -66,7 +66,7 @@ void polyEval(double coeffs[], double *x, double *output){
 	double result=0.0;
 
 	for(i=0;i<MAXDEGREEPOLY-1;i++){
-		result+=coeffs[i]*pow(*x,MAXDEGREEPOLY-i);
+		result+=coeffs[i]*pow(*x,MAXDEGREEPOLY-1-i);
 	}
 	result+=coeffs[MAXDEGREEPOLY-1];
 
