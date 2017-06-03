@@ -76,7 +76,7 @@ void polyEval(double coeffs[], double *time, double *angle){
 }
 
 void polyAngToIncAng(double *polyAng, struct encoder *polyEnc){
-	*polyEnc->angInc=int(*polyAng**polyEnc->pulsePerTurn/360.0);
+	polyEnc->angInc=int(*polyAng*polyEnc->pulsePerTurn/360.0);
 }
 
 int setParamThreadFIFO(pthread_attr_t attr, struct sched_param param, int priority){
