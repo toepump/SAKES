@@ -57,6 +57,21 @@ struct motor{
 	double desiredDuty; //Value of the desired duty
 };
 
+struct output{
+	double motorCurreVelocity; //Value of the current velocity in rpm
+	double motorCurrDuty; //Value of the current duty
+	double motorDesVelocity; //Value of the desired velocity in rpm
+	double motorDesDuty; //Value of the desired duty
+	int kneeAngInc; //value of the angle in increment
+	double kneeAngDeg; //value of the angle in degree
+	double kneeVelDegSec; //the velocity in deg/sec
+	double kneeAccDegSec; //the acceleration in deg/secˆ2
+	int motorAngInc; //value of the angle in increment
+	double motorAngDeg; //value of the angle in degree
+	double motorVelDegSec; //the velocity in deg/sec
+	double motorAccDegSec; //the acceleration in deg/secˆ2
+
+};
 
 const int TIME_MAX = 100000; // time max for the loop in ms
 const int INTERVALMS =1000000; // in nanosecond
@@ -80,6 +95,9 @@ struct encoder motorPrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec
 
 //Specification of the motor
 struct motor maxon1={.dutyMin=0.10, .dutyMax=0.90, .velMotorMin=-8000.0, .velMotorMax=8000.0, .currentVelocity=0.0, .currentDuty=0.0, .desiredVelocity=0.0, .desiredDuty=0.0};
+
+
+
 
 void polyEval(double coeffs[], double *time, double *angle){
 	//from the coefficient in coeffs[] and the time in @time, give the angle in @angle
