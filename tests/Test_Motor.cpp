@@ -143,8 +143,8 @@ int angleIncToDeg (struct encoder *current){
 
 int calcVelAndAcc(struct encoder *current, struct encoder *previous){
 	//Calculate the current value of the velocity and the acceleration
-	current->velDegSec=(previous->angDeg-current->angDeg)*INTERVAL_S;
-	current->accDegSec=(previous->velDegSec-current->velDegSec)*INTERVAL_S;
+	current->velDegSec=(previous->angDeg-current->angDeg)/INTERVAL_S;
+	current->accDegSec=(previous->velDegSec-current->velDegSec)/INTERVAL_S;
 	return 0;
 }
 
@@ -152,7 +152,7 @@ int controller(struct encoder *encKnee, struct encoder *encMotor, struct motor *
 
 	//Simple controller
 	//Evaluate the velocity of the motor in RPM
-	cmdMotor->desiredVelocity=encKnee->velDegSec*cmdMotor->degSecToRPM*cmdMotor->gearRatio;
+	cmdMotor->desiredVelocity=encKnee->velDegSec*cmdMotor->degSecToRPM/cmdMotor->gearRatio;
 
 	//Calculate the value of the desired duty
 	cmdMotor->desiredDuty=(cmdMotor->desiredVelocity-cmdMotor->velMotorMin)*(cmdMotor->dutyMax-cmdMotor->dutyMin)/(cmdMotor->velMotorMax-cmdMotor->velMotorMin)+cmdMotor->dutyMin;
