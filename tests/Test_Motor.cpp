@@ -74,7 +74,7 @@ struct output{
 	double motorAccDegSec[100000]; //the acceleration in deg/secˆ2
 };
 
-const int TIME_MAX = 100000; // time max for the loop in ms
+const int TIME_MAX = 5000; // time max for the loop in ms
 const int INTERVALMS =1000000; // in nanosecond
 double INTERVAL_S=double(INTERVALMS/1000000000.0);
 
