@@ -137,7 +137,7 @@ int angleIncToDeg (struct encoder *current){
 	/*Take the value of an angle in increment and turn it into an angle in deg,
 	 * using the number of pulse per turn, the number of channel used and the number of edge that create an interrupt.
 	 */
-	current->angDeg=double(current->angInc/current->pulsePerTurn/current->numOfChannel/current->numOfEdge*360.0);
+	current->angDeg=current->angInc/double(current->pulsePerTurn)/double(current->numOfChannel)/double(current->numOfEdge)*360.0;
 	return 0;
 }
 
@@ -155,7 +155,12 @@ int controller(struct encoder *encKnee, struct encoder *encMotor, struct motor *
 	cmdMotor->desiredVelocity=encKnee->velDegSec*cmdMotor->degSecToRPM*cmdMotor->gearRatio;
 
 	//Calculate the value of the desired duty
-	cmdMotor->desiredDuty=(cmdMotor->desiredVelocity-cmdMotor->velMotorMin)*(cmdMotor->dutyMax-cmdMotor->dutyMin)/(cmdMotor->velMotorMin-cmdMotor->velMotorMin)+cmdMotor->dutyMin;
+	if(cmdMotor->velMotorMin-cmdMotor->velMotorMin<0.00001 && cmdMotor->velMotorMin-cmdMotor->velMotorMin>-0.00001){
+
+	}else{
+		cmdMotor->desiredDuty=(cmdMotor->desiredVelocity-cmdMotor->velMotorMin)*(cmdMotor->dutyMax-cmdMotor->dutyMin)/(cmdMotor->velMotorMin-cmdMotor->velMotorMin)+cmdMotor->dutyMin;
+
+	}
 
 	//Put the former value int current
 	cmdMotor->currentVelocity=cmdMotor->desiredVelocity;
@@ -335,9 +340,9 @@ void *testThread1(void *ptr) {
   		timeTestPoly+=0.001;
 
   		if(ticks_t1%100==0){
-  			cout << "Value: " << maxon1.currentVelocity << "Value: " <<maxon1.currentDuty<< "Value: " <<maxon1.desiredVelocity << "Value: " <<maxon1.desiredDuty << endl;
-  			cout <<	"Value: " << kneeCurrent.angInc << "Value: " << kneeCurrent.angDeg << "Value: " <<kneeCurrent.velDegSec << "Value: " << kneeCurrent.accDegSec << endl;
-			cout << "Value: " << motorCurrent.angInc << "Value: " <<motorCurrent.angDeg << "Value: " << motorCurrent.velDegSec << "Value: " << motorCurrent.accDegSec << endl;
+  			cout << "Value: " << maxon1.currentVelocity << " Value: " <<maxon1.currentDuty<< "Value: " <<maxon1.desiredVelocity << "Value: " <<maxon1.desiredDuty << endl;
+  			cout <<	"Value: " << kneeCurrent.angInc << " Value: " << kneeCurrent.angDeg << "Value: " <<kneeCurrent.velDegSec << "Value: " << kneeCurrent.accDegSec << endl;
+			cout << "Value: " << motorCurrent.angInc << " Value: " <<motorCurrent.angDeg << "Value: " << motorCurrent.velDegSec << "Value: " << motorCurrent.accDegSec << endl;
 			cout << "value :" << angTestPoly << endl;
 			cout << "  " << endl;
   		}
