@@ -30,7 +30,8 @@ int angleIncToDeg (struct encoder *current);
 int calcVelAndAcc(struct encoder *current, struct encoder *previous);
 int controller(struct encoder *encKnee, struct encoder *encMotor, struct motor *cmdMotor);
 int cmdMotor(struct motor *cmdMotor);
-int outputTestMotor(void);
+int copyIntoOutput(struct encoder *encKnee, struct encoder *encMotor, struct motor *cmdMotor, struct output *output, int increment);
+int fileTestMotor(void);
 void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
@@ -58,19 +59,18 @@ struct motor{
 };
 
 struct output{
-	double motorCurreVelocity; //Value of the current velocity in rpm
-	double motorCurrDuty; //Value of the current duty
-	double motorDesVelocity; //Value of the desired velocity in rpm
-	double motorDesDuty; //Value of the desired duty
-	int kneeAngInc; //value of the angle in increment
-	double kneeAngDeg; //value of the angle in degree
-	double kneeVelDegSec; //the velocity in deg/sec
-	double kneeAccDegSec; //the acceleration in deg/secˆ2
-	int motorAngInc; //value of the angle in increment
-	double motorAngDeg; //value of the angle in degree
-	double motorVelDegSec; //the velocity in deg/sec
-	double motorAccDegSec; //the acceleration in deg/secˆ2
-
+	double motorCurreVelocity[100000]; //Value of the current velocity in rpm
+	double motorCurrDuty[100000]; //Value of the current duty
+	double motorDesVelocity[100000]; //Value of the desired velocity in rpm
+	double motorDesDuty[100000]; //Value of the desired duty
+	int kneeAngInc[100000]; //value of the angle in increment
+	double kneeAngDeg[100000]; //value of the angle in degree
+	double kneeVelDegSec[100000]; //the velocity in deg/sec
+	double kneeAccDegSec[100000]; //the acceleration in deg/secˆ2
+	int motorAngInc[100000]; //value of the angle in increment
+	double motorAngDeg[100000]; //value of the angle in degree
+	double motorVelDegSec[100000]; //the velocity in deg/sec
+	double motorAccDegSec[100000]; //the acceleration in deg/secˆ2
 };
 
 const int TIME_MAX = 100000; // time max for the loop in ms
@@ -95,9 +95,6 @@ struct encoder motorPrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec
 
 //Specification of the motor
 struct motor maxon1={.dutyMin=0.10, .dutyMax=0.90, .velMotorMin=-8000.0, .velMotorMax=8000.0, .currentVelocity=0.0, .currentDuty=0.0, .desiredVelocity=0.0, .desiredDuty=0.0};
-
-
-
 
 void polyEval(double coeffs[], double *time, double *angle){
 	//from the coefficient in coeffs[] and the time in @time, give the angle in @angle
@@ -170,7 +167,29 @@ int cmdMotor(struct motor *cmdMotor){
 	return 0;
 }
 
-int outputTestMotor(void){
+int copyIntoOutput(struct encoder *encKnee, struct encoder *encMotor, struct motor *cmdMotor, struct output *output, int increment){
+
+	//Motor command
+	output->motorCurreVelocity[increment]=cmdMotor->currentVelocity; //Value of the current velocity in rpm
+	output->motorCurrDuty[increment]=cmdMotor->currentDuty; //Value of the current duty
+	output->motorDesVelocity[increment]=cmdMotor->desiredVelocity; //Value of the desired velocity in rpm
+	output->motorDesDuty[increment]=cmdMotor->desiredDuty; //Value of the desired duty
+
+	//knee Encoder
+	output->kneeAngInc[increment]=encKnee->angInc; //value of the angle in increment
+	output->kneeAngDeg[increment]=encKnee->angDeg; //value of the angle in degree
+	output->kneeVelDegSec[increment]=encKnee->velDegSec; //the velocity in deg/sec
+	output->kneeAccDegSec[increment]=encKnee->accDegSec; //the acceleration in deg/secˆ2
+	//Motor Encoder
+	output->motorAngInc[increment]=encMotor->angInc; //value of the angle in increment
+	output->motorAngDeg[increment]=encMotor->angDeg; //value of the angle in degree
+	output->motorVelDegSec[increment]=encMotor->velDegSec; //the velocity in deg/sec
+	output->motorAccDegSec[increment]=encMotor->accDegSec; //the acceleration in deg/secˆ2
+
+	return 0;
+}
+
+int fileTestMotor(void){
 
 	return 0;
 }
