@@ -24,34 +24,42 @@ using namespace std;
 int setParamThreadFIFO(pthread_attr_t attr, struct sched_param param, int priority);
 void polyEval(double coeffs[], double *time, double *angle);
 void polyAngToIncAng(double *polyAng, struct encoder *encoder);
+int copyCurrToPrevEnc(struct encoder *previous, struct encoder *current);
 int fetchAngInc(int *sourceAngInc, struct encoder *current);
 int angleIncToDeg (struct encoder *current);
+int calcVelAndAcc(struct encoder *current, struct encoder *previous);
+int controller(struct encoder *encKnee, struct encoder *encMotor, struct motor *cmdMotor);
+int cmdMotor(struct motor *cmdMotor);
 void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
 struct encoder{
 	int angInc; //value of the angle in increment
 	double angDeg; //value of the angle in degree
+	double velDegSec; //the velocity in deg/sec
+	double accDegSec; //the acceleration in deg/secˆ2
 	int pulsePerTurn; //number of increment to make one turn for one channel
 	int numOfChannel; //number of channel used for this encoder
 	int numOfEdge; //number of edge detected for this encoder for one channel (either 1 or 2)
-	double velDegSec; //the velocity in deg/sec
-	double accDegSec; //the acceleration in deg/secˆ2
 };
 
 struct motor{
 	const double dutyMin; //Value of duty min set in the maxon board
 	const double dutyMax; //Value of duty max set in the maxon board
 	const double velMotorMin; //Value of the velocity min set on the maxon board in rpm
-	const double velMotorax; //Value of the velocity max set on the maxon board in rpm
+	const double velMotorMax; //Value of the velocity max set on the maxon board in rpm
+	const double degSecToRPM=1.0/6.0;; //to convert a speed from deg/sec to rpm
+	double gearRatio=1.0/60.0; //from knee to motor, when the motor does one turn, how many turn does the knee
 	double currentVelocity; //Value of the current velocity in rpm
 	double currentDuty; //Value of the current duty
 	double desiredVelocity; //Value of the desired velocity in rpm
 	double desiredDuty; //Value of the desired duty
 };
 
+
 const int TIME_MAX = 100000; // time max for the loop in ms
 const int INTERVALMS =1000000; // in nanosecond
+double INTERVAL_S=double(INTERVALMS/1000000000.0);
 
 int ticks_t1=0; //Incremental value for the thread 1
 int ticks_t2=0; //Incremental value for the thread 2
@@ -62,9 +70,12 @@ double coeffs1[MAXDEGREEPOLY]={ 2161704178.57744, -7678966834.50137, 7321336263.
 //double coeffs3[MAXDEGREEPOLY]={-5568914.69050683, 0, 18550269.9593775, 0, 0, -23986691.8154377, 0, 0, 0, 0, 0, 0, 0, 49531094.6617748, 0, 0, 0, 0, -80515111.3284084, 0, 0, 0, 0, 0, 61150107.658354, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -52944834.5893432, 0, 0, 0, 0, 0, 0, 0, 0, 0, 88145386.7882361, 0, 0, 0, 0, 0, 0, 0, 0, 0, -156446891.058224, 0, 0, 0, 0, 0, 0, 0, 0, 0, 533593350.532314, 0, 0, 0, 0, -1048894258.17445, 0, 0, 0, 0, 1199016711.57069, 0, 0, 0, 0, -1033184989.92329, 0, 0, 0, 0, 862028565.726653, 0, 0, 0, -705213545.729899, 0, 0, 0, 614832548.422423, 0, 0, -746208588.092968, 0, 791392111.350242, 0, -947590096.72696, 914359301.492975, -436255303.466556, 123792199.437433, -21816443.1312183, 2387498.2633569, -158624.061403544, 4988.62315434288, 158.259318872659, 11.4720337508105};
 
 //Specification of the knee encoder E30S4-3000-6-L-5 from Autonics, with channel A and B activated
-struct encoder kneePoly={.angInc=0, .angDeg=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .velDegSec=0.0, .accDegSec=0.0}; //for the polynomial function
-struct encoder kneeCurrent={.angInc=0, .angDeg=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .velDegSec=0.0, .accDegSec=0.0}; //to be use for real
-struct encoder kneePrevious={.angInc=0, .angDeg=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .velDegSec=0.0, .accDegSec=0.0}; //to be use for real
+struct encoder kneePoly={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2}; //for the polynomial function
+struct encoder kneeCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2}; //to be use for real
+struct encoder kneePrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2}; //to be use for real
+
+//Specification of the motor
+struct motor maxon1={.dutyMin=0.0, .dutyMax=1.0, .velMotorMin=-8000.0, .velMotorMax=8000.0, .currentVelocity=0.0, .currentDuty=0.0, .desiredVelocity=0.0, .desiredDuty=0.0};
 
 void polyEval(double coeffs[], double *time, double *angle){
 	//from the coefficient in coeffs[] and the time in @time, give the angle in @angle
@@ -83,8 +94,18 @@ void polyAngToIncAng(double *polyAng, struct encoder *polyEnc){
 	polyEnc->angInc=int(*polyAng*polyEnc->pulsePerTurn*polyEnc->numOfChannel*polyEnc->numOfEdge/360.0);
 }
 
+int copyCurrToPrevEnc(struct encoder *previous, struct encoder *current){
+	//Copy the value of the variable from @previous to @current
+	previous->angInc;current->angInc;
+	previous->angDeg;current->angDeg;
+	previous->velDegSec;current->velDegSec;
+	previous->accDegSec;current->accDegSec;
+
+	return 0;
+}
+
 int fetchAngInc(int *sourceAngInc, struct encoder *current){
-	//Copy the value of @sourceAngInc into @incoder.angInc
+	//Copy the value of @sourceAngInc into @current.angInc,
 	current->angInc=sourceAngInc;
 	return 0;
 }
@@ -94,6 +115,36 @@ int angleIncToDeg (struct encoder *current){
 	 * using the number of pulse per turn, the number of channel used and the number of edge that create an interrupt.
 	 */
 	current->angDeg=double(*current->angInc/current->pulsePerTurn/current->numOfChannel/current->numOfEdge*360.0);
+	return 0;
+}
+
+int calcVelAndAcc(struct encoder *current, struct encoder *previous){
+	//Calculate the current value of the velocity and the acceleration
+	current->velDegSec=(previous->angDeg-current->angDeg)*INTERVAL_S;
+	current->accDegSec=(previous->velDegSec-current->velDegSec)*INTERVAL_S;
+	return 0;
+}
+
+int controller(struct encoder *encKnee, struct encoder *encMotor, struct motor *cmdMotor){
+
+	//Simple controller
+	//Evaluate the velocity of the motor in RPM
+	cmdMotor->desiredVelocity=encKnee->velDegSec*cmdMotor->degSecToRPM*cmdMotor->gearRatio;
+
+	//Calculate the value of the desired duty
+	cmdMotor->desiredDuty=(cmdMotor->desiredVelocity-cmdMotor->velMotorMin)*(cmdMotor->dutyMax-cmdMotor->dutyMin)/(cmdMotor->velMotorMin-cmdMotor->velMotorMin)+cmdMotor->dutyMin;
+
+	//Put the former value int current
+	cmdMotor->currentVelocity=cmdMotor->desiredVelocity;
+	cmdMotor->currentDuty=cmdMotor->desiredDuty;
+
+	return 0;
+}
+
+int cmdMotor(struct motor *cmdMotor){
+
+	//TODO
+
 	return 0;
 }
 
