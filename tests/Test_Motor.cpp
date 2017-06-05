@@ -31,7 +31,7 @@ int calcVelAndAcc(struct encoder *current, struct encoder *previous);
 int controller(struct encoder *encKnee, struct encoder *encMotor, struct motor *cmdMotor);
 int cmdMotor(struct motor *cmdMotor);
 int copyIntoOutput(struct encoder *encKnee, struct encoder *encMotor, struct motor *cmdMotor, struct output *output, int increment);
-int fileTestMotor(void);
+int fileTestMotor(struct output *output);
 void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
@@ -189,7 +189,32 @@ int copyIntoOutput(struct encoder *encKnee, struct encoder *encMotor, struct mot
 	return 0;
 }
 
-int fileTestMotor(void){
+int fileTestMotor(struct output *output){
+
+	cout << "Printing of the output starts" << endl;
+
+		int i=0;
+		FILE *fj1=fopen("fileTestMotor.dat","w");
+
+		fprintf(fj1,"indexOutput;Motor Current Velocity; Motor Current Duty; Motor Desired Velocity; Motor Desired Duty;"
+				"Knee Enc Ang Inc; Knee Enc Ang Deg; Knee Enc Vel Deg/sec; Knee Acc Deg/secsec;"
+				"Motor Enc Ang Inc; Motor Enc Ang Deg; Motor Enc Vel Deg/sec; Motor Acc Deg/secsec;"
+				" \r\n");
+
+		while(i<TIME_MAX){
+		    fprintf(fj1,"%d;%d;%f;%d;%d;%d;\r\n",
+		    	i+1, output->motorCurreVelocity[i], output->motorCurrDuty[i],output->motorDesVelocity[i], output->motorDesDuty[i],
+				output->kneeAngInc[i], output->kneeAngDeg[i], output->kneeVelDegSec[i], output->kneeAccDegSec[i],
+				output->motorAngInc[i], output->motorAngDeg[i], output->motorVelDegSec[i],output->motorAccDegSec[i]
+		    );
+
+		    if(i==TIME_MAX-1){
+		    	fclose(fj1);
+		    }
+		    i++ ;
+		}
+
+	cout << "Printing of the output is done" << endl;
 
 	return 0;
 }
