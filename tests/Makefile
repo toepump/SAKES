@@ -1,4 +1,8 @@
-all: encRTtest2 BBB_Encoder
+all: encRTtest2 BBB_Encoder Test_Motor encRTtest1
+
+encRTtest1: encRTtest1.cpp
+	g++ encRTtest1.cpp -o encRTtest2 `pkg-config glib-2.0 --cflags --libs` -lpthread
+
 
 encRTtest2: encRTtest2.cpp
 	g++ encRTtest2.cpp -o encRTtest2 `pkg-config glib-2.0 --cflags --libs` -lpthread

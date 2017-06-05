@@ -148,12 +148,14 @@ void counter(int nb_signal) {
         outputEncbwd[indexOutput]=encbwd;
         outputState[state];
         indexOutput++;
-        }
 
     	if(indexOutput+1>MAX_PULSE){
             cout<< "indexOutput = " << indexOutput << endl;
     		printOutData();
     	}
+        }
+
+
 
 }
 
