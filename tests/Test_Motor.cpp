@@ -50,8 +50,8 @@ struct motor{
 	const double dutyMax; //Value of duty max set in the maxon board
 	const double velMotorMin; //Value of the velocity min set on the maxon board in rpm
 	const double velMotorMax; //Value of the velocity max set on the maxon board in rpm
-	const double degSecToRPM=1.0/6.0;; //to convert a speed from deg/sec to rpm
-	double gearRatio=1.0/60.0; //from knee to motor, when the motor does one turn, how many turn does the knee
+	const double degSecToRPM={1.0/6.0}; //to convert a speed from deg/sec to rpm
+	double gearRatio={1.0/60.0}; //from knee to motor, when the motor does one turn, how many turn does the knee
 	double currentVelocity; //Value of the current velocity in rpm
 	double currentDuty; //Value of the current duty
 	double desiredVelocity; //Value of the desired velocity in rpm
