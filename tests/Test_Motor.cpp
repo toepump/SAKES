@@ -57,10 +57,6 @@ struct motor{
 	double desiredVelocity; //Value of the desired velocity in rpm
 	double desiredDuty; //Value of the desired duty
 
-
-	//Initialization
-	motor() : degSecToRPM(1.0/6.0) //to convert a speed from deg/sec to rpm
-	motor() : gearRatio(1.0/60.0) //from knee to motor, when the motor does one turn, how many turn does the knee
 };
 
 struct output{
@@ -99,7 +95,7 @@ struct encoder motorCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=
 struct encoder motorPrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2}; //to be use for real
 
 //Specification of the motor
-struct motor maxon1={.dutyMin=0.10, .dutyMax=0.90, .velMotorMin=-8000.0, .velMotorMax=8000.0, .currentVelocity=0.0, .currentDuty=0.0, .desiredVelocity=0.0, .desiredDuty=0.0};
+struct motor maxon1={.dutyMin=0.10, .dutyMax=0.90, .velMotorMin=-8000.0, .velMotorMax=8000.0, .degSecToRPM=(1.0/6.0), .gearRatio=(1.0/60.0),.currentVelocity=0.0, .currentDuty=0.0, .desiredVelocity=0.0, .desiredDuty=0.0};
 
 struct output outputArray;
 
