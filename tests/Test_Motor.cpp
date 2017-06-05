@@ -61,7 +61,6 @@ struct motor{
 	//Initialization
 	motor() : degSecToRPM(1.0/6.0) //to convert a speed from deg/sec to rpm
 	motor() : gearRatio(1.0/60.0) //from knee to motor, when the motor does one turn, how many turn does the knee
-	{}
 };
 
 struct output{
