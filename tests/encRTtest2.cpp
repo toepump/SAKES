@@ -358,7 +358,7 @@ void *testThread1(void *ptr) {
         g_main_loop_run( loopA );
         g_main_loop_run( loopB );
 
-    	}
+    }
 
 	return (void*) NULL;
 }

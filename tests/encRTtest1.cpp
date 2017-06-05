@@ -151,6 +151,7 @@ void counter(int nb_signal) {
         }
 
     	if(indexOutput+1>MAX_PULSE){
+            cout<< "indexOutput = " << indexOutput << endl;
     		printOutData();
     	}
 
