@@ -60,7 +60,7 @@ struct motor{
 };
 
 struct output{
-	double motorCurreVelocity[100000]; //Value of the current velocity in rpm
+	double motorCurrVelocity[100000]; //Value of the current velocity in rpm
 	double motorCurrDuty[100000]; //Value of the current duty
 	double motorDesVelocity[100000]; //Value of the desired velocity in rpm
 	double motorDesDuty[100000]; //Value of the desired duty
@@ -174,7 +174,7 @@ int cmdMotor(struct motor *cmdMotor){
 int copyIntoOutput(struct encoder *encKnee, struct encoder *encMotor, struct motor *cmdMotor, struct output *output, int increment){
 
 	//Motor command
-	output->motorCurreVelocity[increment]=cmdMotor->currentVelocity; //Value of the current velocity in rpm
+	output->motorCurrVelocity[increment]=cmdMotor->currentVelocity; //Value of the current velocity in rpm
 	output->motorCurrDuty[increment]=cmdMotor->currentDuty; //Value of the current duty
 	output->motorDesVelocity[increment]=cmdMotor->desiredVelocity; //Value of the desired velocity in rpm
 	output->motorDesDuty[increment]=cmdMotor->desiredDuty; //Value of the desired duty
@@ -206,8 +206,10 @@ int fileTestMotor(struct output *output){
 				" \r\n");
 
 		while(i<TIME_MAX){
-		    fprintf(fj1,"%d;%d;%f;%d;%d;%d;\r\n",
-		    	i+1, output->motorCurreVelocity[i], output->motorCurrDuty[i],output->motorDesVelocity[i], output->motorDesDuty[i],
+		    fprintf(fj1,"%d;%f;%f;%f;%f;"
+		    		"%d;%f;%f;%f"
+		    		"%d;%f;%f;%f\r\n",
+		    	i+1, output->motorCurrVelocity[i], output->motorCurrDuty[i],output->motorDesVelocity[i], output->motorDesDuty[i],
 				output->kneeAngInc[i], output->kneeAngDeg[i], output->kneeVelDegSec[i], output->kneeAccDegSec[i],
 				output->motorAngInc[i], output->motorAngDeg[i], output->motorVelDegSec[i],output->motorAccDegSec[i]
 		    );
