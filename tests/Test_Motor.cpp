@@ -96,6 +96,9 @@ struct encoder motorPrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec
 //Specification of the motor
 struct motor maxon1={.dutyMin=0.10, .dutyMax=0.90, .velMotorMin=-8000.0, .velMotorMax=8000.0, .currentVelocity=0.0, .currentDuty=0.0, .desiredVelocity=0.0, .desiredDuty=0.0};
 
+struct output outputArray;
+
+
 void polyEval(double coeffs[], double *time, double *angle){
 	//from the coefficient in coeffs[] and the time in @time, give the angle in @angle
 	int i=0;
@@ -334,6 +337,8 @@ void *testThread1(void *ptr) {
   		//}
   		}
 
+  		copyIntoOutput(&kneeCurrent, &motorCurrent, &maxon1, &outputArray, ticks_t1);
+
   	ticks_t1++; // Increment the ticks value
 
 		/* calculate next shot */
@@ -344,6 +349,8 @@ void *testThread1(void *ptr) {
   		t_Thread1.tv_sec++;
   	}
   }
+
+  fileTestMotor(&outputArray);
 
 	return (void*) NULL;
 }
