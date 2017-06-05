@@ -30,6 +30,7 @@ int angleIncToDeg (struct encoder *current);
 int calcVelAndAcc(struct encoder *current, struct encoder *previous);
 int controller(struct encoder *encKnee, struct encoder *encMotor, struct motor *cmdMotor);
 int cmdMotor(struct motor *cmdMotor);
+int outputTestMotor(void);
 void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
@@ -74,8 +75,11 @@ struct encoder kneePoly={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0,
 struct encoder kneeCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2}; //to be use for real
 struct encoder kneePrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2}; //to be use for real
 
+struct encoder motorCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2}; //to be use for real
+struct encoder motorPrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2}; //to be use for real
+
 //Specification of the motor
-struct motor maxon1={.dutyMin=0.0, .dutyMax=1.0, .velMotorMin=-8000.0, .velMotorMax=8000.0, .currentVelocity=0.0, .currentDuty=0.0, .desiredVelocity=0.0, .desiredDuty=0.0};
+struct motor maxon1={.dutyMin=0.10, .dutyMax=0.90, .velMotorMin=-8000.0, .velMotorMax=8000.0, .currentVelocity=0.0, .currentDuty=0.0, .desiredVelocity=0.0, .desiredDuty=0.0};
 
 void polyEval(double coeffs[], double *time, double *angle){
 	//from the coefficient in coeffs[] and the time in @time, give the angle in @angle
@@ -144,6 +148,11 @@ int controller(struct encoder *encKnee, struct encoder *encMotor, struct motor *
 int cmdMotor(struct motor *cmdMotor){
 
 	//TODO
+
+	return 0;
+}
+
+int outputTestMotor(void){
 
 	return 0;
 }
@@ -237,12 +246,18 @@ void *testThread1(void *ptr) {
 
   	/* do the stuff */
 
-  	if(ticks_t1%500==0){
+  	//if(ticks_t1%500==0){
+  		//simulation of the polynomial
   		polyEval(coeffs1, &timeTestPoly, &angTestPoly); //put the value in angTestPoly
   		polyAngToIncAng(&angTestPoly, &kneePoly); //Copy it into kneePoly
 
+  		//actual calculation
+  		copyCurrToPrevEnc(&kneePrevious, &kneeCurrent); //copy the value from curr to previous
   		fetchAngInc(&kneePoly.angInc, &kneeCurrent); //take the value in kneeCurrent
   		angleIncToDeg(&kneeCurrent); //convert the value from inc to deg
+  		calcVelAndAcc(&kneeCurrent, &motorCurrent);
+  		controller(&kneeCurrent, &motorCurrent, &maxon1);
+  		cmdMotor(&maxon1);
 
   		testValue2=kneePoly.angDeg;
   		cout << "Time: "<< timeTestPoly << endl;
@@ -250,12 +265,12 @@ void *testThread1(void *ptr) {
   		cout << "Angle in degree (after fetch, in the encoder): "<< testValue2 << endl;
   		cout << " "<<  endl;
 
-  		timeTestPoly+=0.075;
+  		timeTestPoly+=0.001;
 
-  		if(timeTestPoly>0.99){
-  			timeTestPoly=0;
+  		if(timeTestPoly>=0.999){
+  			timeTestPoly=0.0;
+  		//}
   		}
-  	}
 
   	ticks_t1++; // Increment the ticks value
 
@@ -290,7 +305,7 @@ void *testThread2(void *ptr) {
   	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
 
   	/* do the stuff */
-  	if(ticks_t2%10000==0){
+  	if(ticks_t2%1000==0){
   		cout << "Add 2, thread 2: " << ticks_t2 << endl;
   	}
 
