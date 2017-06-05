@@ -119,10 +119,10 @@ void polyAngToIncAng(double *polyAng, struct encoder *polyEnc){
 
 int copyCurrToPrevEnc(struct encoder *previous, struct encoder *current){
 	//Copy the value of the variable from @previous to @current
-	previous->angInc;current->angInc;
-	previous->angDeg;current->angDeg;
-	previous->velDegSec;current->velDegSec;
-	previous->accDegSec;current->accDegSec;
+	previous->angInc=current->angInc;
+	previous->angDeg=current->angDeg;
+	previous->velDegSec=current->velDegSec;
+	previous->accDegSec=current->accDegSec;
 
 	return 0;
 }
@@ -208,7 +208,7 @@ int fileTestMotor(struct output *output){
 		while(i<TIME_MAX){
 		    fprintf(fj1,"%d;%f;%f;%f;%f;"
 		    		"%d;%f;%f;%f"
-		    		"%d;%f;%f;%f\r\n",
+		    		"%d;%f;%f;%f;\r\n",
 		    	i+1, output->motorCurrVelocity[i], output->motorCurrDuty[i],output->motorDesVelocity[i], output->motorDesDuty[i],
 				output->kneeAngInc[i], output->kneeAngDeg[i], output->kneeVelDegSec[i], output->kneeAccDegSec[i],
 				output->motorAngInc[i], output->motorAngDeg[i], output->motorVelDegSec[i],output->motorAccDegSec[i]
