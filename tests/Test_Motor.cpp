@@ -76,7 +76,7 @@ struct output{
 
 const int TIME_MAX = 5000; // time max for the loop in ms
 const int INTERVALMS =1000000; // in nanosecond
-double INTERVAL_S=double(INTERVALMS/1000000000.0);
+double INTERVAL_S=double(INTERVALMS)/1000000000.0;
 
 int ticks_t1=0; //Incremental value for the thread 1
 int ticks_t2=0; //Incremental value for the thread 2
