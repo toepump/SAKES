@@ -334,6 +334,15 @@ void *testThread1(void *ptr) {
 
   		timeTestPoly+=0.001;
 
+  		if(ticks_t1%100==0){
+  			cout << "Value: " << maxon1.currentVelocity << "Value: " <<maxon1.currentDuty<< "Value: " <<maxon1.desiredVelocity << "Value: " <<maxon1.desiredDuty << endl;
+  			cout <<	"Value: " << kneeCurrent.angInc << "Value: " << kneeCurrent.angDeg << "Value: " <<kneeCurrent.velDegSec << "Value: " << kneeCurrent.accDegSec << endl;
+			cout << "Value: " << motorCurrent.angInc << "Value: " <<motorCurrent.angDeg << "Value: " << motorCurrent.velDegSec << "Value: " << motorCurrent.accDegSec << endl;
+			cout << "value :" << angTestPoly << endl;
+			cout << "  " << endl;
+  		}
+
+
   		if(timeTestPoly>=0.999){
   			timeTestPoly=0.0;
   		//}
