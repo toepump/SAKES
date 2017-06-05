@@ -184,6 +184,7 @@ int copyIntoOutput(struct encoder *encKnee, struct encoder *encMotor, struct mot
 	output->kneeAngDeg[increment]=encKnee->angDeg; //value of the angle in degree
 	output->kneeVelDegSec[increment]=encKnee->velDegSec; //the velocity in deg/sec
 	output->kneeAccDegSec[increment]=encKnee->accDegSec; //the acceleration in deg/secˆ2
+
 	//Motor Encoder
 	output->motorAngInc[increment]=encMotor->angInc; //value of the angle in increment
 	output->motorAngDeg[increment]=encMotor->angDeg; //value of the angle in degree
@@ -200,10 +201,9 @@ int fileTestMotor(struct output *output){
 		int i=0;
 		FILE *fj1=fopen("fileTestMotor.dat","w");
 
-		fprintf(fj1,"indexOutput;Motor Current Velocity; Motor Current Duty; Motor Desired Velocity; Motor Desired Duty;"
-				"Knee Enc Ang Inc; Knee Enc Ang Deg; Knee Enc Vel Deg/sec; Knee Acc Deg/secsec;"
-				"Motor Enc Ang Inc; Motor Enc Ang Deg; Motor Enc Vel Deg/sec; Motor Acc Deg/secsec;"
-				" \r\n");
+		fprintf(fj1,"indexOutput;MotorCurrentVelocity; MotorCurrentDuty; MotorDesiredVelocity; MotorDesiredDuty;"
+				"KneeEncAngInc; KneeEncAngDeg; KneeEncVelDegsec; KneeAccDegsecsec;"
+				"MotorEncAngInc; MotorEncAngDeg; MotorEncVelDegsec; MotorAccDegsecsec; \r\n");
 
 		while(i<TIME_MAX){
 		    fprintf(fj1,"%d;%f;%f;%f;%f;"
@@ -211,8 +211,7 @@ int fileTestMotor(struct output *output){
 		    		"%d;%f;%f;%f;\r\n",
 		    	i+1, output->motorCurrVelocity[i], output->motorCurrDuty[i],output->motorDesVelocity[i], output->motorDesDuty[i],
 				output->kneeAngInc[i], output->kneeAngDeg[i], output->kneeVelDegSec[i], output->kneeAccDegSec[i],
-				output->motorAngInc[i], output->motorAngDeg[i], output->motorVelDegSec[i],output->motorAccDegSec[i]
-		    );
+				output->motorAngInc[i], output->motorAngDeg[i], output->motorVelDegSec[i],output->motorAccDegSec[i]);
 
 		    if(i==TIME_MAX-1){
 		    	fclose(fj1);
@@ -319,12 +318,16 @@ void *testThread1(void *ptr) {
   		//actual calculation
   		fetchAngInc(&kneePoly.angInc, &kneeCurrent); //take the value in kneeCurrent
   		angleIncToDeg(&kneeCurrent); //convert the value from inc to deg
+
   		calcVelAndAcc(&kneeCurrent, &kneePrevious);
+  		calcVelAndAcc(&motorCurrent, &motorPrevious);
+
   		controller(&kneeCurrent, &motorCurrent, &maxon1);
   		cmdMotor(&maxon1);
 
   		//Copyb the data from current to previous
   		copyCurrToPrevEnc(&kneePrevious, &kneeCurrent); //copy the value from curr to previous
+  		copyCurrToPrevEnc(&motorPrevious, &motorCurrent); //copy the value from curr to previous
 
   		//testValue2=kneePoly.angDeg;
   		//cout << "Time: "<< timeTestPoly << endl;
