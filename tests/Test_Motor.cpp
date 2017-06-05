@@ -322,11 +322,11 @@ void *testThread1(void *ptr) {
   		controller(&kneeCurrent, &motorCurrent, &maxon1);
   		cmdMotor(&maxon1);
 
-  		testValue2=kneePoly.angDeg;
-  		cout << "Time: "<< timeTestPoly << endl;
-  		cout << "Angle in degree (polynomial): "<< angTestPoly << endl;
-  		cout << "Angle in degree (after fetch, in the encoder): "<< testValue2 << endl;
-  		cout << " "<<  endl;
+  		//testValue2=kneePoly.angDeg;
+  		//cout << "Time: "<< timeTestPoly << endl;
+  		//cout << "Angle in degree (polynomial): "<< angTestPoly << endl;
+  		//cout << "Angle in degree (after fetch, in the encoder): "<< testValue2 << endl;
+  		//cout << " "<<  endl;
 
   		timeTestPoly+=0.001;
 
