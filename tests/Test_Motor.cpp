@@ -91,8 +91,8 @@ struct encoder kneePoly={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0,
 struct encoder kneeCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2}; //to be use for real
 struct encoder kneePrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2}; //to be use for real
 
-struct encoder motorCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2}; //to be use for real
-struct encoder motorPrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2}; //to be use for real
+struct encoder motorCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=1024, .numOfChannel=4, .numOfEdge=1}; //to be use for real
+struct encoder motorPrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=1024, .numOfChannel=4, .numOfEdge=1}; //to be use for real
 
 //Specification of the motor
 struct motor maxon1={.dutyMin=0.10, .dutyMax=0.90, .velMotorMin=-8000.0, .velMotorMax=8000.0, .degSecToRPM=(1.0/6.0), .gearRatio=(1.0/60.0),.currentVelocity=0.0, .currentDuty=0.0, .desiredVelocity=0.0, .desiredDuty=0.0};
@@ -129,7 +129,7 @@ int copyCurrToPrevEnc(struct encoder *previous, struct encoder *current){
 
 int fetchAngInc(int *sourceAngInc, struct encoder *current){
 	//Copy the value of @sourceAngInc into @current.angInc,
-	current->angInc=sourceAngInc;
+	current->angInc=*sourceAngInc;
 	return 0;
 }
 
@@ -137,7 +137,7 @@ int angleIncToDeg (struct encoder *current){
 	/*Take the value of an angle in increment and turn it into an angle in deg,
 	 * using the number of pulse per turn, the number of channel used and the number of edge that create an interrupt.
 	 */
-	current->angDeg=double(*current->angInc/current->pulsePerTurn/current->numOfChannel/current->numOfEdge*360.0);
+	current->angDeg=double(current->angInc/current->pulsePerTurn/current->numOfChannel/current->numOfEdge*360.0);
 	return 0;
 }
 
