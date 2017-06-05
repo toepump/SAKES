@@ -223,9 +223,6 @@ int fileTestMotor(struct output *output){
 	return 0;
 }
 
-int
-
-
 int setParamThreadFIFO(pthread_attr_t attr, struct sched_param param, int priority){
 	//Function: Set the attr and parm as a FIFO function with priority
 
