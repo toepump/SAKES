@@ -137,7 +137,7 @@ int angleIncToDeg (struct encoder *current){
 	/*Take the value of an angle in increment and turn it into an angle in deg,
 	 * using the number of pulse per turn, the number of channel used and the number of edge that create an interrupt.
 	 */
-	current->angDeg=current->angInc/double(current->pulsePerTurn)/double(current->numOfChannel)/double(current->numOfEdge)*360.0;
+	current->angDeg=double(current->angInc)/double(current->pulsePerTurn)/double(current->numOfChannel)/double(current->numOfEdge)*360.0;
 	return 0;
 }
 
