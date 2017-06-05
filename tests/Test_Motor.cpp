@@ -155,7 +155,7 @@ int controller(struct encoder *encKnee, struct encoder *encMotor, struct motor *
 	cmdMotor->desiredVelocity=encKnee->velDegSec*cmdMotor->degSecToRPM*cmdMotor->gearRatio;
 
 	//Calculate the value of the desired duty
-	cmdMotor->desiredDuty=(cmdMotor->desiredVelocity-cmdMotor->velMotorMin)*(cmdMotor->dutyMax-cmdMotor->dutyMin)/(cmdMotor->velMotorMan-cmdMotor->velMotorMin)+cmdMotor->dutyMin;
+	cmdMotor->desiredDuty=(cmdMotor->desiredVelocity-cmdMotor->velMotorMin)*(cmdMotor->dutyMax-cmdMotor->dutyMin)/(cmdMotor->velMotorMax-cmdMotor->velMotorMin)+cmdMotor->dutyMin;
 
 	//Put the former value int current
 	cmdMotor->currentVelocity=cmdMotor->desiredVelocity;
