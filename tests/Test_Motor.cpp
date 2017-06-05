@@ -118,11 +118,11 @@ void polyAngToIncAng(double *polyAng, struct encoder *polyEnc){
 }
 
 int copyCurrToPrevEnc(struct encoder *previous, struct encoder *current){
-	//Copy the value of the variable from @previous to @current
-	previous->angInc=current->angInc;
-	previous->angDeg=current->angDeg;
-	previous->velDegSec=current->velDegSec;
-	previous->accDegSec=current->accDegSec;
+	//Copy the value of the variable from @current to @previous
+	current->angInc=previous->angInc;
+	current->angDeg=previous->angDeg;
+	current->velDegSec=previous->velDegSec;
+	current->accDegSec=previous->accDegSec;
 
 	return 0;
 }
@@ -317,12 +317,14 @@ void *testThread1(void *ptr) {
   		polyAngToIncAng(&angTestPoly, &kneePoly); //Copy it into kneePoly
 
   		//actual calculation
-  		copyCurrToPrevEnc(&kneePrevious, &kneeCurrent); //copy the value from curr to previous
   		fetchAngInc(&kneePoly.angInc, &kneeCurrent); //take the value in kneeCurrent
   		angleIncToDeg(&kneeCurrent); //convert the value from inc to deg
-  		calcVelAndAcc(&kneeCurrent, &motorCurrent);
+  		calcVelAndAcc(&kneeCurrent, &kneePrevious);
   		controller(&kneeCurrent, &motorCurrent, &maxon1);
   		cmdMotor(&maxon1);
+
+  		//Copyb the data from current to previous
+  		copyCurrToPrevEnc(&kneePrevious, &kneeCurrent); //copy the value from curr to previous
 
   		//testValue2=kneePoly.angDeg;
   		//cout << "Time: "<< timeTestPoly << endl;
