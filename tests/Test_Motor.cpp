@@ -103,6 +103,9 @@ struct motor maxon1={.dutyMin=0.10, .dutyMax=0.90, .velMotorMin=-8000.0, .velMot
 
 struct output outputArray;
 
+struct timespec simTime;
+
+
 
 void polyEval(double coeffs[], double *time, double *angle){
 	//from the coefficient in coeffs[] and the time in @time, give the angle in @angle
@@ -293,14 +296,26 @@ void *testThread1(void *ptr) {
 	message = (char *) ptr;
 	struct timespec t_Thread1;
 
+	double testTimeSec;
+	double testTimeNanoSec;
+
 	//Variable for the polynomial function
 
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
 
 	clock_gettime(CLOCK_MONOTONIC ,&t_Thread1);
-	/* start after one second */
+	/* start after two second */
 	t_Thread1.tv_sec++;
+	t_Thread1.tv_sec++;
+
+	//Initialization
+	fetchAngInc(&kneePoly.angInc, &kneeCurrent); //take the value in kneeCurrent
+	angleIncToDeg(&kneeCurrent); //convert the value from inc to deg
+	calcVelAndAcc(&kneeCurrent, &kneePrevious);
+	calcVelAndAcc(&motorCurrent, &motorPrevious);
+	copyCurrToPrevEnc(&kneePrevious, &kneeCurrent); //copy the value from curr to previous
+	copyCurrToPrevEnc(&motorPrevious, &motorCurrent); //copy the value from curr to previous
 
 	while(ticks_t1<TIME_MAX+1){
 
@@ -309,7 +324,18 @@ void *testThread1(void *ptr) {
 
 		/* do the stuff */
 
-		//if(ticks_t1%500==0){
+		simTime.tv_sec=t_Thread1.tv_sec;
+		simTime.tv_nsec=t_Thread1.tv_nsec;
+
+		testTimeSec=double(simTime.tv_sec);
+		testTimeNanoSec=double(simTime.tv_nsec);
+
+		if(ticks_t1%100=0){
+			cout << "Time sec: " << testTimeSec << endl;
+			cout << "ime Nano sec: " << testTimeNanoSec << endl;
+			cout << "  " <<
+		}
+				//if(ticks_t1%500==0){
 
   		//actual calculation
   		fetchAngInc(&kneePoly.angInc, &kneeCurrent); //take the value in kneeCurrent
@@ -366,7 +392,7 @@ void *testThread2(void *ptr) {
   /* start after one second */
   t_Thread2.tv_sec++;
 
-  while(ticks_t2<TIME_MAX*3+1) {
+  while(ticks_t2<TIME_MAX*3+1500) {
 
   	/* wait until next shot */
   	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
