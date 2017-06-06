@@ -333,7 +333,7 @@ void *testThread1(void *ptr) {
 		if(ticks_t1%100==0){
 			cout << "Time sec: " << testTimeSec << endl;
 			cout << "ime Nano sec: " << testTimeNanoSec << endl;
-			cout << "  " <<
+			cout << "  " << endl;
 		}
 				//if(ticks_t1%500==0){
 
