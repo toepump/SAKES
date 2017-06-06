@@ -1,9 +1,9 @@
 /*
- * TestRT_3.cpp
- *
- *  Created on: May 15, 2017
- *      Author: Vincent
- */
+* TestRT_3.cpp
+*
+*  Created on: May 15, 2017
+*      Author: Vincent
+*/
 
 #include <iostream>
 #include <unistd.h>
@@ -92,12 +92,12 @@ void counter(int nb_signal) {
     init++;
 
 
-    //TODO change condition so that if condition is met, launch counter() function and consolidate into external function.
+
     if(init>2 && indexOutput<MAX_PULSE){
 
         if(state==1){
             if(nb_signal==2){
-            	netAngleIncrement++;
+                netAngleIncrement++;
                 //encfwd++;
                 state=2;
             }else if(nb_signal==1){
@@ -105,37 +105,37 @@ void counter(int nb_signal) {
                 netAngleIncrement--;
                 state=4;
             }else{
-            	failInt++;
+                failInt++;
                 //cout << "problem with the counter in case 1" << endl;
             }
         }
 
         else if(state==2){
             if(nb_signal==1){
-            	netAngleIncrement++;
-            	//encfwd++;
+                netAngleIncrement++;
+                //encfwd++;
                 state=3;
             }else if(nb_signal==2){
-            	state=1;
-            	netAngleIncrement--;
-            	//encbwd++;
+                state=1;
+                netAngleIncrement--;
+                //encbwd++;
             }else{
-            	failInt++;
+                failInt++;
                 //cout << "problem with the counter in case 1" << endl;
             }
         }
 
         else if(state==3){
             if(nb_signal==2){
-            	netAngleIncrement++;
-               // encfwd++;
+                netAngleIncrement++;
+                // encfwd++;
                 state=4;
             }else if(nb_signal==1){
-            	netAngleIncrement--;
-				//encbwd++;
-				state=2;
+                netAngleIncrement--;
+                //encbwd++;
+                state=2;
             }else{
-            	failInt++;
+                failInt++;
                 //cout << "problem with the counter in case 1" << endl;
             }
         }
@@ -146,11 +146,11 @@ void counter(int nb_signal) {
                 netAngleIncrement++;
                 state=1;
             }else if(nb_signal==2){
-            	//encbwd++;
-            	netAngleIncrement--;
+                //encbwd++;
+                netAngleIncrement--;
                 state=3;
             }else{
-            	failInt++;
+                failInt++;
                 //cout << "problem with the counter in case 1" << endl;
             }
 
@@ -169,52 +169,50 @@ void counter(int nb_signal) {
         outputState[indexOutput] = state;
         indexOutput++;
 
-        }
-
-        //TODO: why the FUCK is this printing so many times
-    	if(indexOutput-1==MAX_PULSE){
+        if(indexOutput+1==MAX_PULSE){
             cout<< "checking if indexOutput is changing not. " << endl;
             cout<< "indexOutput-1 = " << indexOutput << "  MAX_PULSE = " << MAX_PULSE<< endl;
-    		cout << "printOutStarted" << endl;
-    		printOutData();
-    	}
+            cout << "printOutStarted" << endl;
+            printOutData();
+        }
+    }
 }
 
 void printOutData(void){
-	cout << "Printing of the output starts" << endl;
+    cout << "Printing of the output starts" << endl;
 
-	int i=0;
-	FILE *fj1=fopen("outputEncoder.dat","w");
+    int i=0;
+    FILE *fj1=fopen("outputEncoder.dat","w");
 
-	fprintf(fj1,"indexOutput;Net Increment;Net Angle (degrees);State;EncoderForward;EncoderBackward;\r\n");
+    fprintf(fj1,"indexOutput;Net Increment;Net Angle (degrees);State;EncoderForward;EncoderBackward;\r\n");
 
-	while(i<MAX_PULSE){
-	    fprintf(fj1,"%d;%d;%f;%d;%d;%d;\r\n", i+1, outputNetIncrement[i], outputNetAngle[i],outputState[i], outputEncfwd[i], outputEncbwd[i]);
+    while(i<MAX_PULSE){
+        fprintf(fj1,"%d;%d;%f;%d;%d;%d;\r\n", i+1, outputNetIncrement[i], outputNetAngle[i],outputState[i], outputEncfwd[i], outputEncbwd[i]);
 
-	    if(i==MAX_PULSE-1){
-	    	fclose(fj1);
-	    }
-	    i++ ;
-	}
+        if(i==MAX_PULSE-1){
+            fclose(fj1);
+        }
+        i++ ;
+    }
 
-	cout << "Printing of the output is done" << endl;
+    cout << "Printing of the output is done" << endl;
 
 }
 
 void printProbe(void){
-	cout << "Printing of the probe starts" << endl;
+    cout << "Printing of the probe starts" << endl;
 
-	int i=0;
-	FILE *fj2=fopen("probeCheck.data","w");
+    int i=0;
+    FILE *fj2=fopen("probeCheck.data","w");
 
-	fprintf(fj2, "Time (ms); Net Angle (degree); net Increment;\n");
+    fprintf(fj2, "Time (ms); Net Angle (degree); net Increment;\n");
 
-	while(i<PROBE_STORAGE_SIZE){
-	    fprintf(fj2,  "%d;%f;%d\n", i, probeAngleDeg[i], probeIncrement[i]);
-	    i++ ;
-	}
+    while(i<PROBE_STORAGE_SIZE){
+        fprintf(fj2,  "%d;%f;%d\n", i, probeAngleDeg[i], probeIncrement[i]);
+        i++ ;
+    }
 
-	cout << "Printing of the output is done" << endl;
+    cout << "Printing of the output is done" << endl;
 
 }
 
@@ -279,33 +277,33 @@ void initCounter(void){
 
 int main(int argc, char* argv[]){
 
-	//Initialization of the counter
-	initCounter();
+    //Initialization of the counter
+    initCounter();
 
-	//Creation of the thread
-	pthread_t thread1;
+    //Creation of the thread
+    pthread_t thread1;
     pthread_t thread2;
-	const char *message1 = "Thread 1";
+    const char *message1 = "Thread 1";
     const char *message2 = "Thread 2";
 
-	int  iret1;
-	int  iret2;
-	/*set attribute */
+    int  iret1;
+    int  iret2;
+    /*set attribute */
 
-	pthread_attr_t attr1, attr2; //Creation of the variable for the attribute
-	struct sched_param parm1, parm2; //Creation of new sched_param
-	pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
-	pthread_attr_init(&attr2);
+    pthread_attr_t attr1, attr2; //Creation of the variable for the attribute
+    struct sched_param parm1, parm2; //Creation of new sched_param
+    pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
+    pthread_attr_init(&attr2);
 
-	/* Create independent thread which will execute function */
-	pthread_attr_getschedparam(&attr1, &parm1); // put the scheduling param of att to parm
-	parm1.sched_priority = sched_get_priority_min(SCHED_FIFO); //return the minimum priority
-	pthread_attr_setschedpolicy(&attr1, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
-	pthread_attr_setschedparam(&attr1, &parm1); //set the scheduling parameter of attr1 as parm1
+    /* Create independent thread which will execute function */
+    pthread_attr_getschedparam(&attr1, &parm1); // put the scheduling param of att to parm
+    parm1.sched_priority = sched_get_priority_min(SCHED_FIFO); //return the minimum priority
+    pthread_attr_setschedpolicy(&attr1, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
+    pthread_attr_setschedparam(&attr1, &parm1); //set the scheduling parameter of attr1 as parm1
 
-	iret1 = pthread_create(&thread1, &attr1, testThread1,(void*) message1); //create a thread that launch the print_message_function with the arguments  message1
+    iret1 = pthread_create(&thread1, &attr1, testThread1,(void*) message1); //create a thread that launch the print_message_function with the arguments  message1
     pthread_setschedparam(thread1, SCHED_FIFO, &parm1); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
-														// if it fails, return not 0
+    // if it fails, return not 0
 
     //===========================================================
     pthread_attr_getschedparam(&attr2, &parm2);
@@ -316,29 +314,29 @@ int main(int argc, char* argv[]){
     //iret2 = pthread_create(&thread2, &attr2, testThread2,(void*) message2);
     //pthread_setschedparam(thread2, SCHED_FIFO, &parm2);
 
-	//set priority each thread
-	pthread_setschedprio(thread1, 40);
+    //set priority each thread
+    pthread_setschedprio(thread1, 40);
     //pthread_setschedprio(thread2, 45);
-	//
-	printf("pthread_create() for thread 1 returns: %d\n",iret1);
+    //
+    printf("pthread_create() for thread 1 returns: %d\n",iret1);
     //printf("pthread_create() for thread 2 returns: %d\n",iret2);
 
-	/* Wait till threads are complete before main continues. Unless we  */
-	/* wait we run the risk of executing an exit which will terminate   */
-	/* the process and all threads before the threads have completed.   */
+    /* Wait till threads are complete before main continues. Unless we  */
+    /* wait we run the risk of executing an exit which will terminate   */
+    /* the process and all threads before the threads have completed.   */
 
-	pthread_join( thread1, NULL);
+    pthread_join( thread1, NULL);
     //pthread_join( thread2, NULL);
 
     printf("Finished: %d\n");
 
-	exit(EXIT_SUCCESS);
+    exit(EXIT_SUCCESS);
 }
 
 void *testThread1(void *ptr) {
 
-	char *message;
-	message = (char *) ptr;
+    char *message;
+    message = (char *) ptr;
 
     while(true) {
 
@@ -360,7 +358,7 @@ void *testThread1(void *ptr) {
 
     }
 
-	return (void*) NULL;
+    return (void*) NULL;
 }
 
 void *testThread2(void *ptr){
@@ -373,9 +371,9 @@ void *testThread2(void *ptr){
     /*here should start the things used with the rt preempt patch*/
 
     clock_gettime(CLOCK_MONOTONIC ,&t_Thread2);     //get the current time and store in the timespec struct
-                                                   /* start after one second */
+    /* start after one second */
     t_Thread2.tv_sec++;                             //increment the timespec struct time by one full second so that
-                                                    //we can get a delay in the next step
+    //we can get a delay in the next step
 
     while(true) {
 
@@ -384,7 +382,7 @@ void *testThread2(void *ptr){
 
         /* do the stuff */
         //probe the encoder values every millisecond while the interrupts are happening
-    	//printf("%lf\n",netAngleDegree);
+        //printf("%lf\n",netAngleDegree);
 
         // probeAngleDeg[index] = netAngleDegree; //store current netAngleDegree
         // probeIncrement[index] = netAngleIncrement;
@@ -397,13 +395,13 @@ void *testThread2(void *ptr){
         // }
 
 
-		/* calculate next shot */
-    	t_Thread2.tv_nsec += INTERVAL;      //wait another millisecond so that delay will happen again before next probe
+        /* calculate next shot */
+        t_Thread2.tv_nsec += INTERVAL;      //wait another millisecond so that delay will happen again before next probe
 
-    	while (t_Thread2.tv_nsec >= NSEC_PER_SEC) {
-    		t_Thread2.tv_nsec -= NSEC_PER_SEC;
-    		t_Thread2.tv_sec++;
-    	}
+        while (t_Thread2.tv_nsec >= NSEC_PER_SEC) {
+            t_Thread2.tv_nsec -= NSEC_PER_SEC;
+            t_Thread2.tv_sec++;
+        }
     }
 
     return (void*) NULL;
