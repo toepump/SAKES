@@ -25,7 +25,7 @@ int setParamThreadFIFO(pthread_attr_t attr, struct sched_param param, int priori
 void polyEval(double coeffs[], double *time, double *angle);
 void polyAngToIncAng(double *polyAng, struct encoder *encoder);
 int copyCurrToPrevEnc(struct encoder *previous, struct encoder *current);
-int fetchAngInc(int *sourceAngInc, struct encoder *current);
+int fetchAngInc(int *sourceAngInc, struct encoder *current, struct timeStruct *timeFetching);
 int angleIncToDeg (struct encoder *current);
 int calcVelAndAcc(struct encoder *current, struct encoder *previous);
 int controller(struct encoder *encKnee, struct encoder *encMotor, struct motor *cmdMotor);
