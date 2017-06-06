@@ -330,7 +330,7 @@ void *testThread1(void *ptr) {
 		testTimeSec=double(simTime.tv_sec);
 		testTimeNanoSec=double(simTime.tv_nsec);
 
-		if(ticks_t1%100=0){
+		if(ticks_t1%100==0){
 			cout << "Time sec: " << testTimeSec << endl;
 			cout << "ime Nano sec: " << testTimeNanoSec << endl;
 			cout << "  " <<
