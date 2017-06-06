@@ -382,13 +382,13 @@ void *testThread2(void *ptr){
 
         /* do the stuff */
         //probe the encoder values every millisecond while the interrupts are happening
-        printf("%lf\n",netAngleDegree);
+        //printf("%lf\n",netAngleDegree);
 
         probeAngleDeg[index] = netAngleDegree; //store current netAngleDegree
         probeIncrement[index] = indexOutput;
         index++;                            //increment index
 
-        if(index > PROBE_STORAGE_SIZE){                   //if index is past storage limit, print
+        if(index > PROBE_STORAGE_SIZE || indexOutput-1 == MAX_PULSE){                   //if index is past storage limit, print
         	cout << "number of failure: " << failInt << endl;
         	printProbe();
             return (void*) NULL;
