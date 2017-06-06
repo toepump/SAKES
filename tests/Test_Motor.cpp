@@ -108,12 +108,16 @@ struct timeStruct{
 
 const int MAXDEGREEPOLY=57; //57 for coeffs1,  112 for coeffs2 or 3
 
-double coeffs1[MAXDEGREEPOLY]={ 2161704178.57744, -7678966834.50137, 7321336263.45535, 0.0, 0.0, 0.0, -4367145721.75599, 0.0, 0.0, 3978221771.45533, 0.0, 0.0, -985186083.37859, 0.0, 0.0, 0.0, 0.0, -2539164036.74563, 0.0, 0.0, 0.0, 5490325943.05484, 0.0, 0.0, 0.0, -7322471014.88356, 0.0, 0.0, 0.0, 8222278890.26401, 0.0, 0.0, 0.0, -10920714548.72234, 0.0, 0.0,16644524938.81657, 0.0, -16364372664.70290, 0.0,8080579968.97197, 0.0, 0.0, -2834740327.51965, 0.0,  1331213566.88150,  1010961461.30280, -2387418495.97765,1659337298.89251, -622192768.04629, 138921217.362358, -18305060.8984875,1320820.91241054, -50395.6593240169, 1594.07054186194, 38.7663699452653,11.8011809149536};
+double coeffsKnee1[MAXDEGREEPOLY]={ 2161704178.57744, -7678966834.50137, 7321336263.45535, 0.0, 0.0, 0.0, -4367145721.75599, 0.0, 0.0, 3978221771.45533, 0.0, 0.0, -985186083.37859, 0.0, 0.0, 0.0, 0.0, -2539164036.74563, 0.0, 0.0, 0.0, 5490325943.05484, 0.0, 0.0, 0.0, -7322471014.88356, 0.0, 0.0, 0.0, 8222278890.26401, 0.0, 0.0, 0.0, -10920714548.72234, 0.0, 0.0,16644524938.81657, 0.0, -16364372664.70290, 0.0,8080579968.97197, 0.0, 0.0, -2834740327.51965, 0.0,  1331213566.88150,  1010961461.30280, -2387418495.97765,1659337298.89251, -622192768.04629, 138921217.362358, -18305060.8984875,1320820.91241054, -50395.6593240169, 1594.07054186194, 38.7663699452653,11.8011809149536};
+double coeffsMotor1[MAXDEGREEPOLY]={ 60*2161704178.57744, -60*7678966834.50137, 60*7321336263.45535, 0.0, 0.0, 0.0, -60*4367145721.75599, 0.0, 0.0, 60*3978221771.45533, 0.0, 0.0, -60*985186083.37859, 0.0, 0.0, 0.0, 0.0, -60*2539164036.74563, 0.0, 0.0, 0.0, 60*5490325943.05484, 0.0, 0.0, 0.0, -60*7322471014.88356, 0.0, 0.0, 0.0, 60*8222278890.26401, 0.0, 0.0, 0.0, -60*10920714548.72234, 0.0, 0.0,60*16644524938.81657, 0.0, -60*16364372664.70290, 0.0,60*8080579968.97197, 0.0, 0.0, -60*2834740327.51965, 0.0,  60*1331213566.88150,  60*1010961461.30280, -60*2387418495.97765,60*1659337298.89251, -60*622192768.04629, 60*138921217.362358, -60*18305060.8984875,60*1320820.91241054, -60*50395.6593240169, 60*1594.07054186194, 60*38.7663699452653,60*11.8011809149536};
+
 //double coeffs2[MAXDEGREEPOLY]={-7804126.68756267, 0, 25506481.892212, 0, 0, -31995497.6264176, 0, 0, 0, 0, 0, 0, 0, 60180709.9392192, 0, 0, 0, 0, -91290146.7205068, 0, 0, 0, 0, 0, 62966686.2936572, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -41489120.4273827, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51569710.2406328, 0, 0, 0, 0, 0, 0, 0, 0, 0 , -61482650.4011263, 0, 0, 0, 0, 0, 0, 0, 0, 0, 119151566.929812, 0, 0, 0, 0, -158836801.811755, 0, 0, 0, 0, 107845792.501427, 0, 0, 0, 0, -40438704.5594945, 0, 0, 0, 0, -2017204.55659056, 0, 0, 0, 22368787.3291233, 0, 0, 0, -38587201.2961324,0, 0, 68338463.6321268, 0, -91431570.8652916, 0, 136730933.950438, -146381938.709179, 76449935.5389264, -22951812.7425929, 3901914.86045682, -302425.558782687, -2995.35800355861, 1143.64231358147, 70.3494501822929, 11.3679676751559};
 //double coeffs3[MAXDEGREEPOLY]={-5568914.69050683, 0, 18550269.9593775, 0, 0, -23986691.8154377, 0, 0, 0, 0, 0, 0, 0, 49531094.6617748, 0, 0, 0, 0, -80515111.3284084, 0, 0, 0, 0, 0, 61150107.658354, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -52944834.5893432, 0, 0, 0, 0, 0, 0, 0, 0, 0, 88145386.7882361, 0, 0, 0, 0, 0, 0, 0, 0, 0, -156446891.058224, 0, 0, 0, 0, 0, 0, 0, 0, 0, 533593350.532314, 0, 0, 0, 0, -1048894258.17445, 0, 0, 0, 0, 1199016711.57069, 0, 0, 0, 0, -1033184989.92329, 0, 0, 0, 0, 862028565.726653, 0, 0, 0, -705213545.729899, 0, 0, 0, 614832548.422423, 0, 0, -746208588.092968, 0, 791392111.350242, 0, -947590096.72696, 914359301.492975, -436255303.466556, 123792199.437433, -21816443.1312183, 2387498.2633569, -158624.061403544, 4988.62315434288, 158.259318872659, 11.4720337508105};
 
 //Specification of the knee encoder E30S4-3000-6-L-5 from Autonics, with channel A and B activated
 struct encoder kneePoly={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0}; //for the polynomial function
+struct encoder motorPoly={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=1024, .numOfChannel=4, .numOfEdge=1, .timeFetch=0.0};
+
 struct encoder kneeCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0}; //to be use for real
 struct encoder kneePrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0}; //to be use for real
 
@@ -362,10 +366,16 @@ void *testThread1(void *ptr) {
 
 	//Initialization
 	setTimeOrigin(&t_Result);
+
 	fetchAngInc(&kneePoly.angInc, &kneeCurrent, &t_Result); //take the value in kneeCurrent
+	fetchAngInc(&motorPoly.angInc, &motorCurrent, &t_Result); //take the value in kneeCurrent
+
 	angleIncToDeg(&kneeCurrent); //convert the value from inc to deg
+	angleIncToDeg(&motorCurrent);
+
 	calcVelAndAcc(&kneeCurrent, &kneePrevious);
 	calcVelAndAcc(&motorCurrent, &motorPrevious);
+
 	copyCurrToPrevEnc(&kneePrevious, &kneeCurrent); //copy the value from curr to previous
 	copyCurrToPrevEnc(&motorPrevious, &motorCurrent); //copy the value from curr to previous
 
@@ -383,7 +393,10 @@ void *testThread1(void *ptr) {
 
   		//actual calculation
   		fetchAngInc(&kneePoly.angInc, &kneeCurrent, &t_Result); //take the value in kneeCurrent
+  		fetchAngInc(&motorPoly.angInc, &motorCurrent, &t_Result);
+
   		angleIncToDeg(&kneeCurrent); //convert the value from inc to deg
+  		angleIncToDeg(&motorCurrent);
 
   		calcVelAndAcc(&kneeCurrent, &kneePrevious);
   		calcVelAndAcc(&motorCurrent, &motorPrevious);
@@ -442,8 +455,11 @@ void *testThread2(void *ptr) {
   	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
 
 	//simulation of the polynomial
-	polyEval(coeffs1, &timeTestPoly, &kneePoly.angDeg); //put the value in angTestPoly
+	polyEval(coeffsKnee1, &timeTestPoly, &kneePoly.angDeg); //put the value in angTestPoly
+	polyEval(coeffsMotor1, &timeTestPoly, &motorPoly.angDeg);
+
 	polyAngToIncAng(&kneePoly.angDeg, &kneePoly); //Copy it into kneePoly
+	polyAngToIncAng(&motorPoly.angDeg, &motorPoly);
 
 	timeTestPoly+=double(INTERVAL_T2)/double(ONESECINNANO);
 	if(timeTestPoly>=0.9999){
