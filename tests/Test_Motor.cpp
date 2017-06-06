@@ -79,19 +79,19 @@ struct motor{
 };
 
 struct output{
-	double motorCurrVelocity[sizeArrayOuput]; //Value of the current velocity in rpm
-	double motorCurrDuty[sizeArrayOuput]; //Value of the current duty
-	double motorDesVelocity[sizeArrayOuput]; //Value of the desired velocity in rpm
-	double motorDesDuty[sizeArrayOuput]; //Value of the desired duty
-	int kneeAngInc[sizeArrayOuput]; //value of the angle in increment
-	double kneeAngDeg[sizeArrayOuput]; //value of the angle in degree
-	double kneeVelDegSec[sizeArrayOuput]; //the velocity in deg/sec
-	double kneeAccDegSec[sizeArrayOuput]; //the acceleration in deg/secˆ2
-	int motorAngInc[sizeArrayOuput]; //value of the angle in increment
-	double motorAngDeg[sizeArrayOuput]; //value of the angle in degree
-	double motorVelDegSec[sizeArrayOuput]; //the velocity in deg/sec
-	double motorAccDegSec[sizeArrayOuput]; //the acceleration in deg/secˆ2
-	double timeInMilli[sizeArrayOuput]; //the time in millisecond since hte beginning of the fetching
+	double motorCurrVelocity[5000]; //Value of the current velocity in rpm
+	double motorCurrDuty[5000]; //Value of the current duty
+	double motorDesVelocity[5000]; //Value of the desired velocity in rpm
+	double motorDesDuty[5000]; //Value of the desired duty
+	int kneeAngInc[5000]; //value of the angle in increment
+	double kneeAngDeg[5000]; //value of the angle in degree
+	double kneeVelDegSec[5000]; //the velocity in deg/sec
+	double kneeAccDegSec[5000]; //the acceleration in deg/secˆ2
+	int motorAngInc[5000]; //value of the angle in increment
+	double motorAngDeg[5000]; //value of the angle in degree
+	double motorVelDegSec[5000]; //the velocity in deg/sec
+	double motorAccDegSec[5000]; //the acceleration in deg/secˆ2
+	double timeInMilli[5000]; //the time in millisecond since hte beginning of the fetching
 };
 
 struct timeStruct{
@@ -240,7 +240,7 @@ int fileTestMotor(struct output *output){
 		    fprintf(fj1,"%d;%f;%f;%f;%f;%f;"
 		    		"%d;%f;%f;%f"
 		    		"%d;%f;%f;%f;\r\n",
-		    	i+1, output->timeInMilli, output->motorCurrVelocity[i], output->motorCurrDuty[i],output->motorDesVelocity[i], output->motorDesDuty[i],
+		    	i+1, output->timeInMilli[i], output->motorCurrVelocity[i], output->motorCurrDuty[i],output->motorDesVelocity[i], output->motorDesDuty[i],
 				output->kneeAngInc[i], output->kneeAngDeg[i], output->kneeVelDegSec[i], output->kneeAccDegSec[i],
 				output->motorAngInc[i], output->motorAngDeg[i], output->motorVelDegSec[i],output->motorAccDegSec[i]);
 
