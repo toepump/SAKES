@@ -50,7 +50,7 @@ double INTERVAL_S=double(INTERVALMS)/1000000000.0;
 
 int ticks_t1=0; //Incremental value for the thread 1
 int ticks_t2=0; //Incremental value for the thread 2
-int sizeArrayouput=5000;
+int sizeArrayOuput=5000;
 
 
 struct encoder{
@@ -79,19 +79,19 @@ struct motor{
 };
 
 struct output{
-	double motorCurrVelocity[sizeArrayouput]; //Value of the current velocity in rpm
-	double motorCurrDuty[sizeArrayouput]; //Value of the current duty
-	double motorDesVelocity[sizeArrayouput]; //Value of the desired velocity in rpm
-	double motorDesDuty[sizeArrayouput]; //Value of the desired duty
-	int kneeAngInc[sizeArrayouput]; //value of the angle in increment
-	double kneeAngDeg[sizeArrayouput]; //value of the angle in degree
-	double kneeVelDegSec[sizeArrayouput]; //the velocity in deg/sec
-	double kneeAccDegSec[sizeArrayouput]; //the acceleration in deg/secˆ2
-	int motorAngInc[sizeArrayouput]; //value of the angle in increment
-	double motorAngDeg[sizeArrayouput]; //value of the angle in degree
-	double motorVelDegSec[sizeArrayouput]; //the velocity in deg/sec
-	double motorAccDegSec[sizeArrayouput]; //the acceleration in deg/secˆ2
-	double timeInMilli[sizeArrayouput]; //the time in millisecond since hte beginning of the fetching
+	double motorCurrVelocity[sizeArrayOuput]; //Value of the current velocity in rpm
+	double motorCurrDuty[sizeArrayOuput]; //Value of the current duty
+	double motorDesVelocity[sizeArrayOuput]; //Value of the desired velocity in rpm
+	double motorDesDuty[sizeArrayOuput]; //Value of the desired duty
+	int kneeAngInc[sizeArrayOuput]; //value of the angle in increment
+	double kneeAngDeg[sizeArrayOuput]; //value of the angle in degree
+	double kneeVelDegSec[sizeArrayOuput]; //the velocity in deg/sec
+	double kneeAccDegSec[sizeArrayOuput]; //the acceleration in deg/secˆ2
+	int motorAngInc[sizeArrayOuput]; //value of the angle in increment
+	double motorAngDeg[sizeArrayOuput]; //value of the angle in degree
+	double motorVelDegSec[sizeArrayOuput]; //the velocity in deg/sec
+	double motorAccDegSec[sizeArrayOuput]; //the acceleration in deg/secˆ2
+	double timeInMilli[sizeArrayOuput]; //the time in millisecond since hte beginning of the fetching
 };
 
 struct timeStruct{
@@ -237,10 +237,10 @@ int fileTestMotor(struct output *output){
 				"MotorEncAngInc; MotorEncAngDeg; MotorEncVelDegsec; MotorAccDegsecsec; \r\n");
 
 		while(i<TIME_MAX){
-		    fprintf(fj1,"%d;%f;%f;%f;%f;"
+		    fprintf(fj1,"%d;%f;%f;%f;%f;%f;"
 		    		"%d;%f;%f;%f"
 		    		"%d;%f;%f;%f;\r\n",
-		    	i+1, output->motorCurrVelocity[i], output->motorCurrDuty[i],output->motorDesVelocity[i], output->motorDesDuty[i],
+		    	i+1, output->timeInMilli, output->motorCurrVelocity[i], output->motorCurrDuty[i],output->motorDesVelocity[i], output->motorDesDuty[i],
 				output->kneeAngInc[i], output->kneeAngDeg[i], output->kneeVelDegSec[i], output->kneeAccDegSec[i],
 				output->motorAngInc[i], output->motorAngDeg[i], output->motorVelDegSec[i],output->motorAccDegSec[i]);
 
