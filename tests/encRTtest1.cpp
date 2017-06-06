@@ -1,9 +1,9 @@
 /*
- * TestRT_3.cpp
- *
- *  Created on: May 15, 2017
- *      Author: Vincent
- */
+* TestRT_3.cpp
+*
+*  Created on: May 15, 2017
+*      Author: Vincent
+*/
 
 #include <iostream>
 #include <unistd.h>
@@ -86,7 +86,7 @@ void counter(int nb_signal) {
 
         if(state==1){
             if(nb_signal==2){
-            	netAngleIncrement++;
+                netAngleIncrement++;
                 encfwd++;
                 state=2;
             }else if(nb_signal==1){
@@ -100,13 +100,13 @@ void counter(int nb_signal) {
 
         else if(state==2){
             if(nb_signal==1){
-            	netAngleIncrement++;
-            	encfwd++;
+                netAngleIncrement++;
+                encfwd++;
                 state=3;
             }else if(nb_signal==2){
-            	state=1;
-            	netAngleIncrement--;
-            	encbwd++;
+                state=1;
+                netAngleIncrement--;
+                encbwd++;
             }else{
                 cout << "problem with the counter in case 2" << endl;
             }
@@ -114,13 +114,13 @@ void counter(int nb_signal) {
 
         else if(state==3){
             if(nb_signal==2){
-            	netAngleIncrement++;
+                netAngleIncrement++;
                 encfwd++;
                 state=4;
             }else if(nb_signal==1){
-            	netAngleIncrement--;
-				encbwd++;
-				state=2;
+                netAngleIncrement--;
+                encbwd++;
+                state=2;
             }else{
                 cout << "problem with the counter in case 3" << endl;
             }
@@ -132,8 +132,8 @@ void counter(int nb_signal) {
                 netAngleIncrement++;
                 state=1;
             }else if(nb_signal==2){
-            	encbwd++;
-            	netAngleIncrement--;
+                encbwd++;
+                netAngleIncrement--;
                 state=3;
             }else{
                 cout << "problem with the counter in case 4" << endl;
@@ -149,34 +149,31 @@ void counter(int nb_signal) {
         outputState[state];
         indexOutput++;
 
-    	if(indexOutput+1>MAX_PULSE){
+        if(indexOutput+1>MAX_PULSE){
             cout<< "indexOutput = " << indexOutput << endl;
-    		printOutData();
-    	}
+            printOutData();
         }
-
-
-
+    }
 }
 
 void printOutData(void){
-	cout << "Printing of the output starts" << endl;
+    cout << "Printing of the output starts" << endl;
 
-	int i=0;
-	FILE *fj1=fopen("outputEncoder.dat","w");
+    int i=0;
+    FILE *fj1=fopen("outputEncoder.dat","w");
 
-	fprintf(fj1,"indexOutput;Net Increment;Net Angle (degrees);State;EncoderForward;EncoderBackward;\r\n");
+    fprintf(fj1,"indexOutput;Net Increment;Net Angle (degrees);State;EncoderForward;EncoderBackward;\r\n");
 
-	while(i<MAX_PULSE){
-	    fprintf(fj1,"%d;%d;%d;%d;%d;%d;\r\n", i+1, outputNetIncrement[i], outputNetAngle[i],outputState[i], outputEncfwd[i], outputEncbwd[i]);
+    while(i<MAX_PULSE){
+        fprintf(fj1,"%d;%d;%d;%d;%d;%d;\r\n", i+1, outputNetIncrement[i], outputNetAngle[i],outputState[i], outputEncfwd[i], outputEncbwd[i]);
 
-	    if(i==MAX_PULSE-1){
-	    	fclose(fj1);
-	    }
-	    i++ ;
-	}
+        if(i==MAX_PULSE-1){
+            fclose(fj1);
+        }
+        i++ ;
+    }
 
-	cout << "Printing of the output is done" << endl;
+    cout << "Printing of the output is done" << endl;
 
 }
 
@@ -241,56 +238,56 @@ void initCounter(void){
 
 int main(int argc, char* argv[]){
 
-	//Initialization of the counter
-	initCounter();
+    //Initialization of the counter
+    initCounter();
 
-	//Creation of the thread
-	pthread_t thread1;
-	const char *message1 = "Thread 1";
-	int  iret1;
+    //Creation of the thread
+    pthread_t thread1;
+    const char *message1 = "Thread 1";
+    int  iret1;
 
-	/*set attribute */
+    /*set attribute */
 
-	pthread_attr_t attr1; //Creation of the variable for the attribute
-	struct sched_param parm1; //Creation of new sched_param
-	pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
+    pthread_attr_t attr1; //Creation of the variable for the attribute
+    struct sched_param parm1; //Creation of new sched_param
+    pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
 
 
-	/* Create independent thread which will execute function */
+    /* Create independent thread which will execute function */
 
-	pthread_attr_getschedparam(&attr1, &parm1); // put the scheduling param of att to parm
-	parm1.sched_priority = sched_get_priority_min(SCHED_FIFO); //return the minimum priority
-	pthread_attr_setschedpolicy(&attr1, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
-	pthread_attr_setschedparam(&attr1, &parm1); //set the scheduling parameter of attr1 as parm1
+    pthread_attr_getschedparam(&attr1, &parm1); // put the scheduling param of att to parm
+    parm1.sched_priority = sched_get_priority_min(SCHED_FIFO); //return the minimum priority
+    pthread_attr_setschedpolicy(&attr1, SCHED_FIFO); //set the scheduling policy of attr1 as FIFIO
+    pthread_attr_setschedparam(&attr1, &parm1); //set the scheduling parameter of attr1 as parm1
 
-	iret1 = pthread_create(&thread1, &attr1, testThread1,(void*) message1); //create a thread that launch the print_message_function with the arguments  message1
-	pthread_setschedparam(thread1, SCHED_FIFO, &parm1); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
-														// if it fails, return not 0
-	//set priority each thread
-	pthread_setschedprio(thread1, 49);
+    iret1 = pthread_create(&thread1, &attr1, testThread1,(void*) message1); //create a thread that launch the print_message_function with the arguments  message1
+    pthread_setschedparam(thread1, SCHED_FIFO, &parm1); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
+    // if it fails, return not 0
+    //set priority each thread
+    pthread_setschedprio(thread1, 49);
 
-	//
-	printf("pthread_create() for thread 1 returns: %d\n",iret1);
+    //
+    printf("pthread_create() for thread 1 returns: %d\n",iret1);
 
-	/* Wait till threads are complete before main continues. Unless we  */
-	/* wait we run the risk of executing an exit which will terminate   */
-	/* the process and all threads before the threads have completed.   */
+    /* Wait till threads are complete before main continues. Unless we  */
+    /* wait we run the risk of executing an exit which will terminate   */
+    /* the process and all threads before the threads have completed.   */
 
-	pthread_join( thread1, NULL);
+    pthread_join( thread1, NULL);
 
-	exit(EXIT_SUCCESS);
+    exit(EXIT_SUCCESS);
 }
 
 void *testThread1(void *ptr) {
 
-	char *message;
-	message = (char *) ptr;
-	struct timespec t_Thread1;
+    char *message;
+    message = (char *) ptr;
+    struct timespec t_Thread1;
 
 
     while(true) {
 
-    	/* do the stuff */
+        /* do the stuff */
         //initialize loops for both events
         GMainLoop* loopA = g_main_loop_new(0, 0);
         GMainLoop* loopB = g_main_loop_new(0, 0);
@@ -309,7 +306,7 @@ void *testThread1(void *ptr) {
         g_main_loop_run( loopA );
         g_main_loop_run( loopB );
 
-    	}
+    }
 
-	return (void*) NULL;
+    return (void*) NULL;
 }
