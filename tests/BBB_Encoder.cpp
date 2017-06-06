@@ -19,17 +19,27 @@
 #include<glib-2.0/glib.h>
 
 using namespace std;
+
+const int MAX_PULSE = 30000; //maximum number of pulse recorded
+const double PULSE_PER_DEGREE = 12000.0/360.0; // The number of pulse (interrupt) to complete one degree
+
 int encoder=0;
-double encfwd=0;
-double encbwd=0;
 int angle=0;
 int state=0;
 static int init=0;
+int indexOutput = 0;
+double netAngleDegree = 0;
 
 //prototypes
 static gboolean EventA( GIOChannel *channel, GIOCondition condition, gpointer user_data );
 static gboolean EventB( GIOChannel *channel, GIOCondition condition, gpointer user_data );
 void counter(int nb_signal);
+void printProbe(void);
+
+//storage
+double outputNetAngle[MAX_PULSE]; //Store the value at each interrupt
+int outputState[MAX_PULSE];
+int outputNetIncrement[MAX_PULSE];
 
 
 static gboolean EventA( GIOChannel *channel, GIOCondition condition, gpointer user_data )
@@ -64,15 +74,14 @@ static gboolean EventB( GIOChannel *channel, GIOCondition condition, gpointer us
 void counter(int nb_signal) {
     init++;
 
-    if(init>2){
+    if(init>2 && indexOutput < MAX_PULSE){
 
         if(state==1){
             if(nb_signal==2){
                 encoder++;
-
-                encfwd++;	state=2;
+                state=2;
             }else if(nb_signal==1){
-                encbwd++; encoder--;
+                encoder--;
                 state=4;
             }else{
                 cout << "problem with the counter in case 1" << endl;
@@ -84,12 +93,10 @@ void counter(int nb_signal) {
         else if(state==2){
             if(nb_signal==1){
                 encoder++;
-                encfwd++;
                 state=3;
             }else if(nb_signal==2){
                 state=1;
                 encoder--;
-                encbwd++;
             }else{
                 cout << "problem with the counter in case 2" << endl;
             }
@@ -99,10 +106,10 @@ void counter(int nb_signal) {
         else if(state==3){
             if(nb_signal==2){
                 encoder++;
-                encfwd++;
                 state=4;
             }else if(nb_signal==1){
-                encoder--; encbwd++;					state=2;
+                encoder--;
+                state=2;
             }else{
                 cout << "problem with the counter in case 3" << endl;
             }
@@ -111,32 +118,56 @@ void counter(int nb_signal) {
         }
         else if(state==4){
             if(nb_signal==1){
-
-                encfwd++;	encoder++;
+                encoder++;
                 state=1;
             }else if(nb_signal==2){
-                encbwd++; encoder--;				state=3;
+                encoder--;
+                state=3;
             }else{
                 cout << "problem with the counter in case 4" << endl;
             }
-
         }
 
+        // if(encoder%3000==0){
+        //     angle=encoder/1000;
+        //     angle++;
+        // }
 
-        if(encoder%3000==0){
-            angle=encoder/1000;
-            angle++;
-            cout << "Counter: Value Angle " << angle << endl;
-            cout << "Coubter encoder : " << encoder << endl;
-            cout << "fwd  " << encfwd << " bwd" << encbwd<< endl;
+        netAngleDegree=double(encoder)/PULSE_PER_DEGREE;
 
-        }
+        outputNetIncrement[indexOutput]=encoder;
+        outputNetAngle[indexOutput]=netAngleDegree;
+        outputState[indexOutput] = state;
+        indexOutput++;
 
-        if(encoder%3000==0){
-            cout << "Counter: State value" << state << endl;
-            cout << "  " << endl;
+        if(indexOutput+1==MAX_PULSE){
+            cout<< "checking if indexOutput is changing not. " << endl;
+            cout<< "indexOutput-1 = " << indexOutput << "  MAX_PULSE = " << MAX_PULSE<< endl;
+            cout << "printOutStarted" << endl;
+            printOutData();
         }
     }
+}
+
+void printOutData(void){
+    cout << "Printing of the output starts" << endl;
+
+    int i=0;
+    FILE *fj3=fopen("BBBencoderOutput.dat","w");
+
+    fprintf(fj3,"indexOutput;Net Increment;Net Angle (degrees);State;EncoderForward;EncoderBackward;\r\n");
+
+    while(i<MAX_PULSE){
+        fprintf(fj3,"%d;%f;%d;\r\n", i+1, outputNetIncrement[i], outputNetAngle[i],outputState[i]);
+
+        if(i==MAX_PULSE-1){
+            fclose(fj3);
+        }
+        i++ ;
+    }
+
+    cout << "Printing of the output is done" << endl;
+
 }
 
 void initCounter(void){
