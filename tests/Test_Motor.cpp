@@ -232,7 +232,7 @@ int fileTestMotor(struct output *output){
 		int i=0;
 		FILE *fj1=fopen("fileTestMotor.dat","w");
 
-		fprintf(fj1,"indexOutput;MotorCurrentVelocity; MotorCurrentDuty; MotorDesiredVelocity; MotorDesiredDuty;"
+		fprintf(fj1,"indexOutput;TimeInMilli;MotorCurrentVelocity; MotorCurrentDuty; MotorDesiredVelocity; MotorDesiredDuty;"
 				"KneeEncAngInc; KneeEncAngDeg; KneeEncVelDegsec; KneeAccDegsecsec;"
 				"MotorEncAngInc; MotorEncAngDeg; MotorEncVelDegsec; MotorAccDegsecsec; \r\n");
 
