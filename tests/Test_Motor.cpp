@@ -76,6 +76,10 @@ struct output{
 
 const int TIME_MAX = 2010; // time max for the loop in ms
 const int INTERVALMS =1000000; // in nanosecond
+
+const int INTERVAL_T2 = 333333; //in nanosecond, interval for the thread 2
+
+const int ONESECINNANO = 1000000000; //one second in nanosecond unit
 double INTERVAL_S=double(INTERVALMS)/1000000000.0;
 
 int ticks_t1=0; //Incremental value for the thread 1
@@ -294,18 +298,18 @@ void *testThread1(void *ptr) {
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
 
-  clock_gettime(CLOCK_MONOTONIC ,&t_Thread1);
-  /* start after one second */
-  t_Thread1.tv_sec++;
+	clock_gettime(CLOCK_MONOTONIC ,&t_Thread1);
+	/* start after one second */
+	t_Thread1.tv_sec++;
 
-  while(ticks_t1<TIME_MAX+1) {
+	while(ticks_t1<TIME_MAX+1){
 
-  	/* wait until next shot */
-  	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
+		/* wait until next shot */
+		clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
 
-  	/* do the stuff */
+		/* do the stuff */
 
-  	//if(ticks_t1%500==0){
+		//if(ticks_t1%500==0){
 
   		//actual calculation
   		fetchAngInc(&kneePoly.angInc, &kneeCurrent); //take the value in kneeCurrent
@@ -321,12 +325,14 @@ void *testThread1(void *ptr) {
   		copyCurrToPrevEnc(&kneePrevious, &kneeCurrent); //copy the value from curr to previous
   		copyCurrToPrevEnc(&motorPrevious, &motorCurrent); //copy the value from curr to previous
 
+  		/*
   		if(ticks_t1%100==0){
   			cout << "Value: " << maxon1.currentVelocity << " Value: " <<maxon1.currentDuty<< "Value: " <<maxon1.desiredVelocity << "Value: " <<maxon1.desiredDuty << endl;
   			cout <<	"Value: " << kneeCurrent.angInc << " Value: " << kneeCurrent.angDeg << "Value: " <<kneeCurrent.velDegSec << "Value: " << kneeCurrent.accDegSec << endl;
 			cout << "Value: " << motorCurrent.angInc << " Value: " <<motorCurrent.angDeg << "Value: " << motorCurrent.velDegSec << "Value: " << motorCurrent.accDegSec << endl;
 			cout << "  " << endl;
   		}
+  		*/
   		copyIntoOutput(&kneeCurrent, &motorCurrent, &maxon1, &outputArray, ticks_t1);
 
   	ticks_t1++; // Increment the ticks value
@@ -351,6 +357,7 @@ void *testThread2(void *ptr) {
 	message = (char *) ptr;
 	struct timespec t_Thread2;
 	double timeTestPoly=0.0;
+	int timeRatio=3;
 
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
@@ -359,31 +366,24 @@ void *testThread2(void *ptr) {
   /* start after one second */
   t_Thread2.tv_sec++;
 
-  while(ticks_t2<TIME_MAX+1) {
+  while(ticks_t2<TIME_MAX*3+1) {
 
   	/* wait until next shot */
   	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
-
-
 
 	//simulation of the polynomial
 	polyEval(coeffs1, &timeTestPoly, &kneePoly.angDeg); //put the value in angTestPoly
 	polyAngToIncAng(&kneePoly.angDeg, &kneePoly); //Copy it into kneePoly
 
-  	/* do the stuff */
-  	if(ticks_t2%1000==0){
-  		cout << "Add 2, thread 2: " << ticks_t2 << endl;
-  	}
-
-	timeTestPoly+=0.001;
-	if(timeTestPoly>=0.999){
+	timeTestPoly+=double(INTERVAL_T2)/double(ONESECINNANO);
+	if(timeTestPoly>=0.9999){
 		timeTestPoly=0.0;
 	}
 
   	ticks_t2++; // Increment the ticks value
 
 		/* calculate next shot */
-  	t_Thread2.tv_nsec += INTERVALMS/3;
+  	t_Thread2.tv_nsec += INTERVAL_T2;
 
   	while (t_Thread2.tv_nsec >= NSEC_PER_SEC) {
   		t_Thread2.tv_nsec -= NSEC_PER_SEC;
