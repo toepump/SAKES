@@ -362,7 +362,7 @@ void *testThread1(void *ptr) {
 
 	//Initialization
 	setTimeOrigin(&t_Result);
-	fetchAngInc(&kneePoly.angInc, &kneeCurrent); //take the value in kneeCurrent
+	fetchAngInc(&kneePoly.angInc, &kneeCurrent, &t_Result); //take the value in kneeCurrent
 	angleIncToDeg(&kneeCurrent); //convert the value from inc to deg
 	calcVelAndAcc(&kneeCurrent, &kneePrevious);
 	calcVelAndAcc(&motorCurrent, &motorPrevious);
