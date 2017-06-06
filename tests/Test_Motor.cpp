@@ -145,7 +145,7 @@ void polyEval(double coeffs[], double *time, double *angle){
 
 void polyAngToIncAng(double *polyAng, struct encoder *polyEnc){
 	//put the value of the angle in degree to the value of angInc of the encoder
-	polyEnc->angInc=int(*polyAng*polyEnc->pulsePerTurn*polyEnc->numOfChannel*polyEnc->numOfEdge/360.0);
+	polyEnc->angInc=int(*polyAng)*polyEnc->pulsePerTurn*polyEnc->numOfChannel*polyEnc->numOfEdge/360.0;
 }
 
 int copyCurrToPrevEnc(struct encoder *previous, struct encoder *current){
@@ -241,10 +241,13 @@ int fileTestMotor(struct output *output){
 				"MotorEncAngInc; MotorEncAngDeg; MotorEncVelDegsec; MotorAccDegsecsec; \r\n");
 
 		while(i<TIME_MAX){
-		    fprintf(fj1,"%d;%f;%f;%f;%f;%f;"
-		    		"%d;%f;%f;%f"
-		    		"%d;%f;%f;%f;\r\n",
-		    	i+1, output->timeInMilli[i], output->motorCurrVelocity[i], output->motorCurrDuty[i],output->motorDesVelocity[i], output->motorDesDuty[i],
+		    fprintf(fj1,"%d;%f;"
+		    		"%f;%f;%f;%f;"
+		    		"%d;%f;%f;%f;"
+		    		"%d;%f;%f;%f;"
+		    		"\r\n",
+		    	i+1, output->timeInMilli[i],
+				output->motorCurrVelocity[i], output->motorCurrDuty[i],output->motorDesVelocity[i], output->motorDesDuty[i],
 				output->kneeAngInc[i], output->kneeAngDeg[i], output->kneeVelDegSec[i], output->kneeAccDegSec[i],
 				output->motorAngInc[i], output->motorAngDeg[i], output->motorVelDegSec[i],output->motorAccDegSec[i]);
 
@@ -364,26 +367,16 @@ void *testThread1(void *ptr) {
 	t_Thread1.tv_sec++;
 	t_Thread1.tv_sec++;
 
-	//Initialization
-	setTimeOrigin(&t_Result);
 
-	fetchAngInc(&kneePoly.angInc, &kneeCurrent, &t_Result); //take the value in kneeCurrent
-	fetchAngInc(&motorPoly.angInc, &motorCurrent, &t_Result); //take the value in kneeCurrent
-
-	angleIncToDeg(&kneeCurrent); //convert the value from inc to deg
-	angleIncToDeg(&motorCurrent);
-
-	calcVelAndAcc(&kneeCurrent, &kneePrevious);
-	calcVelAndAcc(&motorCurrent, &motorPrevious);
-
-	copyCurrToPrevEnc(&kneePrevious, &kneeCurrent); //copy the value from curr to previous
-	copyCurrToPrevEnc(&motorPrevious, &motorCurrent); //copy the value from curr to previous
 
 	while(ticks_t1<TIME_MAX+1){
 
 		/* wait until next shot */
 		clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
 
+
+		//Initialization
+		setTimeOrigin(&t_Result);
 		/* do the stuff */
 
 		//if(ticks_t1%500==0){
@@ -459,7 +452,7 @@ void *testThread2(void *ptr) {
 	polyEval(coeffsMotor1, &timeTestPoly, &motorPoly.angDeg);
 
 	polyAngToIncAng(&kneePoly.angDeg, &kneePoly); //Copy it into kneePoly
-	polyAngToIncAng(&motorPoly.angDeg, &motorPoly);
+	polyAngToIncAng(&motorPoly.angDeg, &motorPoly); //Copy it into motor poly
 
 	timeTestPoly+=double(INTERVAL_T2)/double(ONESECINNANO);
 	if(timeTestPoly>=0.9999){
