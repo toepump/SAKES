@@ -2,7 +2,7 @@
 * TestRT_3.cpp
 *
 *  Created on: May 15, 2017
-*      Author: Vincent
+*      Author: Vincent and Mikey
 */
 
 #include <iostream>
@@ -317,7 +317,7 @@ int main(int argc, char* argv[]){
     //set priority each thread
     pthread_setschedprio(thread1, 40);
     pthread_setschedprio(thread2, 45);
-    
+
     printf("pthread_create() for thread 1 returns: %d\n",iret1);
     printf("pthread_create() for thread 2 returns: %d\n",iret2);
 
