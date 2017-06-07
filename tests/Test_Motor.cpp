@@ -483,9 +483,9 @@ void *testThread1(void *ptr) {
 
 	  		timespec_diff(&start, &end, &diff);
 
-	  		if(diff.tvsec==0 && diff.tvnsec < 1000000000){
+	  		if(diff.tv_sec==0 && diff.tv_nsec < 1000000000){
 	  			waitTime.tv_sec=0;
-	  			waitTime.tv_nsec=1000000000-diff.tvnsec;
+	  			waitTime.tv_nsec=1000000000-diff.tv_nsec;
 	  		}
 
 		}else{
