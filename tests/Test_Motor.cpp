@@ -44,6 +44,8 @@ void *testThread2(void *ptr);
 
 
 const int TIME_MAX = 2010; // time max for the loop in ms
+const int TIME_MAX_ENC = 5110; // time max for the loop in ms
+
 const int INTERVALMS =1000000; // in nanosecond
 
 const int INTERVAL_T2 = 750000; //in nanosecond, interval for the thread 2
@@ -301,14 +303,14 @@ int fileOutputEncoder(struct outputEnc *output){
 		fprintf(fj2,"indexOutput;"
 				"PolyAngInc; PolyAngDeg; PolyVelDegsec; PolyAccDegsecsec; \r\n");
 
-		while(i<TIME_MAX){
+		while(i<TIME_MAX_ENC){
 		    fprintf(fj2,"%d;"
 		    		"%d;%f;%f;%f;"
 		    		"\r\n",
 		    	i+1,
 				output->AngInc[i], output->AngDeg[i], output->VelDegSec[i], output->AccDegSec[i]);
 
-		    if(i==TIME_MAX-1){
+		    if(i==TIME_MAX_ENC-1){
 		    	fclose(fj2);
 		    }
 		    i++ ;
