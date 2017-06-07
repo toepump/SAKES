@@ -489,9 +489,6 @@ void *testThread1(void *ptr) {
 
 		}
 
-		/* calculate next shot */
-  	t_Thread1.tv_nsec += INTERVALMS;
-
   }
 
   fileTestMotor(&outputArray);
