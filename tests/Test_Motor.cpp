@@ -432,6 +432,7 @@ void *testThread1(void *ptr) {
 	struct timespec waitTime;
 	struct timespec start;
 	struct timespec end;
+	struct timespec diff;
 	struct timespec remain;
 
 	struct timeStruct t_Result;
@@ -480,17 +481,20 @@ void *testThread1(void *ptr) {
 
 	  		clock_gettime(CLOCK_REALTIME, &end);
 
-	  		timespec_diff(&start, &end, &waitTime);
+	  		timespec_diff(&start, &end, &diff);
 
+	  		if(diff.tv_sec==0 && diff.tv_nsec < 1000000000){
+	  			waitTime.tv_sec=0;
+	  			waitTime.tv_nsec=1000000000-diff.tv_nsec;
+	  		}else{
+	  			cout << "The thread is not done in 1 ms" << endl;
+	  		}
 
 		}else{
 
 			cout << "The thread is not done in 1 ms" << endl;
 
 		}
-
-		/* calculate next shot */
-  	t_Thread1.tv_nsec += INTERVALMS;
 
   }
 
