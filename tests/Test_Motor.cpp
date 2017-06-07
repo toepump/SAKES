@@ -21,6 +21,8 @@ using namespace std;
 
 #define NSEC_PER_SEC  (1000000000) /* The number of nsecs per sec. */
 
+void timespec_diff(struct timespec *start, struct timespec *stop,struct timespec *result);
+
 int setParamThreadFIFO(pthread_attr_t attr, struct sched_param param, int priority);
 void polyEval(double coeffs[], double *time, double *angle);
 void polyAngToIncAng(double *polyAng, struct encoder *encoder);
@@ -151,6 +153,18 @@ struct timeStruct timeSimu;
 
 struct output outputArray;
 struct outputEnc outputKneePoly;
+
+void timespec_diff(struct timespec *start, struct timespec *stop, struct timespec *result){
+    if ((stop->tv_nsec - start->tv_nsec) < 0) {
+        result->tv_sec = stop->tv_sec - start->tv_sec - 1;
+        result->tv_nsec = stop->tv_nsec - start->tv_nsec + 1000000000;
+    } else {
+        result->tv_sec = stop->tv_sec - start->tv_sec;
+        result->tv_nsec = stop->tv_nsec - start->tv_nsec;
+    }
+
+    return;
+}
 
 void polyEval(double coeffs[], double *time, double *angle){
 	//from the coefficient in coeffs[] and the time in @time, give the angle in @angle
@@ -327,7 +341,7 @@ int fileOutputEncoder(struct outputEnc *output){
 int setTimeOrigin(struct timeStruct *time){
 
 	struct timespec timeFetcher;
-	clock_gettime(CLOCK_MONOTONIC ,&timeFetcher);
+	clock_gettime(CLOCK_REALTIME ,&timeFetcher);
 
 	time->originSec=double(timeFetcher.tv_sec);
 	time->originNano=double(timeFetcher.tv_nsec);
@@ -343,7 +357,7 @@ int setTimeOrigin(struct timeStruct *time){
 int getTimeSinceOrigin(struct timeStruct *time){
 
 	struct timespec timeFetcher;
-	clock_gettime(CLOCK_MONOTONIC ,&timeFetcher);
+	clock_gettime(CLOCK_REALTIME ,&timeFetcher);
 
 	time->tSec=double(timeFetcher.tv_sec)-time->originSec;
 	time->tNano=double(timeFetcher.tv_nsec)-time->originNano;
@@ -415,30 +429,26 @@ void *testThread1(void *ptr) {
 
 	char *message;
 	message = (char *) ptr;
-	struct timespec t_Thread1;
+	struct timespec waitTime;
+	struct timespec start;
+	struct timespec end;
 	struct timespec remain;
 
 	struct timeStruct t_Result;
 	int sleepOK=0;
 
-	//Variable for the polynomial function
 
-	/*Stuff I want to do*/
-	/*here should start the things used with the rt preempt patch*/
-
-	clock_gettime(CLOCK_MONOTONIC ,&t_Thread1);
-	/* start after two second */
-	t_Thread1.tv_sec++;
-	t_Thread1.tv_sec++;
-
-
+	waitTime.tv_sec=1;
+	waitTime.tv_nsec=500000000;
 
 	while(ticks_t1<TIME_MAX+1){
 
 		/* wait until next shot */
-		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, &remain);
+		sleepOK = clock_nanosleep(CLOCK_REALTIME, 0, &waitTime, &remain);
 
 		if(sleepOK == 0){
+
+			clock_gettime(CLOCK_REALTIME, &start);
 
 			//Initialization
 			setTimeOrigin(&t_Result);
@@ -468,6 +478,11 @@ void *testThread1(void *ptr) {
 
 	  		ticks_t1++; // Increment the ticks value
 
+	  		clock_gettime(CLOCK_REALTIME, &end);
+
+	  		timespec_diff(&start, &end, &waitTime);
+
+
 		}else{
 
 			cout << "The thread is not done in 1 ms" << endl;
@@ -475,12 +490,8 @@ void *testThread1(void *ptr) {
 		}
 
 		/* calculate next shot */
-  	t_Thread1.tv_nsec += INTERVALMS/100000;
+  	t_Thread1.tv_nsec += INTERVALMS;
 
-  	while (t_Thread1.tv_nsec >= NSEC_PER_SEC) {
-  		t_Thread1.tv_nsec -= NSEC_PER_SEC;
-  		t_Thread1.tv_sec++;
-  	}
   }
 
   fileTestMotor(&outputArray);
@@ -499,14 +510,14 @@ void *testThread2(void *ptr) {
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
 
-  clock_gettime(CLOCK_MONOTONIC ,&t_Thread2);
+  clock_gettime(CLOCK_REALTIME ,&t_Thread2);
   /* start after one second */
   t_Thread2.tv_sec++;
 
   while(ticks_t2<TIME_MAX*timeRatio+1500) {
 
   	/* wait until next shot */
-  	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
+  	clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME, &t_Thread2, NULL);
 
 	//simulation of the polynomial
 	polyEval(coeffsKnee1, &timeTestPoly, &kneePoly.angDeg); //put the value in angTestPoly
