@@ -165,7 +165,9 @@ void polyEval(double coeffs[], double *time, double *angle){
 
 void polyAngToIncAng(double *polyAng, struct encoder *polyEnc){
 	//put the value of the angle in degree to the value of angInc of the encoder
-	polyEnc->angInc=int(*polyAng)*polyEnc->pulsePerTurn*polyEnc->numOfChannel*polyEnc->numOfEdge/360.0;
+
+
+	polyEnc->angInc=int(*polyAng*double(polyEnc->pulsePerTurn)*double(polyEnc->numOfChannel)*double(polyEnc->numOfEdge)/360.0);
 }
 
 int copyCurrToPrevEnc(struct encoder *previous, struct encoder *current){
