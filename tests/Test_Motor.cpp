@@ -416,6 +416,8 @@ void *testThread1(void *ptr) {
 	char *message;
 	message = (char *) ptr;
 	struct timespec t_Thread1;
+	struct timespec remain;
+
 	struct timeStruct t_Result;
 	int sleepOK=0;
 
@@ -434,7 +436,7 @@ void *testThread1(void *ptr) {
 	while(ticks_t1<TIME_MAX+1){
 
 		/* wait until next shot */
-		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
+		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, &remain);
 
 		if(sleepOK == 0){
 
