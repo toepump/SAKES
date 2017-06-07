@@ -14,6 +14,7 @@ void initCounter(void);
 
 //global variables
 int state = 0;
+const int INTERVAL =1000000;    // in nanosecond
 
 /*
 Purpose: Entry thread/function for input commands and launching program threads
@@ -74,9 +75,107 @@ Purpose: thread for spwaning a probing thread every millisecond
          Otherwise, program breaks because of control discrepancy
 */
 void *taskThread(void *ptr){
+    char *message;
+    message = (char *) ptr;
+    struct timespec t_taskThread;   //struct for keeping time (not actual monotonic clock)
 
+
+    clock_gettime(CLOCK_MONOTONIC,&t_taskThread);  //get the current time and store in the timespec struct
+
+    t_taskThread.tv_sec++;                          //increment the timespec struct time by one full second so that
+                                                    //we can get a delay in the next step
+
+    while(true) {
+        /* wait until next shot */
+        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_taskThread, NULL);   //delay until time stored in the timespec
+
+        //check if previously launched probingThread has completed
+        //if yes, launch new probingThread and take mutex
+
+        /* calculate next shot */
+        t_taskThread.tv_nsec += INTERVAL;
+
+        while (t_taskThread.tv_nsec >= NSEC_PER_SEC) {
+            t_taskThread.tv_nsec -= NSEC_PER_SEC;
+            t_taskThread.tv_sec++;
+        }
+    }
+
+    return (void*) NULL;
 }
 
+/*
+Purpose: every millisecond, forcibly take mutex protecting encoder data
+         and do complete processing of that data within 1 millisecond.
+Return: TODO return mutex, so make that mutex. If the calling thread tries to launch
+             another probingThread then the program is not fast enough and break
+*/
+void *probingThread(void *ptr){
+    char * message;
+    message = (char *) ptr;
+    struct timespec t_probing_thread;
+
+    clock_gettime(CLOCK_MONOTONIC, &t_probing_thread);
+
+    t_probing_thread.tv_sec++;
+
+    while(true) {
+        /* wait until next shot */
+        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_probing_thread, NULL);   //delay until time stored in the timespec
+
+        //probe and work on probed data
+
+
+        /* calculate next shot */
+        t_.tv_nsec += INTERVAL;
+
+        while (t_probing_thread.tv_nsec >= NSEC_PER_SEC) {
+            t_probing_thread.tv_nsec -= NSEC_PER_SEC;
+            t_probing_thread.tv_sec++;
+        }
+    }
+
+    return (void*) NULL;
+}
+
+/*
+Purpose: constantly be interrupted by encoder pulses found through GPIO
+         in linux filesystem 'value' files. Upon receiving interrupt from either
+         channel, call EventA or EventB functions.
+         TODO: add eventA and evetnB functions but maybe think about
+         consolidation.
+*/
+void *interruptThread(void *ptr){
+    char *message;
+    message = (char *) ptr;
+
+    while(true) {
+
+        GMainLoop* loopA = g_main_loop_new(0, 0);
+        GMainLoop* loopB = g_main_loop_new(0, 0);
+
+        int fdA = open( "/sys/class/gpio/gpio66/value", O_RDONLY | O_NONBLOCK );
+        GIOChannel* channelA = g_io_channel_unix_new(fdA);
+        GIOCondition condA = GIOCondition(G_IO_PRI);
+        guint idA = g_io_add_watch(channelA, condA, EventA, 0);
+
+        int fdB = open( "/sys/class/gpio/gpio69/value", O_RDONLY | O_NONBLOCK );
+        GIOChannel* channelB = g_io_channel_unix_new(fdB);
+        GIOCondition condB = GIOCondition(G_IO_PRI);
+        guint idB = g_io_add_watch(channelB, condB, EventB, 0);
+
+        g_main_loop_run( loopA );
+        g_main_loop_run( loopB );
+
+    }
+
+    return (void*) NULL;
+}
+
+
+/*
+Purpose: initialize the data for the encoder counter and state
+*/
 void initCounter(void){
 
     cout << "Initialization Counter" << endl;
