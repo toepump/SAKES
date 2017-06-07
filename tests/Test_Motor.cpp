@@ -138,12 +138,8 @@ struct encoder kneeCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0
 struct encoder kneePrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0}; //to be use for real
 struct encoder kneeProbing={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0}; //to fetch the value of kneePoly directly
 
-
 struct encoder motorCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=1024, .numOfChannel=4, .numOfEdge=1, .timeFetch=0.0}; //to be use for real
 struct encoder motorPrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=1024, .numOfChannel=4, .numOfEdge=1, .timeFetch=0.0}; //to be use for real
-
-
-
 
 //Specification of the motor
 struct motor maxon1={.dutyMin=0.10, .dutyMax=0.90, .velMotorMin=-8000.0, .velMotorMax=8000.0, .degSecToRPM=(1.0/6.0), .gearRatio=(1.0/60.0),.currentVelocity=0.0, .currentDuty=0.0, .desiredVelocity=0.0, .desiredDuty=0.0};
@@ -254,10 +250,10 @@ int storeIntoOutput(struct encoder *encKnee, struct encoder *encMotor, struct mo
 int storeEncoderStruct(struct encoder *encoder, struct outputEnc *output, int increment){
 
 	//knee Encoder
-	output->kneeAngInc[increment]=encoder->angInc; //value of the angle in increment
-	output->kneeAngDeg[increment]=encoder->angDeg; //value of the angle in degree
-	output->kneeVelDegSec[increment]=encoder->velDegSec; //the velocity in deg/sec
-	output->kneeAccDegSec[increment]=encoder->accDegSec; //the acceleration in deg/secˆ2
+	output->AngInc[increment]=encoder->angInc; //value of the angle in increment
+	output->AngDeg[increment]=encoder->angDeg; //value of the angle in degree
+	output->VelDegSec[increment]=encoder->velDegSec; //the velocity in deg/sec
+	output->AccDegSec[increment]=encoder->accDegSec; //the acceleration in deg/secˆ2
 
 	return 0;
 }
@@ -347,7 +343,7 @@ int getTimeSinceOrigin(struct timeStruct *time){
 
 	time->tSec=double(timeFetcher.tv_sec)-time->originSec;
 	time->tNano=double(timeFetcher.tv_nsec)-time->originNano;
-	time->tMilli=time->tSec*1000.0+time->tNano/1000000.0-time->originGlobalMilli;
+	time->tMilli=time->tSec*1000.0+time->tNano/1000000.0;
 
 	return 0;
 }
