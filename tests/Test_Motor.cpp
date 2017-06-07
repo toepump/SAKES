@@ -298,9 +298,8 @@ int fileOutputEncoder(struct outputEnc *output){
 		int i=0;
 		FILE *fj2=fopen("fileOutputEnc.dat","w");
 
-		fprintf(fj2,"indexOutput;TimeInMilli;MotorCurrentVelocity; MotorCurrentDuty; MotorDesiredVelocity; MotorDesiredDuty;"
-				"KneeEncAngInc; KneeEncAngDeg; KneeEncVelDegsec; KneeAccDegsecsec;"
-				"MotorEncAngInc; MotorEncAngDeg; MotorEncVelDegsec; MotorAccDegsecsec; \r\n");
+		fprintf(fj2,"indexOutput;"
+				"PolyAngInc; PolyAngDeg; PolyVelDegsec; PolyAccDegsecsec; \r\n");
 
 		while(i<TIME_MAX){
 		    fprintf(fj2,"%d;"
