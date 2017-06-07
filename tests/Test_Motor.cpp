@@ -67,6 +67,7 @@ struct encoder{
 	int numOfChannel; //number of channel used for this encoder
 	int numOfEdge; //number of edge detected for this encoder for one channel (either 1 or 2)
 	double timeFetch; //the time when the angle has been fect in millisecond
+	double angToInc; //to convert from ang to inc
 };
 
 struct motor{
@@ -133,15 +134,15 @@ double coeffsMotor1[MAXDEGREEPOLY]={ 60*2161704178.57744, -60*7678966834.50137, 
 //double coeffs3[MAXDEGREEPOLY]={-5568914.69050683, 0, 18550269.9593775, 0, 0, -23986691.8154377, 0, 0, 0, 0, 0, 0, 0, 49531094.6617748, 0, 0, 0, 0, -80515111.3284084, 0, 0, 0, 0, 0, 61150107.658354, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -52944834.5893432, 0, 0, 0, 0, 0, 0, 0, 0, 0, 88145386.7882361, 0, 0, 0, 0, 0, 0, 0, 0, 0, -156446891.058224, 0, 0, 0, 0, 0, 0, 0, 0, 0, 533593350.532314, 0, 0, 0, 0, -1048894258.17445, 0, 0, 0, 0, 1199016711.57069, 0, 0, 0, 0, -1033184989.92329, 0, 0, 0, 0, 862028565.726653, 0, 0, 0, -705213545.729899, 0, 0, 0, 614832548.422423, 0, 0, -746208588.092968, 0, 791392111.350242, 0, -947590096.72696, 914359301.492975, -436255303.466556, 123792199.437433, -21816443.1312183, 2387498.2633569, -158624.061403544, 4988.62315434288, 158.259318872659, 11.4720337508105};
 
 //Specification of the knee encoder E30S4-3000-6-L-5 from Autonics, with channel A and B activated
-struct encoder kneePoly={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0}; //for the polynomial function
-struct encoder motorPoly={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=1024, .numOfChannel=4, .numOfEdge=1, .timeFetch=0.0};
+struct encoder kneePoly={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0, .angToInc=12000.0/360.0}; //for the polynomial function
+struct encoder motorPoly={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=1024, .numOfChannel=4, .numOfEdge=1, .timeFetch=0.0, .angToInc=4096.0/360.0};
 
-struct encoder kneeCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0}; //to be use for real
-struct encoder kneePrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0}; //to be use for real
-struct encoder kneeProbing={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0}; //to fetch the value of kneePoly directly
+struct encoder kneeCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0, .angToInc=12000.0/360.0}; //to be use for real
+struct encoder kneePrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0, .angToInc=12000.0/360.0}; //to be use for real
+struct encoder kneeProbing={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0, .angToInc=12000.0/360.0}; //to fetch the value of kneePoly directly
 
-struct encoder motorCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=1024, .numOfChannel=4, .numOfEdge=1, .timeFetch=0.0}; //to be use for real
-struct encoder motorPrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=1024, .numOfChannel=4, .numOfEdge=1, .timeFetch=0.0}; //to be use for real
+struct encoder motorCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=1024, .numOfChannel=4, .numOfEdge=1, .timeFetch=0.0, .angToInc=4096.0/360.0}; //to be use for real
+struct encoder motorPrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=1024, .numOfChannel=4, .numOfEdge=1, .timeFetch=0.0, .angToInc=4096.0/360.0}; //to be use for real
 
 //Specification of the motor
 struct motor maxon1={.dutyMin=0.10, .dutyMax=0.90, .velMotorMin=-8000.0, .velMotorMax=8000.0, .degSecToRPM=(1.0/6.0), .gearRatio=(1.0/60.0),.currentVelocity=0.0, .currentDuty=0.0, .desiredVelocity=0.0, .desiredDuty=0.0};
@@ -167,7 +168,7 @@ void polyAngToIncAng(double *polyAng, struct encoder *polyEnc){
 	//put the value of the angle in degree to the value of angInc of the encoder
 
 
-	polyEnc->angInc=int(*polyAng*double(polyEnc->pulsePerTurn)*double(polyEnc->numOfChannel)*double(polyEnc->numOfEdge)/360.0);
+	polyEnc->angInc=int(*polyAng*polyEnc->angToInc);
 }
 
 int copyCurrToPrevEnc(struct encoder *previous, struct encoder *current){
@@ -192,7 +193,7 @@ int angleIncToDeg (struct encoder *current){
 	/*Take the value of an angle in increment and turn it into an angle in deg,
 	 * using the number of pulse per turn, the number of channel used and the number of edge that create an interrupt.
 	 */
-	current->angDeg=double(current->angInc)/double(current->pulsePerTurn)/double(current->numOfChannel)/double(current->numOfEdge)*360.0;
+	current->angDeg=double(current->angInc)/current->angToInc;
 	return 0;
 }
 
@@ -416,6 +417,7 @@ void *testThread1(void *ptr) {
 	message = (char *) ptr;
 	struct timespec t_Thread1;
 	struct timeStruct t_Result;
+	int sleepOK=0;
 
 	//Variable for the polynomial function
 
@@ -432,36 +434,43 @@ void *testThread1(void *ptr) {
 	while(ticks_t1<TIME_MAX+1){
 
 		/* wait until next shot */
-		clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
+		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread1, NULL);
 
+		if(sleepOK == 0){
 
-		//Initialization
-		setTimeOrigin(&t_Result);
-		/* do the stuff */
+			//Initialization
+			setTimeOrigin(&t_Result);
+			/* do the stuff */
 
-		//to know the time
-		getTimeSinceOrigin(&t_Result);
+			//to know the time
+			getTimeSinceOrigin(&t_Result);
 
-  		//actual calculation
-		fetchAngInc(&kneePoly.angInc, &kneeCurrent, &t_Result); //take the value in kneeCurrent
-  		fetchAngInc(&motorPoly.angInc, &motorCurrent, &t_Result);
+	  		//actual calculation
+			fetchAngInc(&kneePoly.angInc, &kneeCurrent, &t_Result); //take the value in kneeCurrent
+	  		fetchAngInc(&motorPoly.angInc, &motorCurrent, &t_Result);
 
-  		angleIncToDeg(&kneeCurrent); //convert the value from inc to deg
-  		angleIncToDeg(&motorCurrent);
+	  		angleIncToDeg(&kneeCurrent); //convert the value from inc to deg
+	  		angleIncToDeg(&motorCurrent);
 
-  		calcVelAndAcc(&kneeCurrent, &kneePrevious);
-  		calcVelAndAcc(&motorCurrent, &motorPrevious);
+	  		calcVelAndAcc(&kneeCurrent, &kneePrevious);
+	  		calcVelAndAcc(&motorCurrent, &motorPrevious);
 
-  		controller(&kneeCurrent, &motorCurrent, &maxon1);
-  		cmdMotor(&maxon1);
+	  		controller(&kneeCurrent, &motorCurrent, &maxon1);
+	  		cmdMotor(&maxon1);
 
-  		//Copyb the data from current to previous
-  		copyCurrToPrevEnc(&kneePrevious, &kneeCurrent); //copy the value from curr to previous
-  		copyCurrToPrevEnc(&motorPrevious, &motorCurrent); //copy the value from curr to previous
+	  		//Copyb the data from current to previous
+	  		copyCurrToPrevEnc(&kneePrevious, &kneeCurrent); //copy the value from curr to previous
+	  		copyCurrToPrevEnc(&motorPrevious, &motorCurrent); //copy the value from curr to previous
 
-  		storeIntoOutput(&kneeCurrent, &motorCurrent, &maxon1, &outputArray, ticks_t1, &t_Result);
+	  		storeIntoOutput(&kneeCurrent, &motorCurrent, &maxon1, &outputArray, ticks_t1, &t_Result);
 
-  	ticks_t1++; // Increment the ticks value
+	  		ticks_t1++; // Increment the ticks value
+
+		}else{
+
+			cout << "The thread is not done in 1 ms" << endl;
+
+		}
 
 		/* calculate next shot */
   	t_Thread1.tv_nsec += INTERVALMS;
