@@ -451,7 +451,6 @@ void *testThread1(void *ptr) {
 
 			clock_gettime(CLOCK_MONOTONIC, &start);
 
-			cout << "Ctrl Task" << endl;
 			//Initialization
 			setTimeOrigin(&t_Result);
 			/* do the stuff */
@@ -484,9 +483,9 @@ void *testThread1(void *ptr) {
 
 	  		timespec_diff(&start, &end, &diff);
 
-	  		if(diff.tv_sec==0 && diff.tv_nsec < 1000000000){
+	  		if(diff.tv_sec==0 && diff.tv_nsec < 1000000){
 	  			waitTime.tv_sec=0;
-	  			waitTime.tv_nsec=1000000000-diff.tv_nsec;
+	  			waitTime.tv_nsec=1000000-diff.tv_nsec;
 	  		}else{
 	  			cout << "The thread is not done in 1 ms" << endl;
 	  		}
