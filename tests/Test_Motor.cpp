@@ -510,7 +510,8 @@ void *testThread2(void *ptr) {
 	message = (char *) ptr;
 	struct timespec t_Thread2;
 	double timeTestPoly=0.0;
-	int timeRatio=INTERVALMS/INTERVAL_T2;
+	double timeRatio=double(INTERVALMS)/double(INTERVAL_T2);
+	double maxTicks = double(TIME_MAX)*timeRatio+1500.0;
 
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
@@ -519,7 +520,7 @@ void *testThread2(void *ptr) {
   /* start after one second */
   t_Thread2.tv_sec++;
 
-  while(ticks_t2<TIME_MAX*timeRatio+1500) {
+  while(ticks_t2<int(maxTicks)) {
 
   	/* wait until next shot */
   	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
