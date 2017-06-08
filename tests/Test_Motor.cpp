@@ -442,6 +442,8 @@ void *testThread1(void *ptr) {
 	waitTime.tv_sec=1;
 	waitTime.tv_nsec=500000000;
 
+	setTimeOrigin(&t_Result);
+
 	while(ticks_t1<TIME_MAX+1){
 
 		/* wait until next shot */
@@ -451,11 +453,6 @@ void *testThread1(void *ptr) {
 
 			clock_gettime(CLOCK_MONOTONIC, &start);
 
-			//Initialization
-			setTimeOrigin(&t_Result);
-			/* do the stuff */
-
-			//to know the time
 			getTimeSinceOrigin(&t_Result);
 
 	  		//actual calculation
