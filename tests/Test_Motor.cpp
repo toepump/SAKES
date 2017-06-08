@@ -488,6 +488,7 @@ void *testThread1(void *ptr) {
 	  			waitTime.tv_nsec=1000000-diff.tv_nsec;
 	  		}else{
 	  			cout << "The thread is not done in 1 ms" << endl;
+	  			cout << ticks_t1 << endl;
 	  		}
 
 		}else{
