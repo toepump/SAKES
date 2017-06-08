@@ -5,22 +5,34 @@
 *      Author: Mikey and Vincent
 */
 
+//constants
+MAX_PULSE = 30000
+PROBE_STORAGE_SIZE = 20000;             // the arbitrary size of stored
+                                        // probe's storage
+
 //prototypes
 void *interruptThread(void *ptr);
 void *taskThread(void *ptr);
 void *probingThread(void *ptr);
 void initCounter(void);
+void counter(int channelSig);
+static gboolean EventA( GIOChannel *channel, GIOCondition condition, gpointer user_data );
+static gboolean EventB( GIOChannel *channel, GIOCondition condition, gpointer user_data );
 
 
 //global variables
 int state = 0;
-const int INTERVAL =1000000;    // in nanosecond
+const int INTERVAL =1000000;                // in nanosecond
+double probeAngleDeg[PROBE_STORAGE_SIZE];   // the strorage space for probed data
+
 
 /*
 Purpose: Entry thread/function for input commands and launching program threads
 */
 int main(int argc, char const *argv[]) {
     //TODO: if you want to add any input commands add them here
+        //argc is number of input arguments (argCount)
+        //argv is array of each input argument
 
     //initialize counter
     initCounter();
@@ -69,6 +81,79 @@ int main(int argc, char const *argv[]) {
     return 0;
 }
 
+void counter(int channelSig){
+    init++;
+
+    if(init>2 && indexOutput<MAX_PULSE){
+        if(state==1){
+            if(nb_signal==2){
+                netAngleIncrement++;
+                state=2;
+            }else if(nb_signal==1){
+                netAngleIncrement--;
+                state=4;
+            }else{
+                failInt++;
+                //cout << "problem with the counter in case 1" << endl;
+            }
+        }
+
+        else if(state==2){
+            if(nb_signal==1){
+                netAngleIncrement++;
+                state=3;
+            }else if(nb_signal==2){
+                state=1;
+                netAngleIncrement--;
+            }else{
+                failInt++;
+                //cout << "problem with the counter in case 1" << endl;
+            }
+        }
+
+        else if(state==3){
+            if(nb_signal==2){
+                netAngleIncrement++;
+                state=4;
+            }else if(nb_signal==1){
+                netAngleIncrement--;
+                state=2;
+            }else{
+                failInt++;
+                //cout << "problem with the counter in case 1" << endl;
+            }
+        }
+
+        else if(state==4){
+            if(nb_signal==1){
+                netAngleIncrement++;
+                state=1;
+            }else if(nb_signal==2){
+                netAngleIncrement--;
+                state=3;
+            }else{
+                failInt++;
+                //cout << "problem with the counter in case 1" << endl;
+            }
+
+        }
+        else{
+            cout<<"state is fucked" << endl;
+        }
+
+        netAngleDegree=double(netAngleIncrement)/PULSE_PER_DEGREE;
+
+        outputNetIncrement[indexOutput]=netAngleIncrement;
+        outputNetAngle[indexOutput]=netAngleDegree;
+        outputState[indexOutput] = state;
+        indexOutput++;
+
+        if(indexOutput+1==MAX_PULSE){
+            printOutData();
+        }
+    }
+}
+
 /*
 Purpose: thread for spwaning a probing thread every millisecond
          only launches a thread if previously spawned thread has Finished
@@ -80,7 +165,7 @@ void *taskThread(void *ptr){
     struct timespec t_taskThread;   //struct for keeping time (not actual monotonic clock)
 
 
-    clock_gettime(CLOCK_MONOTONIC,&t_taskThread);  //get the current time and store in the timespec struct
+    clock_gettime(CLOCK_MONOTONIC,&t_taskThread);   //get the current time and store in the timespec struct
 
     t_taskThread.tv_sec++;                          //increment the timespec struct time by one full second so that
                                                     //we can get a delay in the next step
@@ -89,8 +174,9 @@ void *taskThread(void *ptr){
         /* wait until next shot */
         clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_taskThread, NULL);   //delay until time stored in the timespec
 
-        //check if previously launched probingThread has completed
-        //if yes, launch new probingThread and take mutex
+        //TODO
+        //check if previously launched probingThread has completed by taking mutex
+        //if yes, launch new probingThread
 
         /* calculate next shot */
         t_taskThread.tv_nsec += INTERVAL;
@@ -111,16 +197,20 @@ Return: TODO return mutex, so make that mutex. If the calling thread tries to la
              another probingThread then the program is not fast enough and break
 */
 void *probingThread(void *ptr){
+    //initialize variables of the probing thread for RT
     char * message;
     message = (char *) ptr;
     struct timespec t_probing_thread;
 
+    //get current time as shown by the monotonic clock and store in probe timespec
+    //TODO: maybe get rid of this line because the probing thread might actually
+        //not need a delay
     clock_gettime(CLOCK_MONOTONIC, &t_probing_thread);
 
-    t_probing_thread.tv_sec++;
-
+    int probeIndex = 0;
     while(true) {
         /* wait until next shot */
+        //TODO; possibly not need this line if delay not neceary for probing thread
         clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_probing_thread, NULL);   //delay until time stored in the timespec
 
         //probe and work on probed data
@@ -151,6 +241,7 @@ void *interruptThread(void *ptr){
 
     while(true) {
 
+        //initialize the looping for interrupt handling of both channels
         GMainLoop* loopA = g_main_loop_new(0, 0);
         GMainLoop* loopB = g_main_loop_new(0, 0);
 
@@ -171,7 +262,6 @@ void *interruptThread(void *ptr){
 
     return (void*) NULL;
 }
-
 
 /*
 Purpose: initialize the data for the encoder counter and state
@@ -237,4 +327,65 @@ void initCounter(void){
     }else{
         cout << "Problem with the counter init" << endl;
     }
+}
+
+/*
+Purpose: constantly be listening for interrupt coming from channelA
+         if interrupted, then call counter function with argument
+         indicating channelA was the interrupted channel
+*/
+static gboolean EventA( GIOChannel *channel, GIOCondition condition, gpointer user_data )
+{
+    const int channelSig=1;
+    GError *error = 0;
+    gsize bytes_read = 0;
+    const int buf_sz = 1024;
+    gchar buf[buf_sz] = {};
+    g_io_channel_seek_position( channel, 0, G_SEEK_SET, 0 );
+    GIOStatus rc = g_io_channel_read_chars( channel, buf,buf_sz - 1,&bytes_read,&error );
+    counter(channelSig);
+    return 1;
+}
+
+/*
+Purpose: constantly be listening for intterupt coming from channelB
+         if interruped, then call counter functino with argument
+         indicating channelB was the interrupted channel
+*/
+static gboolean EventB( GIOChannel *channel, GIOCondition condition, gpointer user_data )
+{
+    const int channelSig=2;
+    GError *error = 0;
+    gsize bytes_read = 0;
+    const int buf_sz = 1024;
+    gchar buf[buf_sz] = {};
+    g_io_channel_seek_position( channel, 0, G_SEEK_SET, 0 );
+    GIOStatus rc = g_io_channel_read_chars( channel, buf,buf_sz - 1,&bytes_read,&error );
+    counter(channelSig);
+    return 1;
+}
+
+/*
+Purpose: print out data collected from the encoders including:
+         index, interrupt number, calculated angle of encoder, and state
+*/
+void printOutData(void){
+    cout << "Printing of the output starts" << endl;
+
+    int i=0;
+    FILE *fj1=fopen("outputEncoder.dat","w");
+
+    fprintf(fj1,"indexOutput;Net Increment;Net Angle (degrees);State;\r\n");
+
+    while(i<MAX_PULSE){
+        fprintf(fj1,"%d;%d;%f;%d;%d;%d;\r\n", i+1, outputNetIncrement[i], outputNetAngle[i],outputState[i]);
+
+        if(i==MAX_PULSE-1){
+            fclose(fj1);
+        }
+        i++ ;
+    }
+
+    cout << "Printing of the output is done" << endl;
+
 }
