@@ -333,7 +333,7 @@ int fileOutputEncoder(struct outputEnc *output){
 		    i++ ;
 		}
 
-	cout << "Printing of the output is done" << endl;
+	cout << "Printing of the encoder output is done" << endl;
 
 	return 0;
 }
@@ -341,7 +341,7 @@ int fileOutputEncoder(struct outputEnc *output){
 int setTimeOrigin(struct timeStruct *time){
 
 	struct timespec timeFetcher;
-	clock_gettime(CLOCK_REALTIME ,&timeFetcher);
+	clock_gettime(CLOCK_MONOTONIC ,&timeFetcher);
 
 	time->originSec=double(timeFetcher.tv_sec);
 	time->originNano=double(timeFetcher.tv_nsec);
@@ -357,7 +357,7 @@ int setTimeOrigin(struct timeStruct *time){
 int getTimeSinceOrigin(struct timeStruct *time){
 
 	struct timespec timeFetcher;
-	clock_gettime(CLOCK_REALTIME ,&timeFetcher);
+	clock_gettime(CLOCK_MONOTONIC ,&timeFetcher);
 
 	time->tSec=double(timeFetcher.tv_sec)-time->originSec;
 	time->tNano=double(timeFetcher.tv_nsec)-time->originNano;
@@ -445,12 +445,13 @@ void *testThread1(void *ptr) {
 	while(ticks_t1<TIME_MAX+1){
 
 		/* wait until next shot */
-		sleepOK = clock_nanosleep(CLOCK_REALTIME, 0, &waitTime, &remain);
+		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, 0, &waitTime, &remain);
 
 		if(sleepOK == 0){
 
-			clock_gettime(CLOCK_REALTIME, &start);
+			clock_gettime(CLOCK_MONOTONIC, &start);
 
+			cout << "Ctrl Task" << endl;
 			//Initialization
 			setTimeOrigin(&t_Result);
 			/* do the stuff */
@@ -479,7 +480,7 @@ void *testThread1(void *ptr) {
 
 	  		ticks_t1++; // Increment the ticks value
 
-	  		clock_gettime(CLOCK_REALTIME, &end);
+	  		clock_gettime(CLOCK_MONOTONIC, &end);
 
 	  		timespec_diff(&start, &end, &diff);
 
@@ -514,14 +515,14 @@ void *testThread2(void *ptr) {
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
 
-  clock_gettime(CLOCK_REALTIME ,&t_Thread2);
+  clock_gettime(CLOCK_MONOTONIC ,&t_Thread2);
   /* start after one second */
   t_Thread2.tv_sec++;
 
   while(ticks_t2<TIME_MAX*timeRatio+1500) {
 
   	/* wait until next shot */
-  	clock_nanosleep(CLOCK_REALTIME, TIMER_ABSTIME, &t_Thread2, NULL);
+  	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
 
 	//simulation of the polynomial
 	polyEval(coeffsKnee1, &timeTestPoly, &kneePoly.angDeg); //put the value in angTestPoly
