@@ -50,7 +50,7 @@ const int TIME_MAX_ENC = 5110; // time max for the loop in ms
 
 const int INTERVALMS =1000000; // in nanosecond
 
-const int INTERVAL_T2 = 750000; //in nanosecond, interval for the thread 2
+const int INTERVAL_T2 = 1000000; //in nanosecond, interval for the thread 2
 
 const int ONESECINNANO = 1000000000; //one second in nanosecond unit
 double INTERVAL_S=double(INTERVALMS)/1000000000.0;
