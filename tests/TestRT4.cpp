@@ -324,12 +324,12 @@ void *testThread2(void *ptr) {
 	  			waitTime.tv_sec=0;
 	  			waitTime.tv_nsec=1000000-diff.tv_nsec;
 	  		}else{
-	  			cout << "The thread 2 is not done in 1 ms" << endl;
-	  			cout << ticks_t2 << endl;
+	  			//cout << "The thread 2 is not done in 1 ms" << endl;
+	  			//cout << ticks_t2 << endl;
 	  		}
 		}else{
 
-			cout << "The thread 2 is not done in 1 ms" << endl;
+			//cout << "The thread 2 is not done in 1 ms" << endl;
 
 		}
 
@@ -387,12 +387,12 @@ void *testThread3(void *ptr) {
 	  			waitTime.tv_sec=0;
 	  			waitTime.tv_nsec=1000000-diff.tv_nsec;
 	  		}else{
-	  			cout << "The thread 3 is not done in 1 ms" << endl;
-	  			cout << ticks_t3 << endl;
+	  			//cout << "The thread 3 is not done in 1 ms" << endl;
+	  			//cout << ticks_t3 << endl;
 	  		}
 		}else{
 
-			cout << "The thread 3 is not done in 1 ms" << endl;
+			//cout << "The thread 3 is not done in 1 ms" << endl;
 
 		}
 
