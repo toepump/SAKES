@@ -402,8 +402,8 @@ int main(int argc, char* argv[]){
 	pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
 	pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
 
-	checkInitThread=setParamThreadFIFO(attr1, param1, 36);
-	checkInitThread=setParamThreadFIFO(attr2, param2, 44);
+	checkInitThread=setParamThreadFIFO(attr1, param1, 48);
+	checkInitThread=setParamThreadFIFO(attr2, param2, 48);
 
 	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
 	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
