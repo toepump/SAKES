@@ -15,8 +15,8 @@ BBB_Encoder: BBB_Encoder.cpp
 Test_Motor: Test_Motor.cpp
 	g++ Test_Motor.cpp -o Test_Motor `pkg-config glib-2.0 --cflags --libs` -lpthread
 
-RT4: RT4.cpp
-	g++ RT4.cpp -o RT4 `pkg-config glib-2.0 --cflags --libs` -lpthread
+TestRT4: TestRT4.cpp
+	g++ TestRT4.cpp -o TestRT4 `pkg-config glib-2.0 --cflags --libs` -lpthread
 
 clean:
 	rm -f encRTtest2 BBB_Encoder outputEncoder.csv probeCheck.data
