@@ -403,24 +403,24 @@ int main(int argc, char* argv[]){
 	pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
 
 	checkInitThread=setParamThreadFIFO(attr1, param1, 36);
-	//checkInitThread=setParamThreadFIFO(attr2, param2, 44);
+	checkInitThread=setParamThreadFIFO(attr2, param2, 44);
 
 	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
-	//iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
+	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
 
-	//create a thread that launch the print_message_function with the arguments message1
+	create a thread that launch the print_message_function with the arguments message1
 	pthread_setschedparam(thread1, SCHED_FIFO, &param1);
-	//pthread_setschedparam(thread2, SCHED_FIFO, &param2); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
+	pthread_setschedparam(thread2, SCHED_FIFO, &param2); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
 														// if it fails, return not 0
 	printf("pthread_create() for returns: %d\n", iret1);
-	//printf("pthread_create() for returns: %d\n", iret2);
+	printf("pthread_create() for returns: %d\n", iret2);
 
 	/* Wait till threads are complete before main continues. Unless we */
 	/* wait we run the risk of executing an exit which will terminate  */
 	/* the process and all threads before the threads have completed.  */
 
 	pthread_join( thread1, NULL);
-	//pthread_join( thread2, NULL);
+	pthread_join( thread2, NULL);
 
 	exit(EXIT_SUCCESS);
 }
@@ -486,7 +486,6 @@ void *testThread1(void *ptr) {
 	  			cout << "The thread is not done in 1 ms" << endl;
 	  			cout << ticks_t1 << endl;
 	  		}
-
 		}else{
 
 			cout << "The thread is not done in 1 ms" << endl;
