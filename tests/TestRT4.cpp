@@ -102,7 +102,7 @@ int fileTestMotor(struct output *output1,struct output *output2,struct output *o
 		int i=0;
 		FILE *fj1=fopen("fileTestRT4.dat","w");
 
-		fprintf(fj1,"indexOutput;TimeInMilli1;TimeInMilli2;TimeInMilli3; increment 1; increment 2; increment 3;\r\n");
+		fprintf(fj1,"indexOutput; TimeInMilli1; TimeInMilli2; TimeInMilli3; increment 1; increment 2; increment 3;\r\n");
 
 		while(i<TIME_MAX){
 		    fprintf(fj1,"%d;%f;%f;%f; %d;%d;%d; \r\n",
