@@ -95,7 +95,6 @@ int storeIntoOutput(struct output *output, int increment, struct timeStruct *tim
 	return 0;
 }
 
-
 int fileTestMotor(struct output *output1,struct output *output2,struct output *output3){
 
 	cout << "Printing of the output starts" << endl;
@@ -119,7 +118,6 @@ int fileTestMotor(struct output *output1,struct output *output2,struct output *o
 
 	return 0;
 }
-
 
 int setTimeOrigin(struct timeStruct *time){
 
@@ -176,7 +174,7 @@ int main(int argc, char* argv[]){
 	const char *message1 = "Thread 1";
 	const char *message2 = "Thread 2";
 	const char *message3 = "Thread 3";
-	int iret1, iret2, iret 3;
+	int iret1, iret2, iret3;
 
 	pthread_attr_t attr1, attr2, attr3; //Creation of the variable for the attribute
 	struct sched_param param1, param2, param3; //Creation of new sched_param
