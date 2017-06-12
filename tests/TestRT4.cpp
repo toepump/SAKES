@@ -105,8 +105,8 @@ int fileTestMotor(struct output *output1,struct output *output2,struct output *o
 		fprintf(fj1,"indexOutput; TimeInMilli1; TimeInMilli2; TimeInMilli3; increment 1; increment 2; increment 3;\r\n");
 
 		while(i<TIME_MAX){
-		    fprintf(fj1,"%d;%f;%f;%f; %d;%d;%d; \r\n",
-		    	i+1, output1->timeInMilli[i], output2->timeInMilli[i],output3->timeInMilli[i]), output1->increment[i],output2->increment[i],output3->increment[i];
+		    fprintf(fj1,"%d;%f;%f;%f;%d;%d;%d; \r\n",
+		    	i+1, output1->timeInMilli[i], output2->timeInMilli[i],output3->timeInMilli[i]), output1->increment[i],output2->increment[i],output3->increment[i]);
 
 		    if(i==TIME_MAX-1){
 		    	fclose(fj1);
@@ -262,12 +262,12 @@ void *testThread1(void *ptr) {
 	  			waitTime.tv_sec=0;
 	  			waitTime.tv_nsec=1000000-diff.tv_nsec;
 	  		}else{
-	  			cout << "The thread is not done in 1 ms" << endl;
-	  			cout << ticks_t1 << endl;
+	  			//cout << "The thread is not done in 1 ms" << endl;
+	  			//cout << ticks_t1 << endl;
 	  		}
 		}else{
 
-			cout << "The thread is not done in 1 ms" << endl;
+			//cout << "The thread is not done in 1 ms" << endl;
 
 		}
 
