@@ -408,7 +408,7 @@ int main(int argc, char* argv[]){
 	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
 	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
 
-	create a thread that launch the print_message_function with the arguments message1
+	//create a thread that launch the print_message_function with the arguments message1
 	pthread_setschedparam(thread1, SCHED_FIFO, &param1);
 	pthread_setschedparam(thread2, SCHED_FIFO, &param2); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
 														// if it fails, return not 0
