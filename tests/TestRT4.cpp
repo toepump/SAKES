@@ -32,7 +32,7 @@ int getTimeSinceOrigin(struct timeStruct *time);
 
 void *testThread1(void *ptr);
 void *testThread2(void *ptr);
-void *testThread2(void *ptr);
+void *testThread3(void *ptr);
 
 
 const int TIME_MAX = 2010; // time max for the loop in ms
