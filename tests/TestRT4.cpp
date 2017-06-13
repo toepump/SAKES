@@ -186,6 +186,9 @@ int main(int argc, char* argv[]){
 
 	int min, max;
 
+	while(true){
+
+
 	min = sched_get_priority_min( SCHED_FIFO );
 	max = sched_get_priority_max( SCHED_FIFO );
 
@@ -206,6 +209,11 @@ int main(int argc, char* argv[]){
 	if(checkAttrInit!=0){
 		printf("Problem attribute 3: %d \n", checkAttrInit);
 	}
+
+	pthread_attr_setdetachstate(&attr1,PTHREAD_CREATE_DETACHED );
+	pthread_attr_setdetachstate(&attr2,PTHREAD_CREATE_DETACHED );
+	pthread_attr_setdetachstate(&attr3,PTHREAD_CREATE_DETACHED );
+
 
 	checkInitThread=setParamThreadFIFO(attr1, param1, 50);
 	if(checkInitThread!=0){
@@ -250,9 +258,7 @@ int main(int argc, char* argv[]){
 	printf("pthread_create() 2 for returns: %d\n", iret2);
 	printf("pthread_create() 3 for returns: %d\n", iret3);
 
-	pthread_join( thread1, NULL);
-	pthread_join( thread2, NULL);
-	pthread_join( thread3, NULL);
+	}
 
 	fileTestMotor(&output1, &output2, &output3);
 
