@@ -5,6 +5,22 @@
 *      Author: Mikey and Vincent
 */
 
+#include <iostream>
+#include <unistd.h>
+#include <fstream>
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include <sched.h>
+#include <sys/mman.h>
+#include <string.h>
+#include <pthread.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<fcntl.h>
+#include<glib-2.0/glib.h>
+#include <mutex>
+
 //constants
 MAX_PULSE = 30000
 PROBE_STORAGE_SIZE = 20000;             // the arbitrary size of stored
@@ -22,9 +38,17 @@ static gboolean EventB( GIOChannel *channel, GIOCondition condition, gpointer us
 
 //global variables
 int state = 0;
+int netAngleIncrement = 0;
+int RealNetAngleIncrement = 0;
 const int INTERVAL =1000000;                // in nanosecond
-double probeAngleDeg[PROBE_STORAGE_SIZE];   // the strorage space for probed data
+std::mutex mtx;
+int threadExists = 0;
+int index = 0;
 
+double probeAngleDeg[PROBE_STORAGE_SIZE];   // the strorage space for probed data
+double outputNetAngle[MAX_PULSE];
+int outputState[MAX_PULSE];
+int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
 
 /*
 Purpose: Entry thread/function for input commands and launching program threads
@@ -81,7 +105,12 @@ int main(int argc, char const *argv[]) {
     return 0;
 }
 
+
 void counter(int channelSig){
+    //TODO store actual netAngleIncrement and temp netAngleIncrement seperately
+    // and protect the actual one with a mutex so that the probe reads a safe
+    // data. every if statement update temp and copy to actual but surround actual
+    // with mutex CONDITION VARIABLE MAYBE
     init++;
 
     if(init>2 && indexOutput<MAX_PULSE){
@@ -162,7 +191,8 @@ Purpose: thread for spwaning a probing thread every millisecond
 void *taskThread(void *ptr){
     char *message;
     message = (char *) ptr;
-    struct timespec t_taskThread;   //struct for keeping time (not actual monotonic clock)
+    struct timespec t_taskThread;                   //struct for keeping time (not actual monotonic clock)
+
 
 
     clock_gettime(CLOCK_MONOTONIC,&t_taskThread);   //get the current time and store in the timespec struct
@@ -174,10 +204,38 @@ void *taskThread(void *ptr){
         /* wait until next shot */
         clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_taskThread, NULL);   //delay until time stored in the timespec
 
-        //TODO
-        //check if previously launched probingThread has completed by taking mutex
-        //if yes, launch new probingThread
+        pthread_t probingThread;
+        const char *message1 = "probingThread";
+        int  iret1;
 
+        pthread_attr_t attr;
+        struct sched_param parm;
+        pthread_attr_init(&attr);
+
+        /* Create independent thread which will execute function */
+        pthread_attr_getschedparam(&attr, &parm);                               // put the scheduling param of att to parm
+        parm.sched_priority = sched_get_priority_min(SCHED_FIFO);               //return the minimum priority
+        pthread_attr_setschedpolicy(&attr, SCHED_FIFO);                         //set the scheduling policy of attr1 as FIFIO
+        pthread_attr_setschedparam(&attr, &parm);                               //set the scheduling parameter of attr1 as parm1
+
+        //Creation of the probingThread
+        iret1 = pthread_create(&probingThread, &attr, probingThread,(void*) message1);      //create a thread that launch the print_message_function with the arguments  message1
+        pthread_setschedparam(probingThread, SCHED_FIFO, &parm);                            // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
+                                                                                            // if it fails, return not 0
+        //set RT-Preempt thread priorities
+        pthread_setschedprio(probingThread, 45);
+
+        //check if threads created correctly, if 0 then ok if. if not then wtf
+        printf("pthread_create() for probingThread returns: %d\n",iret1);
+
+        //check if the previous thread completed or not
+        if(threadExists == 0){
+            //launch threads
+            pthread_join(probingThread, NULL);
+        }
+        else{
+            cout<< "TOO SLOW" << endl;
+        }
         /* calculate next shot */
         t_taskThread.tv_nsec += INTERVAL;
 
@@ -193,38 +251,29 @@ void *taskThread(void *ptr){
 /*
 Purpose: every millisecond, forcibly take mutex protecting encoder data
          and do complete processing of that data within 1 millisecond.
-Return: TODO return mutex, so make that mutex. If the calling thread tries to launch
-             another probingThread then the program is not fast enough and break
+Return: TODO use the mutex::try_lock function to determine if calling thread
+        can lock the desired mutex, if not then the program is not fast enough
 */
 void *probingThread(void *ptr){
-    //initialize variables of the probing thread for RT
-    char * message;
-    message = (char *) ptr;
-    struct timespec t_probing_thread;
+    //set threadExists to 1
+    threadExists = 1;
+    //get mutex
+    mtx.lock();
 
-    //get current time as shown by the monotonic clock and store in probe timespec
-    //TODO: maybe get rid of this line because the probing thread might actually
-        //not need a delay
-    clock_gettime(CLOCK_MONOTONIC, &t_probing_thread);
+    //do stuff on mutex protected data
+    probeAngleDeg[index] = netAngleDegree; //store current netAngleDegree
+    probeIncrement[index] = indexOutput;
+    index++;                            //increment index
 
-    int probeIndex = 0;
-    while(true) {
-        /* wait until next shot */
-        //TODO; possibly not need this line if delay not neceary for probing thread
-        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_probing_thread, NULL);   //delay until time stored in the timespec
-
-        //probe and work on probed data
-
-
-        /* calculate next shot */
-        t_.tv_nsec += INTERVAL;
-
-        while (t_probing_thread.tv_nsec >= NSEC_PER_SEC) {
-            t_probing_thread.tv_nsec -= NSEC_PER_SEC;
-            t_probing_thread.tv_sec++;
-        }
+    if(index > PROBE_STORAGE_SIZE || indexOutput-1 == MAX_PULSE){               //if index is past storage limit, print
+        cout << "number of failure: " << failInt << endl;
+        printProbe();
+        return (void*) NULL;
     }
-
+    //release mutex
+    mtx.unlock();
+    //set threadExists to 0
+    threadExists = 0;
     return (void*) NULL;
 }
 
@@ -232,8 +281,6 @@ void *probingThread(void *ptr){
 Purpose: constantly be interrupted by encoder pulses found through GPIO
          in linux filesystem 'value' files. Upon receiving interrupt from either
          channel, call EventA or EventB functions.
-         TODO: add eventA and evetnB functions but maybe think about
-         consolidation.
 */
 void *interruptThread(void *ptr){
     char *message;
