@@ -207,7 +207,7 @@ int main(int argc, char* argv[]){
 		printf("Problem attribute 3: %d \n", checkAttrInit);
 	}
 
-	checkInitThread=setParamThreadFIFO(attr1, param1, 50);
+	checkInitThread=setParamThreadFIFO(attr1, param1, 49);
 	if(checkInitThread!=0){
 		printf("Problem Init 1: %d \n", checkInitThread);
 	}
