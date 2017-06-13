@@ -139,9 +139,9 @@ int i, j;
 
 
 
-	printf("Mean Time: %f \n", meanTime[0]);
-	printf("Max Time: %f \n", maxTimeInterval[0]);
-	printf("Mean Time: %f \n", variance[0]);
+	printf("T1: Mean Time: %f \n", meanTime[0]);
+	printf("T1: Max Time: %f \n", maxTimeInterval[0]);
+	printf("T1: Variance: %f \n _n", variance[0]);
 
 
 	for(i=0;i<TIME_MAX-1;i++){
