@@ -177,7 +177,7 @@ int main(int argc, char* argv[]){
 	int iret1, iret2, iret3;
 
 	pthread_attr_t attr1, attr2, attr3; //Creation of the variable for the attribute
-	struct sched_param param1, param2, param3; //Creation of new sched_param
+	struct sched_param param1, param2, param3, parm; //Creation of new sched_param
 
 	int checkInitThread;
 
