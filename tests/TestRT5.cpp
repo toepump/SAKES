@@ -134,11 +134,11 @@ int i, j;
 
 
 	for(i=0;i<TIME_MAX-1;i++){
-		if((output1->timeInMilli[i+1]-output1->timeInMilli[i])>maxTimeInterval[1])
+		if((output2->timeInMilli[i+1]-output2->timeInMilli[i])>maxTimeInterval[1])
 		{
-			maxTimeInterval[1]=output1->timeInMilli[i+1]-output1->timeInMilli[i];
+			maxTimeInterval[1]=output2->timeInMilli[i+1]-output2->timeInMilli[i];
 		}
-		meanTime[1]=meanTime[1]+output1->timeInMilli[i+1]-output1->timeInMilli[i];
+		meanTime[1]=meanTime[1]+output2->timeInMilli[i+1]-output2->timeInMilli[i];
 	}
 
 	meanTime[1]=meanTime[1]/double(TIME_MAX);
