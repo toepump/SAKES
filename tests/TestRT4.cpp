@@ -180,24 +180,59 @@ int main(int argc, char* argv[]){
 
 	int checkInitThread;
 
-	pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
-	pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
-	pthread_attr_init(&attr3); //Initialize the thread attributes with default attribute
+	int checkAttrInit;
+	int checkschedParam;
+
+	checkAttrInit=pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
+	if(checkAttrInit!=0){
+		printf("Problem attribute 1: %d \n", checkAttrInit);
+	}
+
+	checkAttrInit=pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
+	if(checkAttrInit!=0){
+		printf("Problem attribute 2: %d \n", checkAttrInit);
+	}
+
+	checkAttrInit=pthread_attr_init(&attr3); //Initialize the thread attributes with default attribute
+	if(checkAttrInit!=0){
+		printf("Problem attribute 3: %d \n", checkAttrInit);
+	}
 
 	checkInitThread=setParamThreadFIFO(attr1, param1, 70);
-	checkInitThread=setParamThreadFIFO(attr2, param2, 70);
-	checkInitThread=setParamThreadFIFO(attr3, param3, 70);
+	if(checkInitThread!=0){
+		printf("Problem Init 1: %d \n", checkInitThread);
+	}
 
+	checkInitThread=setParamThreadFIFO(attr2, param2, 50);
+	if(checkInitThread!=0){
+		printf("Problem Init 2: %d \n", checkInitThread);
+	}
+
+	checkInitThread=setParamThreadFIFO(attr3, param3, 30);
+	if(checkInitThread!=0){
+		printf("Problem Init 3: %d \n", checkInitThread);
+	}
 
 	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
 	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
 	iret3 = pthread_create(&thread3, &attr3, testThread3, (void*) message3);
 
 	//create a thread that launch the print_message_function with the arguments message1
-	pthread_setschedparam(thread1, SCHED_FIFO, &param1);
-	pthread_setschedparam(thread2, SCHED_FIFO, &param2);
-	pthread_setschedparam(thread3, SCHED_FIFO, &param3);// sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
-														// if it fails, return not 0
+	checkschedParam=pthread_setschedparam(thread1, SCHED_FIFO, &param1);
+	if(checkschedParam!=0){
+		printf("Problem param 3: %d \n", checkschedParam);
+	}
+
+	checkschedParam=pthread_setschedparam(thread2, SCHED_FIFO, &param2);
+	if(checkschedParam!=0){
+		printf("Problem param 3: %d \n", checkschedParam);
+	}
+
+	checkschedParam=pthread_setschedparam(thread3, SCHED_FIFO, &param3);// sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
+	if(checkschedParam!=0){
+		printf("Problem param 3: %d \n", checkschedParam);
+	}
+	// if it fails, return not 0
 	printf("pthread_create() 1 for returns: %d\n", iret1);
 	printf("pthread_create() 2 for returns: %d\n", iret2);
 	printf("pthread_create() 3 for returns: %d\n", iret3);
