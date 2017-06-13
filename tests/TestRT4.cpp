@@ -222,10 +222,6 @@ int main(int argc, char* argv[]){
 		printf("Problem Init 3: %d \n", checkInitThread);
 	}
 
-	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
-	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
-	iret3 = pthread_create(&thread3, &attr3, testThread3, (void*) message3);
-
 	//create a thread that launch the print_message_function with the arguments message1
 	checkschedParam=pthread_setschedparam(thread1, SCHED_FIFO, &param1);
 	if(checkschedParam!=0){
@@ -241,6 +237,12 @@ int main(int argc, char* argv[]){
 	if(checkschedParam!=0){
 		printf("Problem param 3: %d \n", checkschedParam);
 	}
+
+	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
+	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
+	iret3 = pthread_create(&thread3, &attr3, testThread3, (void*) message3);
+
+
 	// if it fails, return not 0
 	printf("pthread_create() 1 for returns: %d\n", iret1);
 	printf("pthread_create() 2 for returns: %d\n", iret2);
