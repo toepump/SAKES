@@ -387,7 +387,7 @@ void *testThread1(void *ptr) {
 	  		}
 
 
-	  		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, 0, &waitTime, &remain);
+	  		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, &remain);
 		}else{
 
 			cout << "The thread is not done in 1 ms" << endl;
