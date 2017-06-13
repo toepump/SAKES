@@ -216,17 +216,17 @@ int main(int argc, char* argv[]){
 
 
 
-	setInherited=pthread_attr_setinheritedsched(&attr1, PTHREAD_EXPLICIT_SCHED);
+	setInherited=pthread_attr_setinheritsched(&attr1, PTHREAD_EXPLICIT_SCHED);
 	if(setInherited!=0){
 		printf("Problem set inherited 1: %d \n", setInherited);
 	}
 
-	setInherited=pthread_attr_setinheritedsched(&attr2, PTHREAD_EXPLICIT_SCHED);
+	setInherited=pthread_attr_setinheritsched(&attr2, PTHREAD_EXPLICIT_SCHED);
 	if(setInherited!=0){
 		printf("Problem set inherited 2: %d \n", setInherited);
 	}
 
-	setInherited=pthread_attr_setinheritedsched(&attr3, PTHREAD_EXPLICIT_SCHED);
+	setInherited=pthread_attr_setinheritsched(&attr3, PTHREAD_EXPLICIT_SCHED);
 	if(setInherited!=0){
 		printf("Problem set inherited 3: %d \n", setInherited);
 	}
