@@ -220,12 +220,12 @@ int main(int argc, char* argv[]){
 	//create a thread that launch the print_message_function with the arguments message1
 	checkschedParam=pthread_setschedparam(thread1, SCHED_FIFO, &param1);
 	if(checkschedParam!=0){
-		printf("Problem param 3: %d \n", checkschedParam);
+		printf("Problem param 1: %d \n", checkschedParam);
 	}
 
 	checkschedParam=pthread_setschedparam(thread2, SCHED_FIFO, &param2);
 	if(checkschedParam!=0){
-		printf("Problem param 3: %d \n", checkschedParam);
+		printf("Problem param 2: %d \n", checkschedParam);
 	}
 
 	checkschedParam=pthread_setschedparam(thread3, SCHED_FIFO, &param3);// sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
