@@ -188,9 +188,6 @@ int main(int argc, char* argv[]){
 
 	int min, max;
 
-
-
-
 	min = sched_get_priority_min( SCHED_FIFO );
 	max = sched_get_priority_max( SCHED_FIFO );
 
@@ -245,9 +242,9 @@ int main(int argc, char* argv[]){
 		printf("Problem set policy 3: %d \n", setPolicy);
 	}
 
-	param1.sched_priority = 42;
-	param2.sched_priority = 50;
-	param3.sched_priority = 60;
+	param1.sched_priority = 30;
+	param2.sched_priority = 70;
+	param3.sched_priority = 50;
 
 	checkschedParam=pthread_attr_setschedparam(&attr1, &param1);
 	if(checkschedParam!=0){
@@ -321,7 +318,7 @@ void *testThread1(void *ptr) {
 
 	  		testValue=0;
 
-	  		for(i=0;i<300;i++){
+	  		for(i=0;i<30000;i++){
 	  			testValue++;
 	  		}
 
@@ -384,7 +381,7 @@ void *testThread2(void *ptr) {
 
 	  		testValue=0;
 
-	  		for(i=0;i<300;i++){
+	  		for(i=0;i<30000;i++){
 	  			testValue++;
 	  		}
 
@@ -447,7 +444,7 @@ void *testThread3(void *ptr) {
 
 	  		testValue=0;
 
-	  		for(i=0;i<300;i++){
+	  		for(i=0;i<30000;i++){
 	  			testValue++;
 	  		}
 
