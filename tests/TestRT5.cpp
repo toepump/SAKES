@@ -98,6 +98,10 @@ int storeIntoOutput(struct output *output, int increment, struct timeStruct *tim
 
 int fileTestMotor(struct output *output1,struct output *output2,struct output *output3){
 
+double meanTime[3]={0, 0, 0};
+double maxTimeInterval[3]={0,0,0};
+int i, j;
+
 	cout << "Printing of the output starts" << endl;
 
 		int i=0;
@@ -115,6 +119,19 @@ int fileTestMotor(struct output *output1,struct output *output2,struct output *o
 		}
 
 	cout << "Printing of the output is done" << endl;
+
+	for(i=0;i<TIME_MAX-1;i++){
+		if((output1->timeInMilli[i+1]-output1->timeInMilli[i])>maxTimeInterval)
+		{
+			maxTimeInterval[0]=output1->timeInMilli[i+1]-output1->timeInMilli[i];
+		}
+		meanTime[0]=meanTime[0]+output1->timeInMilli[i+1]-output1->timeInMilli[i];
+	}
+
+	meanTime[0]=meanTime[0]/double(TIME_MAX);
+
+	printf("Mean Time: %d \n", meanTime[0]);
+	printf("Max Time: %d \n", maxTimeInterval[0]);
 
 	return 0;
 }
@@ -263,8 +280,8 @@ int main(int argc, char* argv[]){
 
 
 	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
-	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
-	iret3 = pthread_create(&thread3, &attr3, testThread3, (void*) message3);
+	//iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
+	//iret3 = pthread_create(&thread3, &attr3, testThread3, (void*) message3);
 
 
 	// if it fails, return not 0
