@@ -245,19 +245,21 @@ int main(int argc, char* argv[]){
 		printf("Problem set policy 3: %d \n", setPolicy);
 	}
 
-	parm.sched_priority = 42;
+	param1.sched_priority = 42;
+	param2.sched_priority = 50;
+	param3.sched_priority = 60;
 
-	checkschedParam=pthread_attr_setschedparam(&attr1, &parm);
+	checkschedParam=pthread_attr_setschedparam(&attr1, &param1);
 	if(checkschedParam!=0){
 		printf("Problem set param 1: %d \n", checkschedParam);
 	}
 
-	checkschedParam=pthread_attr_setschedparam(&attr2, &parm);
+	checkschedParam=pthread_attr_setschedparam(&attr2, &param2);
 	if(checkschedParam!=0){
 		printf("Problem set param 1: %d \n", checkschedParam);
 	}
 
-	checkschedParam=pthread_attr_setschedparam(&attr3, &parm);
+	checkschedParam=pthread_attr_setschedparam(&attr3, &param3);
 	if(checkschedParam!=0){
 		printf("Problem set param 1: %d \n", checkschedParam);
 	}
