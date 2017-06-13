@@ -100,6 +100,7 @@ int fileTestMotor(struct output *output1,struct output *output2,struct output *o
 
 double meanTime[3]={0, 0, 0};
 double maxTimeInterval[3]={0,0,0};
+double variance[3]={0,0,0};
 int i, j;
 
 	cout << "Printing of the output starts" << endl;
@@ -129,8 +130,18 @@ int i, j;
 
 	meanTime[0]=meanTime[0]/double(TIME_MAX);
 
+
+
+	for(i=0;i<TIME_MAX-1;i++){
+		variance[0]=variance[0]+fabs(output1->timeInMilli[i+1]-output1->timeInMilli[i]-meanTime[0]);
+	}
+	variance[0]=variance[0]/double(TIME_MAX);
+
+
+
 	printf("Mean Time: %f \n", meanTime[0]);
 	printf("Max Time: %f \n", maxTimeInterval[0]);
+	printf("Mean Time: %f \n", variance[0]);
 
 
 	for(i=0;i<TIME_MAX-1;i++){
@@ -293,17 +304,17 @@ int main(int argc, char* argv[]){
 
 
 	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
-	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
+	//iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
 	//iret3 = pthread_create(&thread3, &attr3, testThread3, (void*) message3);
 
 
 	// if it fails, return not 0
 	printf("pthread_create() 1 for returns: %d\n", iret1);
-	printf("pthread_create() 2 for returns: %d\n", iret2);
+	//printf("pthread_create() 2 for returns: %d\n", iret2);
 	//printf("pthread_create() 3 for returns: %d\n", iret3);
 
 	pthread_join( thread1, NULL);
-	pthread_join( thread2, NULL);
+	//pthread_join( thread2, NULL);
 	//pthread_join( thread3, NULL);
 
 
