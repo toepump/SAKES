@@ -186,8 +186,8 @@ int main(int argc, char* argv[]){
 
 	int min, max;
 
-	int min = sched_get_priority_min( SCHED_FIFO );
-	int max = sched_get_priority_max( SCHED_FIFO );
+	min = sched_get_priority_min( SCHED_FIFO );
+	max = sched_get_priority_max( SCHED_FIFO );
 
 	printf("Min priority FIFO: %d \n", min);
 	printf("Max priority FIFO: %d \n", max);
