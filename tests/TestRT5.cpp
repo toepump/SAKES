@@ -285,12 +285,12 @@ int main(int argc, char* argv[]){
 
 	// if it fails, return not 0
 	printf("pthread_create() 1 for returns: %d\n", iret1);
-	printf("pthread_create() 2 for returns: %d\n", iret2);
-	printf("pthread_create() 3 for returns: %d\n", iret3);
+	//printf("pthread_create() 2 for returns: %d\n", iret2);
+	//printf("pthread_create() 3 for returns: %d\n", iret3);
 
 	pthread_join( thread1, NULL);
-	pthread_join( thread2, NULL);
-	pthread_join( thread3, NULL);
+	//pthread_join( thread2, NULL);
+	//pthread_join( thread3, NULL);
 
 
 	fileTestMotor(&output1, &output2, &output3);
