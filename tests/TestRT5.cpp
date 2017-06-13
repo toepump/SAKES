@@ -322,7 +322,7 @@ void *testThread1(void *ptr) {
 	while(ticks_t1<TIME_MAX+1){
 
 		/* wait until next shot */
-		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, 0, &waitTime, &remain);
+
 
 		if(sleepOK == 0){
 
@@ -346,11 +346,14 @@ void *testThread1(void *ptr) {
 
 	  		if(diff.tv_sec==0 && diff.tv_nsec < 1000000){
 	  			waitTime.tv_sec=0;
-	  			waitTime.tv_nsec=900000-diff.tv_nsec;
+	  			waitTime.tv_nsec=800000-diff.tv_nsec;
+
 	  		}else{
 	  			//cout << "The thread is not done in 1 ms" << endl;
 	  			//cout << ticks_t1 << endl;
 	  		}
+
+	  		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, 0, &waitTime, &remain);
 		}else{
 
 			//cout << "The thread is not done in 1 ms" << endl;
