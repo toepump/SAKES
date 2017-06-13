@@ -121,7 +121,7 @@ int i, j;
 	cout << "Printing of the output is done" << endl;
 
 	for(i=0;i<TIME_MAX-1;i++){
-		if((output1->timeInMilli[i+1]-output1->timeInMilli[i])>maxTimeInterval)
+		if((output1->timeInMilli[i+1]-output1->timeInMilli[i])>maxTimeInterval[0])
 		{
 			maxTimeInterval[0]=output1->timeInMilli[i+1]-output1->timeInMilli[i];
 		}
