@@ -198,17 +198,17 @@ int main(int argc, char* argv[]){
 		printf("Problem attribute 3: %d \n", checkAttrInit);
 	}
 
-	checkInitThread=setParamThreadFIFO(attr1, param1, 70);
+	checkInitThread=setParamThreadFIFO(attr1, param1, 50);
 	if(checkInitThread!=0){
 		printf("Problem Init 1: %d \n", checkInitThread);
 	}
 
-	checkInitThread=setParamThreadFIFO(attr2, param2, 50);
+	checkInitThread=setParamThreadFIFO(attr2, param2, 49);
 	if(checkInitThread!=0){
 		printf("Problem Init 2: %d \n", checkInitThread);
 	}
 
-	checkInitThread=setParamThreadFIFO(attr3, param3, 30);
+	checkInitThread=setParamThreadFIFO(attr3, param3, 48);
 	if(checkInitThread!=0){
 		printf("Problem Init 3: %d \n", checkInitThread);
 	}
