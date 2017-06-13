@@ -377,7 +377,7 @@ void *testThread1(void *ptr) {
 	  			waitTime.tv_nsec=800000-diff.tv_nsec;
 	  			*/
 
-	  		waitTime.tv_nsec+=100000000;
+	  		waitTime.tv_nsec+=1000000;
 	  		if(waitTime.tv_nsec> 999999999){
 	  			waitTime.tv_sec+=1;
 	  			waitTime.tv_nsec-=1000000000;
