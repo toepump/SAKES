@@ -270,7 +270,6 @@ int main(int argc, char* argv[]){
 	iret3 = pthread_create(&thread3, &attr3, testThread3, (void*) message3);
 
 
-
 	// if it fails, return not 0
 	printf("pthread_create() 1 for returns: %d\n", iret1);
 	printf("pthread_create() 2 for returns: %d\n", iret2);
@@ -334,7 +333,7 @@ void *testThread1(void *ptr) {
 
 	  		if(diff.tv_sec==0 && diff.tv_nsec < 1000000){
 	  			waitTime.tv_sec=0;
-	  			waitTime.tv_nsec=1000000-diff.tv_nsec;
+	  			waitTime.tv_nsec=900000-diff.tv_nsec;
 	  		}else{
 	  			//cout << "The thread is not done in 1 ms" << endl;
 	  			//cout << ticks_t1 << endl;
@@ -397,7 +396,7 @@ void *testThread2(void *ptr) {
 
 	  		if(diff.tv_sec==0 && diff.tv_nsec < 1000000){
 	  			waitTime.tv_sec=0;
-	  			waitTime.tv_nsec=1000000-diff.tv_nsec;
+	  			waitTime.tv_nsec=900000-diff.tv_nsec;
 	  		}else{
 	  			//cout << "The thread 2 is not done in 1 ms" << endl;
 	  			//cout << ticks_t2 << endl;
@@ -460,7 +459,7 @@ void *testThread3(void *ptr) {
 
 	  		if(diff.tv_sec==0 && diff.tv_nsec < 1000000){
 	  			waitTime.tv_sec=0;
-	  			waitTime.tv_nsec=1000000-diff.tv_nsec;
+	  			waitTime.tv_nsec=900000-diff.tv_nsec;
 	  		}else{
 	  			//cout << "The thread 3 is not done in 1 ms" << endl;
 	  			//cout << ticks_t3 << endl;
