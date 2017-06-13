@@ -37,18 +37,19 @@ static gboolean EventB( GIOChannel *channel, GIOCondition condition, gpointer us
 
 
 //global variables
-int state = 0;
-int netAngleIncrement = 0;
-int RealNetAngleIncrement = 0;
-const int INTERVAL =1000000;                // in nanosecond
-std::mutex mtx;
-int threadExists = 0;
+int state = 0;                              //state of channels
+int netAngleIncrement = 0;                  //storage for temporary netAngleIncrement, to copy in to netAngleIncrement
+int RealNetAngleIncrement = 0;              //storage for actual netAngleIncrement, used while being probed
+const int INTERVAL =1000000;                //in nanosecond
+std::mutex mtx;                             //probingThread mutex
+std::mutex dataMtx;                         //actual mutex to prevent data corruption
+
 int index = 0;
 
 double probeAngleDeg[PROBE_STORAGE_SIZE];   // the strorage space for probed data
-double outputNetAngle[MAX_PULSE];
-int outputState[MAX_PULSE];
-int outputNetIncrement[MAX_PULSE]; //Store the value at each interrupt
+double outputNetAngle[MAX_PULSE];           // the storage space for the netAngle debug
+int outputState[MAX_PULSE];                 // the storage space for the state debug
+int outputNetIncrement[MAX_PULSE];          //Store the value at each interrupt
 
 /*
 Purpose: Entry thread/function for input commands and launching program threads
@@ -229,12 +230,11 @@ void *taskThread(void *ptr){
         printf("pthread_create() for probingThread returns: %d\n",iret1);
 
         //check if the previous thread completed or not
-        if(threadExists == 0){
-            //launch threads
+        if(!mtx.try_lock()){
             pthread_join(probingThread, NULL);
         }
         else{
-            cout<< "TOO SLOW" << endl;
+            cout<<"PROBINGTHREAD IS TOO SLOW"<<endl;
         }
         /* calculate next shot */
         t_taskThread.tv_nsec += INTERVAL;
@@ -251,15 +251,10 @@ void *taskThread(void *ptr){
 /*
 Purpose: every millisecond, forcibly take mutex protecting encoder data
          and do complete processing of that data within 1 millisecond.
-Return: TODO use the mutex::try_lock function to determine if calling thread
+Return: TODO maybe use the mutex::try_lock function to determine if calling thread
         can lock the desired mutex, if not then the program is not fast enough
 */
 void *probingThread(void *ptr){
-    //set threadExists to 1
-    threadExists = 1;
-    //get mutex
-    mtx.lock();
-
     //do stuff on mutex protected data
     probeAngleDeg[index] = netAngleDegree; //store current netAngleDegree
     probeIncrement[index] = indexOutput;
@@ -272,8 +267,6 @@ void *probingThread(void *ptr){
     }
     //release mutex
     mtx.unlock();
-    //set threadExists to 0
-    threadExists = 0;
     return (void*) NULL;
 }
 
