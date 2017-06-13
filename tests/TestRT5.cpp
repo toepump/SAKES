@@ -77,7 +77,8 @@ output output2;
 output output3;
 
 void timespec_diff(struct timespec *start, struct timespec *stop, struct timespec *result){
-    if ((stop->tv_nsec - start->tv_nsec) < 0) {
+    if ((stop->tv_nsec - start->tv_nsec) < 0)
+    {
         result->tv_sec = stop->tv_sec - start->tv_sec - 1;
         result->tv_nsec = stop->tv_nsec - start->tv_nsec + 1000000000;
     } else {
@@ -232,9 +233,10 @@ int main(int argc, char* argv[]){
 	min = sched_get_priority_min( SCHED_FIFO );
 	max = sched_get_priority_max( SCHED_FIFO );
 
+	/* Diplay max and min FIFO priority
 	printf("Min priority FIFO: %d \n", min);
 	printf("Max priority FIFO: %d \n", max);
-
+	 */
 	checkAttrInit=pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
 	if(checkAttrInit!=0){
 		printf("Problem attribute 1: %d \n", checkAttrInit);
@@ -369,19 +371,26 @@ void *testThread1(void *ptr) {
 
 	  		timespec_diff(&start, &end, &diff);
 
+	  		/*
 	  		if(diff.tv_sec==0 && diff.tv_nsec < 1000000){
 	  			waitTime.tv_sec=0;
 	  			waitTime.tv_nsec=800000-diff.tv_nsec;
+	  			*/
 
+	  		waitTime.tv_nsec+=100000000;
+	  		if(waitTime.tv_nsec> 999999999){
+	  			waitTime.tv_sec+=1;
+	  			waitTime.tv_nsec-=1000000000;
 	  		}else{
 	  			//cout << "The thread is not done in 1 ms" << endl;
 	  			//cout << ticks_t1 << endl;
 	  		}
 
+
 	  		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, 0, &waitTime, &remain);
 		}else{
 
-			//cout << "The thread is not done in 1 ms" << endl;
+			cout << "The thread is not done in 1 ms" << endl;
 
 		}
 
