@@ -129,8 +129,8 @@ int i, j;
 
 	meanTime[0]=meanTime[0]/double(TIME_MAX);
 
-	printf("Mean Time: %d \n", meanTime[0]);
-	printf("Max Time: %d \n", maxTimeInterval[0]);
+	printf("Mean Time: %f \n", meanTime[0]);
+	printf("Max Time: %f \n", maxTimeInterval[0]);
 
 	return 0;
 }
