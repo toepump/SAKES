@@ -188,7 +188,7 @@ int main(int argc, char* argv[]){
 
 	int min, max;
 
-	while(true){
+
 
 
 	min = sched_get_priority_min( SCHED_FIFO );
@@ -211,8 +211,6 @@ int main(int argc, char* argv[]){
 	if(checkAttrInit!=0){
 		printf("Problem attribute 3: %d \n", checkAttrInit);
 	}
-
-
 
 
 
@@ -276,7 +274,7 @@ int main(int argc, char* argv[]){
 	printf("pthread_create() 2 for returns: %d\n", iret2);
 	printf("pthread_create() 3 for returns: %d\n", iret3);
 
-	}
+
 
 	fileTestMotor(&output1, &output2, &output3);
 
