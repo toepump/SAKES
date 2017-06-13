@@ -16,6 +16,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <math.h>
+#include <sched.h>
 
 using namespace std;
 
@@ -182,6 +183,14 @@ int main(int argc, char* argv[]){
 
 	int checkAttrInit;
 	int checkschedParam;
+
+	int min, max;
+
+	int min = sched_get_priority_min( SCHED_FIFO );
+	int max = sched_get_priority_max( SCHED_FIFO );
+
+	printf("Min priority FIFO: %d \n", min);
+	printf("Max priority FIFO: %d \n", max);
 
 	checkAttrInit=pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
 	if(checkAttrInit!=0){
