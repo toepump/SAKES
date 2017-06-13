@@ -1,4 +1,4 @@
-all: encRTtest2 Test_Motor encRTtest1 newStructureEncoder RT4
+all: encRTtest2 Test_Motor encRTtest1 newStructureEncoder TestRT4 TestRT5
 
 newStructureEncoder: newStructureEncoder.cpp
 	g++ newStructureEncoder.cpp -o newStructureEncoder `pkg-config glib-2.0 --cflags --libs` -lpthread
@@ -17,6 +17,9 @@ Test_Motor: Test_Motor.cpp
 
 TestRT4: TestRT4.cpp
 	g++ TestRT4.cpp -o TestRT4 `pkg-config glib-2.0 --cflags --libs` -lpthread
+
+TestRT5: TestRT5.cpp
+	g++ TestRT5.cpp -o TestRT5 `pkg-config glib-2.0 --cflags --libs` -lpthread
 
 clean:
 	rm -f encRTtest2 BBB_Encoder outputEncoder.csv probeCheck.data
