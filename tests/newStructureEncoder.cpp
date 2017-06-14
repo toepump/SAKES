@@ -25,7 +25,6 @@
 MAX_PULSE = 30000
 PROBE_STORAGE_SIZE = 20000;             // the arbitrary size of stored
                                         // probe's storage
-
 //prototypes
 void *interruptThread(void *ptr);
 void *taskThread(void *ptr);
@@ -52,13 +51,9 @@ int outputState[MAX_PULSE];                 // the storage space for the state d
 int outputNetIncrement[MAX_PULSE];          //Store the value at each interrupt
 
 /*
-Purpose: Entry thread/function for input commands and launching program threads
+Purpose: Entry point thread/function
 */
 int main(int argc, char const *argv[]) {
-    //TODO: if you want to add any input commands add them here
-        //argc is number of input arguments (argCount)
-        //argv is array of each input argument
-
     //initialize counter
     initCounter();
 
@@ -118,9 +113,11 @@ void counter(int channelSig){
         if(state==1){
             if(nb_signal==2){
                 netAngleIncrement++;
+                RealNetAngleIncrement = netAngleIncrement;
                 state=2;
             }else if(nb_signal==1){
                 netAngleIncrement--;
+                RealNetAngleIncrement = netAngleIncrement;
                 state=4;
             }else{
                 failInt++;
@@ -131,10 +128,12 @@ void counter(int channelSig){
         else if(state==2){
             if(nb_signal==1){
                 netAngleIncrement++;
+                RealNetAngleIncrement = netAngleIncrement;
                 state=3;
             }else if(nb_signal==2){
                 state=1;
                 netAngleIncrement--;
+                RealNetAngleIncrement = netAngleIncrement;
             }else{
                 failInt++;
                 //cout << "problem with the counter in case 1" << endl;
@@ -144,9 +143,11 @@ void counter(int channelSig){
         else if(state==3){
             if(nb_signal==2){
                 netAngleIncrement++;
+                RealNetAngleIncrement = netAngleIncrement;
                 state=4;
             }else if(nb_signal==1){
                 netAngleIncrement--;
+                RealNetAngleIncrement = netAngleIncrement;
                 state=2;
             }else{
                 failInt++;
@@ -157,9 +158,11 @@ void counter(int channelSig){
         else if(state==4){
             if(nb_signal==1){
                 netAngleIncrement++;
+                RealNetAngleIncrement = netAngleIncrement;
                 state=1;
             }else if(nb_signal==2){
                 netAngleIncrement--;
+                RealNetAngleIncrement = netAngleIncrement;
                 state=3;
             }else{
                 failInt++;
@@ -231,9 +234,11 @@ void *taskThread(void *ptr){
 
         //check if the previous thread completed or not
         if(!mtx.try_lock()){
+            //launch new probingThread
             pthread_join(probingThread, NULL);
         }
         else{
+            //if previous probingThread still has mutex, program is too slow
             cout<<"PROBINGTHREAD IS TOO SLOW"<<endl;
         }
         /* calculate next shot */
@@ -251,8 +256,6 @@ void *taskThread(void *ptr){
 /*
 Purpose: every millisecond, forcibly take mutex protecting encoder data
          and do complete processing of that data within 1 millisecond.
-Return: TODO maybe use the mutex::try_lock function to determine if calling thread
-        can lock the desired mutex, if not then the program is not fast enough
 */
 void *probingThread(void *ptr){
     //do stuff on mutex protected data
@@ -265,7 +268,7 @@ void *probingThread(void *ptr){
         printProbe();
         return (void*) NULL;
     }
-    //release mutex
+    //release mutex if finished
     mtx.unlock();
     return (void*) NULL;
 }

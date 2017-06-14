@@ -1,0 +1,1 @@
+void counter(int channelSig);
