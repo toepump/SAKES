@@ -1,5 +1,6 @@
 #include "interruptThread.h"
 #include "common.h"
+#include "counter.h"
 
 /*
 Purpose: constantly be interrupted by encoder pulses found through GPIO

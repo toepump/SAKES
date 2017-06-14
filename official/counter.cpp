@@ -1,8 +1,8 @@
 #include "counter.h"
-
+#include "printOutData.h"
 
 void counter(int channelSig){
-    //TODO store actual netAngleIncrement and temp netAngleIncrement seperately
+    // TODO store actual netAngleIncrement and temp netAngleIncrement seperately
     // and protect the actual one with a mutex so that the probe reads a safe
     // data. every if statement update temp and copy to actual but surround actual
     // with mutex CONDITION VARIABLE MAYBE
