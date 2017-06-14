@@ -1,3 +1,6 @@
+#ifndef INTERRUPTTHREAD_H
+#define INTERRUPTTHREAD_H
+
 /*
 Purpose: constantly be interrupted by encoder pulses found through GPIO
          in linux filesystem 'value' files. Upon receiving interrupt from either
@@ -18,3 +21,6 @@ Purpose: constantly be listening for intterupt coming from channelB
          indicating channelB was the interrupted channel
 */
 static gboolean EventB( GIOChannel *channel, GIOCondition condition, gpointer user_data );
+
+
+#endif

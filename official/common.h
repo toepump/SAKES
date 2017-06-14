@@ -1,3 +1,6 @@
+#ifndef COMMON_H
+#define COMMON_H
+
 //constants
 extern MAX_PULSE = 30000
 extern PROBE_STORAGE_SIZE = 20000;             // the arbitrary size of stored
@@ -17,3 +20,6 @@ extern int probeIncrement[PROBE_STORAGE_SIZE];     // the storage space for the 
 extern double outputNetAngle[MAX_PULSE];           // the storage space for the netAngle debug
 extern int outputState[MAX_PULSE];                 // the storage space for the state debug
 extern int outputNetIncrement[MAX_PULSE];          //Store the value at each interrupt
+
+
+#endif
