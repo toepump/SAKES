@@ -5,7 +5,7 @@
 *      Author: Mikey and Vincent
 */
 
-//system includes
+//system includes TODO: move neceary includes to the auxillary header files
 #include <iostream>
 #include <unistd.h>
 #include <fstream>
@@ -30,6 +30,9 @@
 #include "counter.h"
 #include "initCounter.h"
 #include "printOutData.h"
+
+#define NSEC_PER_SEC    (1000000000)           /* The number of nsecs per sec. */
+#define NSEC_PER_MSEC   (1000000)              //number of nsecs in milliseconds
 
 /*
 Purpose: Entry point thread/function

@@ -1,3 +1,4 @@
+#include "common.h"
 #include "counter.h"
 #include "printOutData.h"
 
@@ -10,11 +11,11 @@ void counter(int channelSig){
 
     if(init>2 && indexOutput<MAX_PULSE){
         if(state==1){
-            if(nb_signal==2){
+            if(channelSig==2){
                 netAngleIncrement++;
                 RealNetAngleIncrement = netAngleIncrement;
                 state=2;
-            }else if(nb_signal==1){
+            }else if(channelSig==1){
                 netAngleIncrement--;
                 RealNetAngleIncrement = netAngleIncrement;
                 state=4;
@@ -25,11 +26,11 @@ void counter(int channelSig){
         }
 
         else if(state==2){
-            if(nb_signal==1){
+            if(channelSig==1){
                 netAngleIncrement++;
                 RealNetAngleIncrement = netAngleIncrement;
                 state=3;
-            }else if(nb_signal==2){
+            }else if(channelSig==2){
                 state=1;
                 netAngleIncrement--;
                 RealNetAngleIncrement = netAngleIncrement;
@@ -40,11 +41,11 @@ void counter(int channelSig){
         }
 
         else if(state==3){
-            if(nb_signal==2){
+            if(channelSig==2){
                 netAngleIncrement++;
                 RealNetAngleIncrement = netAngleIncrement;
                 state=4;
-            }else if(nb_signal==1){
+            }else if(channelSig==1){
                 netAngleIncrement--;
                 RealNetAngleIncrement = netAngleIncrement;
                 state=2;
@@ -55,11 +56,11 @@ void counter(int channelSig){
         }
 
         else if(state==4){
-            if(nb_signal==1){
+            if(channelSig==1){
                 netAngleIncrement++;
                 RealNetAngleIncrement = netAngleIncrement;
                 state=1;
-            }else if(nb_signal==2){
+            }else if(channelSig==2){
                 netAngleIncrement--;
                 RealNetAngleIncrement = netAngleIncrement;
                 state=3;

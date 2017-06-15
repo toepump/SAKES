@@ -12,7 +12,6 @@ Purpose: every millisecond, forcibly take mutex protecting encoder data
 */
 void *probingThread(void *ptr);
 
-
 void printProbe(void);
 
 

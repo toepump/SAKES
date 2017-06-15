@@ -1,3 +1,4 @@
+#include "common.h"
 #include "probingThread.h"
 /*
 Purpose: every millisecond, forcibly take mutex protecting encoder data

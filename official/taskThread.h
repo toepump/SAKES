@@ -2,6 +2,7 @@
 #define TASKTHREAD_H
 
 std::mutex mtx;  //probingThread mutex
+int INTERVAL;
 
 /*
 Purpose: thread for spwaning a probing thread every millisecond
