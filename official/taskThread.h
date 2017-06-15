@@ -9,9 +9,6 @@
 #include <stdio.h>
 #include <sched.h>
 
-std::mutex mtx;  //probingThread mutex
-int INTERVAL;
-
 /*
 Purpose: thread for spwaning a probing thread every millisecond
          only launches a thread if previously spawned thread has Finished
