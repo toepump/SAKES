@@ -31,9 +31,6 @@
 #include "initCounter.h"
 #include "printOutData.h"
 
-#define NSEC_PER_SEC    (1000000000)           /* The number of nsecs per sec. */
-#define NSEC_PER_MSEC   (1000000)              //number of nsecs in milliseconds
-
 /*
 Purpose: Entry point thread/function
 */

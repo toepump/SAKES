@@ -1,6 +1,12 @@
 #ifndef INTERRUPTTHREAD_H
 #define INTERRUPTTHREAD_H
 
+#include <glib-2.0/glib.h>
+#include <iostream.h>
+#include <string.h>
+#include <fstream.h>
+#include <stdio.h>
+
 /*
 Purpose: constantly be interrupted by encoder pulses found through GPIO
          in linux filesystem 'value' files. Upon receiving interrupt from either

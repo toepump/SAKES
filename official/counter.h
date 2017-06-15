@@ -1,6 +1,10 @@
 #ifndef COUNTER_H
 #define COUNTER_H
 
+#include <iostream>
+
+int init;
+int state;
 int indexOutput;
 int netAngleIncrement = 0;                  //storage for temporary netAngleIncrement, to copy in to netAngleIncrement
 int RealNetAngleIncrement = 0;              //storage for actual netAngleIncrement, used while being probed

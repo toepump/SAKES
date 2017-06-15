@@ -1,6 +1,14 @@
 #ifndef TASKTHREAD_H
 #define TASKTHREAD_H
 
+#include <time.h>
+#include <pthread.h>
+#include <mutex.h>
+#include <iostream.h>
+#include <string.h>
+#include <stdio.h>
+#include <sched.h>
+
 std::mutex mtx;  //probingThread mutex
 int INTERVAL;
 
@@ -11,4 +19,4 @@ Purpose: thread for spwaning a probing thread every millisecond
 */
 void *taskThread(void *ptr);
 
-endif
+#endif
