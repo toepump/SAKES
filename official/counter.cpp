@@ -13,11 +13,15 @@ void counter(int channelSig){
         if(state==1){
             if(channelSig==2){
                 netAngleIncrement++;
+                dataMtx.lock();
                 RealNetAngleIncrement = netAngleIncrement;
+                dataMtx.unlock();
                 state=2;
             }else if(channelSig==1){
                 netAngleIncrement--;
+                dataMtx.lock();
                 RealNetAngleIncrement = netAngleIncrement;
+                dataMtx.unlock();
                 state=4;
             }else{
                 failInt++;
@@ -28,12 +32,16 @@ void counter(int channelSig){
         else if(state==2){
             if(channelSig==1){
                 netAngleIncrement++;
+                dataMtx.lock();
                 RealNetAngleIncrement = netAngleIncrement;
+                dataMtx.unlock();
                 state=3;
             }else if(channelSig==2){
                 state=1;
                 netAngleIncrement--;
+                dataMtx.lock();
                 RealNetAngleIncrement = netAngleIncrement;
+                dataMtx.unlock();
             }else{
                 failInt++;
                 //cout << "problem with the counter in case 1" << endl;
@@ -43,11 +51,15 @@ void counter(int channelSig){
         else if(state==3){
             if(channelSig==2){
                 netAngleIncrement++;
+                dataMtx.lock();
                 RealNetAngleIncrement = netAngleIncrement;
+                dataMtx.unlock();
                 state=4;
             }else if(channelSig==1){
                 netAngleIncrement--;
+                dataMtx.lock();
                 RealNetAngleIncrement = netAngleIncrement;
+                dataMtx.unlock();
                 state=2;
             }else{
                 failInt++;
@@ -58,11 +70,15 @@ void counter(int channelSig){
         else if(state==4){
             if(channelSig==1){
                 netAngleIncrement++;
+                dataMtx.lock();
                 RealNetAngleIncrement = netAngleIncrement;
+                dataMtx.unlock();
                 state=1;
             }else if(channelSig==2){
                 netAngleIncrement--;
+                dataMtx.lock();
                 RealNetAngleIncrement = netAngleIncrement;
+                dataMtx.unlock();
                 state=3;
             }else{
                 failInt++;

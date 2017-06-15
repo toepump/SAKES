@@ -5,8 +5,8 @@ Purpose: every millisecond, forcibly take mutex protecting encoder data
          and do complete processing of that data within 1 millisecond.
 */
 void *probingThread(void *ptr){
-    //do stuff on mutex protected data
-    probeAngleDeg[index] = netAngleDegree; //store current netAngleDegree
+    //do stuff on mutex protected data TODO: add mutex here. might need another for the indexOutput
+    probeAngleDeg[index] = (double)RealNetAngleIncrement/ PULSE_PER_DEGREE; //store current netAngleDegree
     probeIncrement[index] = indexOutput;
     index++;                               //increment index
 
