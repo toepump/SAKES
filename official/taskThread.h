@@ -15,5 +15,6 @@ Purpose: thread for spwaning a probing thread every millisecond
          Otherwise, program breaks because of control discrepancy
 */
 void *taskThread(void *ptr);
+void printProbe(void);
 
 #endif

@@ -50,6 +50,13 @@ void *taskThread(void *ptr){
         if(!mtx.try_lock()){
             //launch new probingThread
             pthread_join(probingThread, NULL);
+
+            index++;
+            //if index > than PROBE_STORAGE_SIZE or indexOutput > MAX_PULSE
+            if(index-1 > PROBE_STORAGE_SIZE || indexOutput >= MAX_PULSE-1){
+                //printProbe
+                printProbe();
+            }
         }
         else{
             //if previous probingThread still has mutex, program is too slow
@@ -65,4 +72,21 @@ void *taskThread(void *ptr){
     }
 
     return (void*) NULL;
+}
+
+void printProbe(void){
+    cout << "Printing of the probe starts" << endl;
+
+    int i=0;
+    FILE *fj2=fopen("probeCheck.data","w");
+
+    fprintf(fj2, "Time (ms); Net Angle (degree); net Increment;\n");
+
+    while(i<PROBE_STORAGE_SIZE){
+        fprintf(fj2,  "%d;%f;%d;\r\n", i, probeAngleDeg[i], probeIncrement[i]);
+        i++ ;
+    }
+
+    cout << "Printing of the output is done" << endl;
+
 }
