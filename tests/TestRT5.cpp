@@ -347,7 +347,7 @@ void *testThread1(void *ptr) {
 	waitTime.tv_nsec=0;
 
 	setTimeOrigin(&timeThread1);
-
+	clock_nanosleep(CLOCK_MONOTONIC, 0, &waitTime, &remain);
 	while(ticks_t1<TIME_MAX+1){
 
 		/* wait until next shot */
@@ -401,12 +401,14 @@ void *testThread1(void *ptr) {
 	  			*/
 	  		}else{
 	  			cout << "The thread is not done in 1 ms" << endl;
-	  			cout << ticks_t1 << endl;
+	  			cout << "The ticks number is : "<< ticks_t1 << endl;
 	  		}
 
 	  		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, 0, &waitTime, &remain);
 		}else{
 
+			cout << " " << endl;
+			cout << "Exit message" << endl;
 			cout << "The thread is not done in 1 ms, exit" << endl;
 			cout << "value of sleepOK : " << sleepOK << endl;
 			cout << "exit" << endl;
