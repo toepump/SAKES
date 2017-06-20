@@ -478,6 +478,8 @@ void *testThread1(void *ptr) {
 		  		waitTime.tv_nsec-=1000000000;
 		  	}
 
+			cout << " " << endl;
+			cout << "Wait time" << waitTime.tv_nsec << endl;
 
 
 			}else{
