@@ -359,6 +359,11 @@ void *testThread1(void *ptr) {
 
 			timespec_diff(&previous_start, &start, &diff);
 
+			if(ticks_t1==0)
+			{
+				diff.tv_sec=0;
+				diff.tv_nsec = 1000000;
+			}
 
 			difference.tMilli=double(diff.tv_sec)*1000.0+double(diff.tv_nsec)/1000000.0;
 			getTimeSinceOrigin(&timeThread1);
@@ -403,7 +408,7 @@ void *testThread1(void *ptr) {
 		}else{
 
 			cout << "The thread is not done in 1 ms, exit" << endl;
-			cout << "value of sleepOK" << sleepOK << endl;
+			cout << "value of sleepOK : " << sleepOK << endl;
 			cout << "exit" << endl;
 			return (void*) NULL;
 
