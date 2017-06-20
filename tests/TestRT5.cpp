@@ -36,7 +36,7 @@ void *testThread2(void *ptr);
 void *testThread3(void *ptr);
 
 
-const int TIME_MAX = 5010; // time max for the loop in ms
+const int TIME_MAX = 2010; // time max for the loop in ms
 const int TIME_MAX_ENC = 5110; // time max for the loop in ms
 
 const int INTERVALMS =1000000; // in nanosecond
@@ -402,7 +402,10 @@ void *testThread1(void *ptr) {
 	  		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, 0, &waitTime, &remain);
 		}else{
 
-			cout << "The thread is not done in 1 ms" << endl;
+			cout << "The thread is not done in 1 ms, exit" << endl;
+			cout << "value of sleepOK" << sleepOK << endl;
+			cout << "exit" << endl;
+			return (void*) NULL;
 
 		}
 
