@@ -332,9 +332,12 @@ void *testThread1(void *ptr) {
 	message = (char *) ptr;
 	struct timespec waitTime;
 	struct timespec start;
+	struct timespec previous_start;
 	struct timespec end;
 	struct timespec diff;
 	struct timespec remain;
+
+	struct timeStruc difference;
 
 	int testValue=0;
 	int i;
@@ -355,9 +358,17 @@ void *testThread1(void *ptr) {
 
 			clock_gettime(CLOCK_MONOTONIC, &start);
 
+			timespec_diff(&previous_start, &start, &diff);
+
+
+			difference=double(diff.tv_sec)*1000.0+double(diff.tv_nsec)/1000000.0;
 			getTimeSinceOrigin(&timeThread1);
 
-	  		storeIntoOutput(&output1, ticks_t1, &timeThread1);
+			if(ticks_t1>0)
+			{
+				storeIntoOutput(&output1, ticks_t1, &difference);
+			}
+
 
 	  		testValue=0;
 
@@ -367,11 +378,14 @@ void *testThread1(void *ptr) {
 
 	  		ticks_t1++; // Increment the ticks value
 
-	  		clock_gettime(CLOCK_MONOTONIC, &end);
 
-	  		timespec_diff(&start, &end, &diff);
+	  		previous_start.tv_sec=start.tv_sec;
+	  		previous_start.tv_nsec=start.tv_nsec;
+
 
 	  		/*
+
+	  		clock_gettime(CLOCK_MONOTONIC, &end);
 	  		if(diff.tv_sec==0 && diff.tv_nsec < 1000000){
 	  			waitTime.tv_sec=0;
 	  			waitTime.tv_nsec=800000-diff.tv_nsec;
@@ -385,7 +399,6 @@ void *testThread1(void *ptr) {
 	  			//cout << "The thread is not done in 1 ms" << endl;
 	  			//cout << ticks_t1 << endl;
 	  		}
-
 
 	  		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, &remain);
 		}else{
