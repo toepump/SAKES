@@ -393,17 +393,17 @@ void *testThread1(void *ptr) {
 			{
 	  			waitTime.tv_sec=0;
 	  			waitTime.tv_nsec=1000;
+			}else{
+				waitTime.tv_sec=0;
+				waitTime.tv_nsec=900000-diff.tv_nsec;
 			}
 
+			/*
 	  		if(diff.tv_sec==0 && diff.tv_nsec < 1000000){
 	  			waitTime.tv_sec=0;
 	  			waitTime.tv_nsec=900000-diff.tv_nsec;
+			 */
 
-				if(ticks_t1==1)
-				{
-		  			waitTime.tv_sec=0;
-		  			waitTime.tv_nsec=1000;
-				}
 
 	  			/*
 	  		waitTime.tv_nsec+=1000000;
@@ -424,6 +424,7 @@ void *testThread1(void *ptr) {
 			cout << "The thread is not done in 1 ms, exit" << endl;
 			cout << "value of sleepOK : " << sleepOK << endl;
 			cout << "exit" << endl;
+			cout << " " << endl;
 			return (void*) NULL;
 
 		}
