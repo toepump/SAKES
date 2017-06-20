@@ -474,9 +474,7 @@ void *testThread1(void *ptr) {
 		  		waitTime.tv_sec+=1;
 		  		waitTime.tv_nsec-=1000000000;
 		  	}
-		  	//sleepOK =
-
-		  		clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
+		  	sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 			}else{
 
 				cout << " " << endl;
