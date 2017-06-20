@@ -399,17 +399,6 @@ void *testThread1(void *ptr) {
 	char *message;
 	message = (char *) ptr;
 	struct timespec waitTime;
-	struct timespec waitTime1;
-	struct timespec waitTime2;
-	struct timespec waitTime3;
-	struct timespec waitTime4;
-	struct timespec waitTime5;
-	struct timespec waitTime6;
-	struct timespec waitTime7;
-	struct timespec waitTime8;
-	struct timespec waitTime9;
-	struct timespec waitTime10;
-
 	struct timespec start;
 	struct timespec previous_start;
 	struct timespec end;
@@ -420,9 +409,6 @@ void *testThread1(void *ptr) {
 	int i;
 
 	int sleepOK=0;
-
-
-
 
 	/*Test with ABSOLUTE TIME*/
 
@@ -473,7 +459,7 @@ void *testThread1(void *ptr) {
 		  	previous_start.tv_sec=start.tv_sec;
 		  	previous_start.tv_nsec=start.tv_nsec;
 
-		  	waitTime.tv_nsec+=1000000;
+		  	waitTime.tv_nsec+=800000;
 		  	if(waitTime.tv_nsec> 999999999){
 		  		waitTime.tv_sec+=1;
 		  		waitTime.tv_nsec-=1000000000;
