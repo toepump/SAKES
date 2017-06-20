@@ -1,25 +1,26 @@
-all: encRTtest2 Test_Motor encRTtest1 newStructureEncoder TestRT4 TestRT5
+all: main.o initCounter.o taskThread.o interruptThread.o counter.o probingThread.o printOutData.o
+	g++ -o main main.o initCounter.o taskThread.o interruptThread.o counter.o probingThread.o printOutData.o
 
-newStructureEncoder: newStructureEncoder.cpp
-	g++ newStructureEncoder.cpp -o newStructureEncoder `pkg-config glib-2.0 --cflags --libs` -lpthread
+main.o: main.cpp common.h initCounter.h taskThread.h interruptThread.h
+	g++ -c `pkg-config glib-2.0 --cflags --libs` -lpthread main.cpp
 
-encRTtest1: encRTtest1.cpp
-	g++ encRTtest1.cpp -o encRTtest1 `pkg-config glib-2.0 --cflags --libs` -lpthread
+initCounter.o: initCounter.cpp common.h
+	g++ -c `pkg-config glib-2.0 --cflags --libs` -lpthread initCounter.cpp
 
-encRTtest2: encRTtest2.cpp
-	g++ encRTtest2.cpp -o encRTtest2 `pkg-config glib-2.0 --cflags --libs` -lpthread
+taskThread.o: taskThread.cpp taskThread.h common.h probingThread.h
+	g++ -c `pkg-config glib-2.0 --cflags --libs` -lpthread taskThread.cpp
 
-BBB_Encoder: BBB_Encoder.cpp
-	g++ BBB_Encoder.cpp -o BBB_Encoder
+interruptThread.o: interruptThread.cpp interruptThread.h common.h counter.h
+	g++ -c `pkg-config glib-2.0 --cflags --libs` -lpthread interruptThread.cpp
 
-Test_Motor: Test_Motor.cpp
-	g++ Test_Motor.cpp -o Test_Motor `pkg-config glib-2.0 --cflags --libs` -lpthread
+counter.o: counter.h common.h printOutData.h
+	g++ -c `pkg-config glib-2.0 --cflags --libs` -lpthread counter.cpp
 
-TestRT4: TestRT4.cpp
-	g++ TestRT4.cpp -o TestRT4 `pkg-config glib-2.0 --cflags --libs` -lpthread
+probingThread.o: probingThread.h common.h
+	g++ -c `pkg-config glib-2.0 --cflags --libs` -lpthread probingThread.cpp
 
-TestRT5: TestRT5.cpp
-	g++ TestRT5.cpp -o TestRT5 `pkg-config glib-2.0 --cflags --libs` -lpthread
+printOutData.o: printOutData.h common.h
+	g++ -c `pkg-config glib-2.0 --cflags --libs` -lpthread printOutData.cpp
 
 clean:
-	rm -f encRTtest2 BBB_Encoder outputEncoder.csv probeCheck.data
+	rm -f

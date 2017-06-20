@@ -25,10 +25,7 @@
 #include "common.h"
 #include "taskThread.h"
 #include "interruptThread.h"
-#include "probingThread.h"
-#include "counter.h"
 #include "initCounter.h"
-#include "printOutData.h"
 
 /*external variables located in common.h need declaration in project so we
   can simply declare them all here and they will be seen by the other files
