@@ -36,7 +36,7 @@ void *testThread2(void *ptr);
 void *testThread3(void *ptr);
 
 
-const int TIME_MAX = 2010; // time max for the loop in ms
+const int TIME_MAX = 5010; // time max for the loop in ms
 const int TIME_MAX_ENC = 5110; // time max for the loop in ms
 
 const int INTERVALMS =1000000; // in nanosecond
@@ -382,24 +382,25 @@ void *testThread1(void *ptr) {
 	  		previous_start.tv_nsec=start.tv_nsec;
 
 
-	  		/*
+
 
 	  		clock_gettime(CLOCK_MONOTONIC, &end);
 	  		if(diff.tv_sec==0 && diff.tv_nsec < 1000000){
 	  			waitTime.tv_sec=0;
-	  			waitTime.tv_nsec=800000-diff.tv_nsec;
-	  			*/
+	  			waitTime.tv_nsec=1000000-diff.tv_nsec;
 
+	  			/*
 	  		waitTime.tv_nsec+=1000000;
 	  		if(waitTime.tv_nsec> 999999999){
 	  			waitTime.tv_sec+=1;
 	  			waitTime.tv_nsec-=1000000000;
+	  			*/
 	  		}else{
 	  			//cout << "The thread is not done in 1 ms" << endl;
 	  			//cout << ticks_t1 << endl;
 	  		}
 
-	  		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, &remain);
+	  		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, 0, &waitTime, &remain);
 		}else{
 
 			cout << "The thread is not done in 1 ms" << endl;
