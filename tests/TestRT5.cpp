@@ -427,6 +427,25 @@ void *testThread1(void *ptr) {
 
 	/* wait until next shot */
 
+		clock_gettime(CLOCK_MONOTONIC, &waitTime);
+		cout << "Value of the nanosec : " << waitTime.tv_nsec << endl;
+
+		clock_gettime(CLOCK_MONOTONIC, &waitTime);
+		cout << "Value of the nanosec : " << waitTime.tv_nsec << endl;
+
+		clock_gettime(CLOCK_MONOTONIC, &waitTime);
+		cout << "Value of the nanosec : " << waitTime.tv_nsec << endl;
+
+		clock_gettime(CLOCK_MONOTONIC, &waitTime);
+		cout << "Value of the nanosec : " << waitTime.tv_nsec << endl;
+
+		clock_gettime(CLOCK_MONOTONIC, &waitTime);
+		cout << "Value of the nanosec : " << waitTime.tv_nsec << endl;
+
+		clock_gettime(CLOCK_MONOTONIC, &waitTime);
+		cout << "Value of the nanosec : " << waitTime.tv_nsec << endl;
+
+/*
 
 		if(sleepOK == 0){
 
@@ -486,8 +505,8 @@ void *testThread1(void *ptr) {
 				cout << " " << endl;
 				return (void*) NULL;
 
-			}
-
+			}*/
+		return (void*) NULL;
 	  }
 
 		/*
