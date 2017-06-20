@@ -437,7 +437,7 @@ void *testThread1(void *ptr) {
 	/* wait until next shot */
 
 		if(sleepOK == 0){
-
+			sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 
 			clock_gettime(CLOCK_MONOTONIC, &start);
 
@@ -478,7 +478,7 @@ void *testThread1(void *ptr) {
 		  		waitTime.tv_nsec-=1000000000;
 		  	}
 
-		  	sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
+
 
 			}else{
 
