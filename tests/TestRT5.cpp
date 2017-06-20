@@ -352,63 +352,59 @@ void *testThread1(void *ptr) {
 	waitTime.tv_sec+=1;
 
 	setTimeOrigin(&timeThread1);
-	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, &remain);
+	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 	cout << "bbefore the while" << endl;
 
 
 	clock_gettime(CLOCK_MONOTONIC, &waitTime);
 	while(ticks_t1<TIME_MAX+1){
 
-			/* wait until next shot */
+	/* wait until next shot */
 
 
-			if(sleepOK == 0){
+		if(sleepOK == 0){
 
-				clock_gettime(CLOCK_MONOTONIC, &start);
+			clock_gettime(CLOCK_MONOTONIC, &start);
 
-				timespec_diff(&previous_start, &start, &diff);
+			timespec_diff(&previous_start, &start, &diff);
 
-				if(ticks_t1==0)
-				{
-					diff.tv_sec=0;
-					cout << diff.tv_sec << endl;
-					diff.tv_nsec=0;
-					cout << diff.tv_nsec << endl;
-				}
+			//Calculation of the time difference between two steps
+			if(ticks_t1==0)
+			{
+				diff.tv_sec=0;
+				cout << diff.tv_sec << endl;
+				diff.tv_nsec=0;
+				cout << diff.tv_nsec << endl;
+			}
 
-				difference.tMilli=double(diff.tv_sec)*1000.0+double(diff.tv_nsec)/1000000.0;
-				getTimeSinceOrigin(&timeThread1);
+			difference.tMilli=double(diff.tv_sec)*1000.0+double(diff.tv_nsec)/1000000.0;
+			getTimeSinceOrigin(&timeThread1);
 
-				if(ticks_t1>0)
-				{
-					storeIntoOutput(&output1, ticks_t1, &difference);
-				}
+			if(ticks_t1>0)
+			{
+				storeIntoOutput(&output1, ticks_t1, &difference);
+			}
 
+			// Task done
+		  	testValue=0;
 
-		  		testValue=0;
+		  	for(i=0;i<30000;i++){
+		  		testValue++;
+		  	}
 
-		  		for(i=0;i<30000;i++){
-		  			testValue++;
-		  		}
+		  	ticks_t1++; // Increment the ticks value
 
-		  		ticks_t1++; // Increment the ticks value
-				if(ticks_t1==1000)
-				{
-					cout << "Ticks 1000 reached." << endl;
-				}
+		  	previous_start.tv_sec=start.tv_sec;
+		  	previous_start.tv_nsec=start.tv_nsec;
 
-		  		previous_start.tv_sec=start.tv_sec;
-		  		previous_start.tv_nsec=start.tv_nsec;
-
-		  		waitTime.tv_nsec+=1000000;
-		  		if(waitTime.tv_nsec> 999999999){
-		  			waitTime.tv_sec+=1;
-		  			waitTime.tv_nsec-=1000000000;
-
-		  		}else{
-		  			cout << "The thread is not done in 1 ms" << endl;
-		  			cout << "The ticks number is : "<< ticks_t1 << endl;
-		  		}
+		  	waitTime.tv_nsec+=1000000;
+		  	if(waitTime.tv_nsec> 999999999){
+		  		waitTime.tv_sec+=1;
+		  		waitTime.tv_nsec-=1000000000;
+		  	}else{
+		  		cout << "The thread is not done in 1 ms" << endl;
+		  		cout << "The ticks number is : "<< ticks_t1 << endl;
+		  	}
 
 		  		//sleepOK =
 
