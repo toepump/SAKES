@@ -436,32 +436,11 @@ void *testThread1(void *ptr) {
 
 	/* wait until next shot */
 
-		clock_gettime(CLOCK_MONOTONIC, &waitTime1);
-		clock_gettime(CLOCK_MONOTONIC, &waitTime2);
-		clock_gettime(CLOCK_MONOTONIC, &waitTime3);
-		clock_gettime(CLOCK_MONOTONIC, &waitTime4);
-		clock_gettime(CLOCK_MONOTONIC, &waitTime5);
-		clock_gettime(CLOCK_MONOTONIC, &waitTime6);
-		clock_gettime(CLOCK_MONOTONIC, &waitTime7);
-		clock_gettime(CLOCK_MONOTONIC, &waitTime8);
-		clock_gettime(CLOCK_MONOTONIC, &waitTime9);
-		clock_gettime(CLOCK_MONOTONIC, &waitTime10);
 
-		cout << "Value of the nanosec : " << waitTime1.tv_nsec << endl;
-		cout << "Value of the nanosec : " << waitTime2.tv_nsec << endl;
-		cout << "Value of the nanosec : " << waitTime3.tv_nsec << endl;
-		cout << "Value of the nanosec : " << waitTime4.tv_nsec << endl;
-		cout << "Value of the nanosec : " << waitTime5.tv_nsec << endl;
-		cout << "Value of the nanosec : " << waitTime6.tv_nsec << endl;
-		cout << "Value of the nanosec : " << waitTime7.tv_nsec << endl;
-		cout << "Value of the nanosec : " << waitTime8.tv_nsec << endl;
-		cout << "Value of the nanosec : " << waitTime9.tv_nsec << endl;
-		cout << "Value of the nanosec : " << waitTime10.tv_nsec << endl;
 
-/*
 
 		if(sleepOK == 0){
-
+			sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 			clock_gettime(CLOCK_MONOTONIC, &start);
 
 			timespec_diff(&previous_start, &start, &diff);
@@ -506,7 +485,7 @@ void *testThread1(void *ptr) {
 		  		waitTime.tv_sec+=1;
 		  		waitTime.tv_nsec-=1000000000;
 		  	}
-		  	sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
+
 			}else{
 
 				cout << " " << endl;
@@ -518,7 +497,7 @@ void *testThread1(void *ptr) {
 				cout << " " << endl;
 				return (void*) NULL;
 
-			}*/
+			}
 		return (void*) NULL;
 	  }
 
