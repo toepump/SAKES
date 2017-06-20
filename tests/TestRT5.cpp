@@ -365,7 +365,9 @@ void *testThread1(void *ptr) {
 			if(ticks_t1==0)
 			{
 				diff.tv_sec=0;
+				cout << diff.tv_sec << endl;
 				diff.tv_nsec=0;
+				cout << diff.tv_nsec << endl;
 			}
 
 			difference.tMilli=double(diff.tv_sec)*1000.0+double(diff.tv_nsec)/1000000.0;
@@ -384,7 +386,10 @@ void *testThread1(void *ptr) {
 	  		}
 
 	  		ticks_t1++; // Increment the ticks value
-
+			if(ticks_t1==1000)
+			{
+				cout << "Ticks 1000 reached." << endl;
+			}
 
 	  		previous_start.tv_sec=start.tv_sec;
 	  		previous_start.tv_nsec=start.tv_nsec;
@@ -419,7 +424,7 @@ void *testThread1(void *ptr) {
 
 	  		//sleepOK =
 
-	  				clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, &remain);
+	  				clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 		}else{
 
 			cout << " " << endl;
@@ -524,7 +529,7 @@ void *testThread3(void *ptr) {
 	while(ticks_t3<TIME_MAX+1){
 
 		/* wait until next shot */
-		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, 0, &waitTime, &remain);
+		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, 0, &waitTime, NULL);
 
 		if(sleepOK == 0){
 
