@@ -401,12 +401,8 @@ void *testThread1(void *ptr) {
 		  	if(waitTime.tv_nsec> 999999999){
 		  		waitTime.tv_sec+=1;
 		  		waitTime.tv_nsec-=1000000000;
-		  	}else{
-		  		cout << "The thread is not done in 1 ms" << endl;
-		  		cout << "The ticks number is : "<< ticks_t1 << endl;
 		  	}
-
-		  		//sleepOK =
+		  	//sleepOK =
 
 		  				clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 			}else{
