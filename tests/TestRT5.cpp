@@ -360,7 +360,7 @@ void *testThread1(void *ptr) {
 			timespec_diff(&previous_start, &start, &diff);
 
 
-			difference=double(diff.tv_sec)*1000.0+double(diff.tv_nsec)/1000000.0;
+			difference.tMilli=double(diff.tv_sec)*1000.0+double(diff.tv_nsec)/1000000.0;
 			getTimeSinceOrigin(&timeThread1);
 
 			if(ticks_t1>0)
