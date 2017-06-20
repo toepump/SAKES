@@ -343,11 +343,13 @@ void *testThread1(void *ptr) {
 
 	int sleepOK=0;
 
-	waitTime.tv_sec=1;
-	waitTime.tv_nsec=0;
+
+	clock_gettime(CLOCK_MONOTONIC, &waitTime);
+	waitTime.tv_sec+=1;
 
 	setTimeOrigin(&timeThread1);
 	clock_nanosleep(CLOCK_MONOTONIC, 0, &waitTime, &remain);
+	clock_gettime(CLOCK_MONOTONIC, &waitTime);
 	while(ticks_t1<TIME_MAX+1){
 
 		/* wait until next shot */
@@ -358,6 +360,7 @@ void *testThread1(void *ptr) {
 			clock_gettime(CLOCK_MONOTONIC, &start);
 
 			timespec_diff(&previous_start, &start, &diff);
+
 
 			if(ticks_t1==0)
 			{
@@ -386,14 +389,15 @@ void *testThread1(void *ptr) {
 	  		previous_start.tv_sec=start.tv_sec;
 	  		previous_start.tv_nsec=start.tv_nsec;
 
+	  		/*
 			if(ticks_t1==1)
 			{
-	  			waitTime.tv_sec=0;
-	  			waitTime.tv_nsec=1000;
+
 			}else{
 				waitTime.tv_sec=0;
 				waitTime.tv_nsec=900000-diff.tv_nsec;
 			}
+			*/
 
 			/*
 	  		if(diff.tv_sec==0 && diff.tv_nsec < 1000000){
@@ -402,7 +406,7 @@ void *testThread1(void *ptr) {
 			 */
 
 
-	  			/*
+
 	  		waitTime.tv_nsec+=1000000;
 	  		if(waitTime.tv_nsec> 999999999){
 	  			waitTime.tv_sec+=1;
@@ -412,9 +416,10 @@ void *testThread1(void *ptr) {
 	  			cout << "The thread is not done in 1 ms" << endl;
 	  			cout << "The ticks number is : "<< ticks_t1 << endl;
 	  		}
-	  			 */
+
 	  		//sleepOK =
-	  				clock_nanosleep(CLOCK_MONOTONIC, 0, &waitTime, &remain);
+
+	  				clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, &remain);
 		}else{
 
 			cout << " " << endl;
