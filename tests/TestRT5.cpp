@@ -403,6 +403,11 @@ void *testThread1(void *ptr) {
 	struct timespec waitTime3;
 	struct timespec waitTime4;
 	struct timespec waitTime5;
+	struct timespec waitTime6;
+	struct timespec waitTime7;
+	struct timespec waitTime8;
+	struct timespec waitTime9;
+	struct timespec waitTime10;
 
 	struct timespec start;
 	struct timespec previous_start;
@@ -432,21 +437,26 @@ void *testThread1(void *ptr) {
 	/* wait until next shot */
 
 		clock_gettime(CLOCK_MONOTONIC, &waitTime1);
-
 		clock_gettime(CLOCK_MONOTONIC, &waitTime2);
-
 		clock_gettime(CLOCK_MONOTONIC, &waitTime3);
-
 		clock_gettime(CLOCK_MONOTONIC, &waitTime4);
-
 		clock_gettime(CLOCK_MONOTONIC, &waitTime5);
+		clock_gettime(CLOCK_MONOTONIC, &waitTime6);
+		clock_gettime(CLOCK_MONOTONIC, &waitTime7);
+		clock_gettime(CLOCK_MONOTONIC, &waitTime8);
+		clock_gettime(CLOCK_MONOTONIC, &waitTime9);
+		clock_gettime(CLOCK_MONOTONIC, &waitTime10);
 
 		cout << "Value of the nanosec : " << waitTime1.tv_nsec << endl;
 		cout << "Value of the nanosec : " << waitTime2.tv_nsec << endl;
 		cout << "Value of the nanosec : " << waitTime3.tv_nsec << endl;
 		cout << "Value of the nanosec : " << waitTime4.tv_nsec << endl;
 		cout << "Value of the nanosec : " << waitTime5.tv_nsec << endl;
-
+		cout << "Value of the nanosec : " << waitTime6.tv_nsec << endl;
+		cout << "Value of the nanosec : " << waitTime7.tv_nsec << endl;
+		cout << "Value of the nanosec : " << waitTime8.tv_nsec << endl;
+		cout << "Value of the nanosec : " << waitTime9.tv_nsec << endl;
+		cout << "Value of the nanosec : " << waitTime10.tv_nsec << endl;
 
 /*
 
