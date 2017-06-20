@@ -362,7 +362,7 @@ void *testThread1(void *ptr) {
 			if(ticks_t1==0)
 			{
 				diff.tv_sec=0;
-				diff.tv_nsec = 0;
+				diff.tv_nsec=0;
 			}
 
 			difference.tMilli=double(diff.tv_sec)*1000.0+double(diff.tv_nsec)/1000000.0;
@@ -413,13 +413,15 @@ void *testThread1(void *ptr) {
 	  			cout << "The ticks number is : "<< ticks_t1 << endl;
 	  		}
 	  			 */
-	  		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, 0, &waitTime, &remain);
+	  		//sleepOK =
+	  				clock_nanosleep(CLOCK_MONOTONIC, 0, &waitTime, &remain);
 		}else{
 
 			cout << " " << endl;
 			cout << "Exit message" << endl;
 			cout << "The thread is not done in 1 ms, exit" << endl;
 			cout << "value of sleepOK : " << sleepOK << endl;
+			cout << "value of ticks" << ticks_t1 <<endl;
 			cout << "exit" << endl;
 			cout << " " << endl;
 			return (void*) NULL;
