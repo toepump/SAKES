@@ -71,6 +71,7 @@ struct output{
 timeStruct timeThread1={.originSec=0.0, .originNano=0.0, .originGlobalMilli=0.0, .tSec=0.0, .tNano=0.0, .tMilli=0.0};
 timeStruct timeThread2={.originSec=0.0, .originNano=0.0, .originGlobalMilli=0.0, .tSec=0.0, .tNano=0.0, .tMilli=0.0};
 timeStruct timeThread3={.originSec=0.0, .originNano=0.0, .originGlobalMilli=0.0, .tSec=0.0, .tNano=0.0, .tMilli=0.0};
+timeStruct difference={.originSec=0.0, .originNano=0.0, .originGlobalMilli=0.0, .tSec=0.0, .tNano=0.0, .tMilli=0.0};
 
 output output1;
 output output2;
@@ -336,8 +337,6 @@ void *testThread1(void *ptr) {
 	struct timespec end;
 	struct timespec diff;
 	struct timespec remain;
-
-	struct timeStruc difference;
 
 	int testValue=0;
 	int i;
