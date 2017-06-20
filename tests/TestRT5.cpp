@@ -17,6 +17,7 @@
 #include <pthread.h>
 #include <math.h>
 #include <sched.h>
+#include <glib-2.0/glib.h>
 
 using namespace std;
 
@@ -477,10 +478,6 @@ void *testThread1(void *ptr) {
 		  		waitTime.tv_sec+=1;
 		  		waitTime.tv_nsec-=1000000000;
 		  	}
-
-			cout << " " << endl;
-			cout << "Wait time" << waitTime.tv_nsec << endl;
-
 
 			}else{
 
