@@ -27,6 +27,7 @@ void timespec_diff(struct timespec *start, struct timespec *stop,struct timespec
 int setParamThreadFIFO(pthread_attr_t attr, struct sched_param param, int priority);
 int storeIntoOutput(struct output *output, int increment, struct timeStruct *time);
 int fileTestMotor(struct output *output1,struct output *output2,struct output *output3);
+int fileTestMotorABS(struct output *output1,struct output *output2,struct output *output3);
 
 int setTimeOrigin(struct timeStruct *time);
 int getTimeSinceOrigin(struct timeStruct *time);
@@ -152,6 +153,70 @@ int i, j;
 			maxTimeInterval[1]=output2->timeInMilli[i+1]-output2->timeInMilli[i];
 		}
 		meanTime[1]=meanTime[1]+output2->timeInMilli[i+1]-output2->timeInMilli[i];
+	}
+
+	meanTime[1]=meanTime[1]/double(TIME_MAX);
+
+	printf("Mean Time: %f \n", meanTime[1]);
+	printf("Max Time: %f \n", maxTimeInterval[1]);
+
+	return 0;
+}
+
+int fileTestMotorABS(struct output *output1,struct output *output2,struct output *output3){
+
+double meanTime[3]={0, 0, 0};
+double maxTimeInterval[3]={0,0,0};
+double variance[3]={0,0,0};
+int i, j;
+
+	cout << "Printing of the output starts" << endl;
+
+		FILE *fj1=fopen("fileTestRT5.dat","w");
+
+		fprintf(fj1,"indexOutput; TimeInMilli1; TimeInMilli2; TimeInMilli3; increment 1; increment 2; increment 3;\r\n");
+
+		while(i<TIME_MAX){
+		    fprintf(fj1,"%d;%f;%f;%f;%d;%d;%d; \r\n",i+1, output1->timeInMilli[i], output2->timeInMilli[i],output3->timeInMilli[i], output1->increment[i],output2->increment[i],output3->increment[i]);
+
+		    if(i==TIME_MAX-1){
+		    	fclose(fj1);
+		    }
+		    i++ ;
+		}
+
+	cout << "Printing of the output is done" << endl;
+
+	for(i=0;i<TIME_MAX-1;i++){
+		if((output1->timeInMilli[i])>maxTimeInterval[0])
+		{
+			maxTimeInterval[0]=output1->timeInMilli[i];
+		}
+		meanTime[0]=meanTime[0]+output1->timeInMilli[i];
+	}
+
+	meanTime[0]=meanTime[0]/double(TIME_MAX);
+
+
+
+	for(i=0;i<TIME_MAX-1;i++){
+		variance[0]=variance[0]+fabs(output1->timeInMilli[i]-meanTime[0]);
+	}
+	variance[0]=variance[0]/double(TIME_MAX);
+
+
+
+	printf("T1: Mean Time: %f \n", meanTime[0]);
+	printf("T1: Max Time: %f \n", maxTimeInterval[0]);
+	printf("T1: Variance: %f \n \n", variance[0]);
+
+
+	for(i=0;i<TIME_MAX-1;i++){
+		if((output2->timeInMilli[i+1]-output2->timeInMilli[i])>maxTimeInterval[1])
+		{
+			maxTimeInterval[1]=output2->timeInMilli[i];
+		}
+		meanTime[1]=meanTime[1]+output2->timeInMilli[i];
 	}
 
 	meanTime[1]=meanTime[1]/double(TIME_MAX);
@@ -321,7 +386,8 @@ int main(int argc, char* argv[]){
 	//pthread_join( thread3, NULL);
 
 
-	fileTestMotor(&output1, &output2, &output3);
+	//fileTestMotor(&output1, &output2, &output3);
+	fileTestMotorABS(&output1, &output2, &output3);
 
 	exit(EXIT_SUCCESS);
 }
@@ -377,7 +443,13 @@ void *testThread1(void *ptr) {
 				cout << diff.tv_nsec << endl;
 			}
 
-			difference.tMilli=double(diff.tv_sec)*1000.0+double(diff.tv_nsec)/1000000.0;
+			if(diff.tv_sec>0)
+			{
+				cout << " " << endl;
+				cout << "Waiting superior to 1" << endl;
+				cout << " " << endl;
+			}
+			difference.tMilli=double(diff.tv_nsec)/1000000.0;
 			getTimeSinceOrigin(&timeThread1);
 
 			if(ticks_t1>0)
@@ -404,7 +476,7 @@ void *testThread1(void *ptr) {
 		  	}
 		  	//sleepOK =
 
-		  				clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
+		  		clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 			}else{
 
 				cout << " " << endl;
