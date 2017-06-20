@@ -351,7 +351,7 @@ int main(int argc, char* argv[]){
 		printf("Problem set policy 3: %d \n", setPolicy);
 	}
 
-	param1.sched_priority = 99;
+	param1.sched_priority = 45;
 	param2.sched_priority = 70;
 	param3.sched_priority = 50;
 
