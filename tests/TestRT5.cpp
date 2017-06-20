@@ -381,10 +381,9 @@ void *testThread1(void *ptr) {
 	  		previous_start.tv_sec=start.tv_sec;
 	  		previous_start.tv_nsec=start.tv_nsec;
 
+  			waitTime.tv_sec=0;
+  			waitTime.tv_nsec=1000000-diff.tv_nsec;
 
-
-
-	  		clock_gettime(CLOCK_MONOTONIC, &end);
 	  		if(diff.tv_sec==0 && diff.tv_nsec < 1000000){
 	  			waitTime.tv_sec=0;
 	  			waitTime.tv_nsec=1000000-diff.tv_nsec;
