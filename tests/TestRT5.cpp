@@ -444,13 +444,6 @@ void *testThread1(void *ptr) {
 			timespec_diff(&previous_start, &start, &diff);
 
 			//Calculation of the time difference between two steps
-			if(ticks_t1==0)
-			{
-				diff.tv_sec=0;
-				cout << diff.tv_sec << endl;
-				diff.tv_nsec=0;
-				cout << diff.tv_nsec << endl;
-			}
 
 			if(diff.tv_sec>0)
 			{
@@ -458,6 +451,7 @@ void *testThread1(void *ptr) {
 				cout << "Waiting superior to 1" << endl;
 				cout << " " << endl;
 			}
+
 			difference.tMilli=double(diff.tv_nsec)/1000000.0;
 			getTimeSinceOrigin(&timeThread1);
 
@@ -485,6 +479,7 @@ void *testThread1(void *ptr) {
 		  	}
 
 		  	sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
+
 			}else{
 
 				cout << " " << endl;
@@ -497,8 +492,7 @@ void *testThread1(void *ptr) {
 				return (void*) NULL;
 
 			}
-		return (void*) NULL;
-	  }
+		}
 
 		/*
 
