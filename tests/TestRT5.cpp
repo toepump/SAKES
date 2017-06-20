@@ -398,6 +398,12 @@ void *testThread1(void *ptr) {
 	char *message;
 	message = (char *) ptr;
 	struct timespec waitTime;
+	struct timespec waitTime1;
+	struct timespec waitTime2;
+	struct timespec waitTime3;
+	struct timespec waitTime4;
+	struct timespec waitTime5;
+
 	struct timespec start;
 	struct timespec previous_start;
 	struct timespec end;
@@ -419,31 +425,28 @@ void *testThread1(void *ptr) {
 
 	setTimeOrigin(&timeThread1);
 	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
-	cout << "bbefore the while" << endl;
-
 
 	clock_gettime(CLOCK_MONOTONIC, &waitTime);
 	while(ticks_t1<TIME_MAX+1){
 
 	/* wait until next shot */
 
-		clock_gettime(CLOCK_MONOTONIC, &waitTime);
-		cout << "Value of the nanosec : " << waitTime.tv_nsec << endl;
+		clock_gettime(CLOCK_MONOTONIC, &waitTime1);
 
-		clock_gettime(CLOCK_MONOTONIC, &waitTime);
-		cout << "Value of the nanosec : " << waitTime.tv_nsec << endl;
+		clock_gettime(CLOCK_MONOTONIC, &waitTime2);
 
-		clock_gettime(CLOCK_MONOTONIC, &waitTime);
-		cout << "Value of the nanosec : " << waitTime.tv_nsec << endl;
+		clock_gettime(CLOCK_MONOTONIC, &waitTime3);
 
-		clock_gettime(CLOCK_MONOTONIC, &waitTime);
-		cout << "Value of the nanosec : " << waitTime.tv_nsec << endl;
+		clock_gettime(CLOCK_MONOTONIC, &waitTime4);
 
-		clock_gettime(CLOCK_MONOTONIC, &waitTime);
-		cout << "Value of the nanosec : " << waitTime.tv_nsec << endl;
+		clock_gettime(CLOCK_MONOTONIC, &waitTime5);
 
-		clock_gettime(CLOCK_MONOTONIC, &waitTime);
-		cout << "Value of the nanosec : " << waitTime.tv_nsec << endl;
+		cout << "Value of the nanosec : " << waitTime1.tv_nsec << endl;
+		cout << "Value of the nanosec : " << waitTime2.tv_nsec << endl;
+		cout << "Value of the nanosec : " << waitTime3.tv_nsec << endl;
+		cout << "Value of the nanosec : " << waitTime4.tv_nsec << endl;
+		cout << "Value of the nanosec : " << waitTime5.tv_nsec << endl;
+
 
 /*
 
