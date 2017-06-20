@@ -431,7 +431,7 @@ void *testThread1(void *ptr) {
 	setTimeOrigin(&timeThread1);
 	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 
-	clock_gettime(CLOCK_MONOTONIC, &waitTime);
+
 	while(ticks_t1<TIME_MAX+1){
 
 	/* wait until next shot */
