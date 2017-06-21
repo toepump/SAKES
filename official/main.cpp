@@ -34,8 +34,8 @@
 #define NSEC_PER_MSEC   (1000000)              //number of nsecs in milliseconds
 
 //constants
-const int MAX_PULSE;
-const int PROBE_STORAGE_SIZE;             // the arbitrary size of stored
+const int MAX_PULSE = 30000;
+const int PROBE_STORAGE_SIZE = 20000;             // the arbitrary size of stored
                                                // probe's storage
 //global variables
 int state = 0;                              //state of channels
