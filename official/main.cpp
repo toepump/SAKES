@@ -34,8 +34,8 @@
 #define NSEC_PER_MSEC   (1000000)              //number of nsecs in milliseconds
 
 //constants
-const int MAX_PULSE = 30000;
-const int PROBE_STORAGE_SIZE = 20000;             // the arbitrary size of stored
+const int MAX_PULSE;
+const int PROBE_STORAGE_SIZE;             // the arbitrary size of stored
                                                // probe's storage
 //global variables
 int state = 0;                              //state of channels
@@ -45,7 +45,7 @@ const int INTERVAL = 1000000;                     //in nanosecond
 std::mutex mtx;                             //probingThread mutex
 std::mutex dataMtx;                         //mutex to protect data
 
-int index = 0;
+int indexProbe = 0;
 int indexOutput = 0;
 
 double probeAngleDeg[PROBE_STORAGE_SIZE];      // the strorage space for probed data
