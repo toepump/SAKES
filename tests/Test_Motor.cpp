@@ -590,11 +590,20 @@ void *testThread2(void *ptr) {
   clock_gettime(CLOCK_MONOTONIC ,&t_Thread2);
   /* start after one second */
   t_Thread2.tv_sec++;
+  setTimeOrigin(&timeSimu);
 
   while(ticks_t2<int(maxTicks)) {
 
   	/* wait until next shot */
   	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
+  	getTimeSinceOrigin(&timeSimu);
+
+  	timeTestPoly=timeSimu.tMilli;
+  	while(timeTestPoly>=1000000000){
+  		timeTestPoly-=1000000000;
+  	}
+  	timeTestPoly=timeTestPoly/1000.0;
+
 
 	//simulation of the polynomial
 	polyEval(coeffsKnee1, &timeTestPoly, &kneePoly.angDeg, &kneePoly, &timePoly); //put the value in angTestPoly
@@ -606,13 +615,6 @@ void *testThread2(void *ptr) {
 	storeEncoderStruct(&kneePoly, &outputKneePoly, ticks_t2);
 
   	ticks_t2++; // Increment the ticks value
-
-	timePoly.tv_nsec+=INTERVAL_T2;
-  	if(timePoly.tv_nsec>= NSEC_PER_SEC){
-  		timePoly.tv_sec+=1;
-  		timePoly.tv_nsec-=NSEC_PER_SEC;
-  	}
-	timeTestPoly+=double(timePoly.tv_nsec)/double(NSEC_PER_SEC);
 
 	/* calculate next shot */
   	t_Thread2.tv_nsec += INTERVAL_T2;
