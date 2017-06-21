@@ -2,7 +2,7 @@ all: main.o initCounter.o taskThread.o interruptThread.o counter.o probingThread
 	g++ -o main main.o initCounter.o taskThread.o interruptThread.o counter.o probingThread.o printOutData.o
 
 main.o: main.cpp common.h initCounter.h taskThread.h interruptThread.h
-	g++ -c -std=c++11 `pkg-config glib-2.0 --cflags --libs` -lpthread main.cpp
+	g++ -c `pkg-config glib-2.0 --cflags --libs`  -std=c++11 -lpthread main.cpp
 
 initCounter.o: initCounter.cpp common.h
 	g++ -c `pkg-config glib-2.0 --cflags --libs` -lpthread initCounter.cpp
