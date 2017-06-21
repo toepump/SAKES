@@ -1,7 +1,7 @@
 #ifndef INITCOUNTER_H
 #define INITCOUNTER_H
 
-#include <iostream.h>
+#include <iostream>
 #include <fstream.h>
 #include <stdio.h>
 #include <string.h>

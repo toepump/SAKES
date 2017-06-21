@@ -2,9 +2,9 @@
 #define INTERRUPTTHREAD_H
 
 #include <glib-2.0/glib.h>
-#include <iostream.h>
+#include <iostream>
 #include <string.h>
-#include <fstream.h>
+#include <fstream>
 #include <stdio.h>
 
 /*
