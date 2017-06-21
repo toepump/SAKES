@@ -50,7 +50,8 @@ const int TIME_MAX_ENC = 5110; // time max for the loop in ms
 
 const int INTERVALMS =1000000; // in nanosecond
 
-const int INTERVAL_T2 = 1000000; //in nanosecond, interval for the thread 2
+const int INTERVAL_T1 = 900000; //in nanosecond, interval for the thread 2
+const int INTERVAL_T2 = 900000; //in nanosecond, interval for the thread 2
 
 const int ONESECINNANO = 1000000000; //one second in nanosecond unit
 double INTERVAL_S=double(INTERVALMS)/1000000000.0;
@@ -535,7 +536,7 @@ void *testThread1(void *ptr) {
 		  	previous_start.tv_nsec=start.tv_nsec;
 
 		  	//Do the calculation for the next time so start the loop
-		  	waitTime.tv_nsec+=900000;
+		  	waitTime.tv_nsec+=INTERVAL_T1;
 		  	if(waitTime.tv_nsec>= NSEC_PER_SEC){
 		  		waitTime.tv_sec+=1;
 		  		waitTime.tv_nsec-=NSEC_PER_SEC;
@@ -547,9 +548,15 @@ void *testThread1(void *ptr) {
 			return (void*) NULL;
 		}
 
-  }
+	}
 
-  fileTestMotor(&outputArray);
+	//We wait 2 seconds to output the files
+	waitTime.tv_sec+=1;
+	waitTime.tv_sec+=1;
+	sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
+
+
+	fileTestMotor(&outputArray);
 
 	return (void*) NULL;
 }
@@ -561,7 +568,7 @@ void *testThread2(void *ptr) {
 	struct timespec t_Thread2;
 	double timeTestPoly=0.0;
 	double timeRatio=double(INTERVALMS)/double(INTERVAL_T2);
-	double maxTicks = double(TIME_MAX)*timeRatio+1500.0;
+	double maxTicks = double(TIME_MAX)*timeRatio+1000.0;
 
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
@@ -598,6 +605,11 @@ void *testThread2(void *ptr) {
   		t_Thread2.tv_sec++;
   	}
   }
+
+  //We wait 2 seconds to output the files
+  t_Thread2.tv_sec++;
+  t_Thread2.tv_sec++;
+  clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
 
   fileOutputEncoder(&outputKneePoly);
 
