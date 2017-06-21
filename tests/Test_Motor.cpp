@@ -487,15 +487,12 @@ void *testThread1(void *ptr) {
 	struct timespec previous_start;
 	struct timespec diff;
 
-	struct timeStruct t_Result_Knee;
-	struct timeStruct t_Result_Motor;
 	int sleepOK=0;
 
 	//We set the begining if the thread in 1 second
 	clock_gettime(CLOCK_MONOTONIC, &waitTime);
 	waitTime.tv_sec+=1;
 
-	setTimeOrigin(&t_Result);
 	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 
 	while(ticks_t1<TIME_MAX+1){
