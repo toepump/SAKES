@@ -34,29 +34,29 @@
 #define NSEC_PER_MSEC   (1000000)              //number of nsecs in milliseconds
 
 //constants
-MAX_PULSE = 30000;
-PROBE_STORAGE_SIZE = 20000;             // the arbitrary size of stored
+const int MAX_PULSE = 30000;
+const int PROBE_STORAGE_SIZE = 20000;             // the arbitrary size of stored
                                                // probe's storage
 //global variables
-state = 0;                              //state of channels
-netAngleIncrement = 0;                  //storage for temporary netAngleIncrement, to copy in to netAngleIncrement
-RealNetAngleIncrement = 0;              //storage for actual netAngleIncrement, used while being probed
-INTERVAL = 1000000;                     //in nanosecond
+int state = 0;                              //state of channels
+int netAngleIncrement = 0;                  //storage for temporary netAngleIncrement, to copy in to netAngleIncrement
+int RealNetAngleIncrement = 0;              //storage for actual netAngleIncrement, used while being probed
+const int INTERVAL = 1000000;                     //in nanosecond
 std::mutex mtx;                             //probingThread mutex
 std::mutex dataMtx;                         //mutex to protect data
 
-index = 0;
-indexOutput = 0;
+int index = 0;
+int indexOutput = 0;
 
-probeAngleDeg[PROBE_STORAGE_SIZE];      // the strorage space for probed data
-probeIncrement[PROBE_STORAGE_SIZE];     // the storage space for the probed incremental data
-outputNetAngle[MAX_PULSE];              // the storage space for the netAngle debug
-outputState[MAX_PULSE];                 // the storage space for the state debug
-outputNetIncrement[MAX_PULSE];          //Store the value at each interrupt
-netAngleDegree=0;                       //the net angle in degree
+double probeAngleDeg[PROBE_STORAGE_SIZE];      // the strorage space for probed data
+int probeIncrement[PROBE_STORAGE_SIZE];     // the storage space for the probed incremental data
+double outputNetAngle[MAX_PULSE];              // the storage space for the netAngle debug
+int outputState[MAX_PULSE];                 // the storage space for the state debug
+int outputNetIncrement[MAX_PULSE];          //Store the value at each interrupt
+double netAngleDegree=0;                       //the net angle in degree
 
-failInt = 0;
-init = 0;
+int failInt = 0;
+int init = 0;
 
 /*
 Purpose: Entry point thread/function
