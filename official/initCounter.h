@@ -2,7 +2,7 @@
 #define INITCOUNTER_H
 
 #include <iostream>
-#include <fstream.h>
+#include <fstream>
 #include <stdio.h>
 #include <string.h>
 
