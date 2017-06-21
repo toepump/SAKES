@@ -63,8 +63,8 @@ int main(int argc, char const *argv[]) {
     initCounter();
 
     //setup interrupt and task threads
-    pthread_t taskThread;
-    pthread_t interruptThread;
+    pthread_t theTaskThread;
+    pthread_t theInterruptThread;
     const char *message1 = "taskThread";
     const char *message2 = "interruptThread";
     int  iret1;
