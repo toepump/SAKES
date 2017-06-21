@@ -397,7 +397,11 @@ int main(int argc, char* argv[]){
 	pthread_attr_t attr1, attr2; //Creation of the variable for the attribute
 	struct sched_param param1, param2; //Creation of new sched_param
 
-	int checkInitThread;
+	int checkAttrInit;
+	int setInherited;
+	int setPolicy;
+	int checkschedParam;
+
 
 	checkAttrInit=pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
 	if(checkAttrInit!=0){
