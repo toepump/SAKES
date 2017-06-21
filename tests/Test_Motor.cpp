@@ -145,12 +145,12 @@ double coeffsMotor1[MAXDEGREEPOLY]={ 60*2161704178.57744, -60*7678966834.50137, 
 struct encoder kneePoly={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0, .timeSecCreated=0, .timeNanoSecCreated=0, .angToInc=12000.0/360.0}; //for the polynomial function
 struct encoder motorPoly={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=1024, .numOfChannel=4, .numOfEdge=1, .timeFetch=0.0, .timeSecCreated=0, .timeNanoSecCreated=0, .angToInc=4096.0/360.0};
 
-struct encoder kneeCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0, .angToInc=12000.0/360.0}; //to be use for real
-struct encoder kneePrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0, .angToInc=12000.0/360.0}; //to be use for real
-struct encoder kneeProbing={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0, .angToInc=12000.0/360.0}; //to fetch the value of kneePoly directly
+struct encoder kneeCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0, .timeSecCreated=0, .timeNanoSecCreated=0, .angToInc=12000.0/360.0}; //to be use for real
+struct encoder kneePrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0, .timeSecCreated=0, .timeNanoSecCreated=0, .angToInc=12000.0/360.0}; //to be use for real
+struct encoder kneeProbing={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=3000, .numOfChannel=2, .numOfEdge=2, .timeFetch=0.0, .timeSecCreated=0, .timeNanoSecCreated=0, .angToInc=12000.0/360.0}; //to fetch the value of kneePoly directly
 
-struct encoder motorCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=1024, .numOfChannel=4, .numOfEdge=1, .timeFetch=0.0, .angToInc=4096.0/360.0}; //to be use for real
-struct encoder motorPrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=1024, .numOfChannel=4, .numOfEdge=1, .timeFetch=0.0, .angToInc=4096.0/360.0}; //to be use for real
+struct encoder motorCurrent={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=1024, .numOfChannel=4, .numOfEdge=1, .timeFetch=0.0, .timeSecCreated=0, .timeNanoSecCreated=0, .angToInc=4096.0/360.0}; //to be use for real
+struct encoder motorPrevious={.angInc=0, .angDeg=0.0, .velDegSec=0.0, .accDegSec=0.0, .pulsePerTurn=1024, .numOfChannel=4, .numOfEdge=1, .timeFetch=0.0, .timeSecCreated=0, .timeNanoSecCreated=0, .angToInc=4096.0/360.0}; //to be use for real
 
 //Specification of the motor
 struct motor maxon1={.dutyMin=0.10, .dutyMax=0.90, .velMotorMin=-8000.0, .velMotorMax=8000.0, .degSecToRPM=(1.0/6.0), .gearRatio=(1.0/60.0),.currentVelocity=0.0, .currentDuty=0.0, .desiredVelocity=0.0, .desiredDuty=0.0};
