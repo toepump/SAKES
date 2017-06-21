@@ -82,24 +82,24 @@ int main(int argc, char const *argv[]) {
     pthread_attr_setschedparam(&attr, &parm);                   //set the scheduling parameter of attr1 as parm1
 
     //Creation of the taskThread
-    iret1 = pthread_create(&taskThread, &attr, taskThread,(void*) message1);    //create a thread that launch the print_message_function with the arguments  message1
-    pthread_setschedparam(taskThread, SCHED_FIFO, &parm);                       // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
+    iret1 = pthread_create(&theTaskThread, &attr, taskThread,(void*) message1);    //create a thread that launch the print_message_function with the arguments  message1
+    pthread_setschedparam(theTaskThread, SCHED_FIFO, &parm);                       // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
                                                                                 // if it fails, return not 0
     //Creation of the interruptThread
-    iret2 = pthread_create(&interruptThread, &attr, interruptThread, (void*) message2);
-    pthread_attr_setschedparam(taskThread, SCHED_FIFO, &parm);
+    iret2 = pthread_create(&theInterruptThread, &attr, interruptThread, (void*) message2);
+    pthread_attr_setschedparam(theInterruptThread, SCHED_FIFO, &parm);
 
     //set RT-Preempt thread priorities
-    pthread_setschedprio(taskThread, 40);
-    pthread_setschedprio(interruptThread, 45);
+    pthread_setschedprio(theTaskThread, 40);
+    pthread_setschedprio(theInterruptThread, 45);
 
     //check if threads created correctly, if 0 then ok if. if not 9 then wtf
     printf("pthread_create() for taskThread returns: %d\n",iret1);
     printf("pthread_create() for interruptThread returns: %d\n",iret2);
 
     //launch threads
-    pthread_join( taskThread, NULL);
-    pthread_join( interruptThread, NULL);
+    pthread_join( theTaskThread, NULL);
+    pthread_join( theInterruptThread, NULL);
 
     printf("Finished: %d\n");
 
