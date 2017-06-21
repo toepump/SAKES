@@ -19,7 +19,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <glib-2.0/glib.h>
-#include <mutex.h>
+#include <mutex>
 
 //user includes
 #include "common.h"
