@@ -51,9 +51,9 @@ void *taskThread(void *ptr){
             //launch new probingThread
             pthread_join(probingThread, NULL);
 
-            index++;
+            indexProbe++;
             //if index > than PROBE_STORAGE_SIZE or indexOutput > MAX_PULSE
-            if(index-1 > PROBE_STORAGE_SIZE || indexOutput >= MAX_PULSE-1){
+            if(indexProbe-1 > PROBE_STORAGE_SIZE || indexOutput >= MAX_PULSE-1){
                 //printProbe
                 printProbe();
             }
