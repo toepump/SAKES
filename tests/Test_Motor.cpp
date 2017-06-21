@@ -399,21 +399,58 @@ int main(int argc, char* argv[]){
 
 	int checkInitThread;
 
-	pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
-	pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
+	checkAttrInit=pthread_attr_init(&attr1); //Initialize the thread attributes with default attribute
+	if(checkAttrInit!=0){
+		printf("Problem attribute 1: %d \n", checkAttrInit);
+	}
 
-	checkInitThread=setParamThreadFIFO(attr1, param1, 48);
-	checkInitThread=setParamThreadFIFO(attr2, param2, 48);
+	checkAttrInit=pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
+	if(checkAttrInit!=0){
+		printf("Problem attribute 2: %d \n", checkAttrInit);
+	}
+
+
+	setInherited=pthread_attr_setinheritsched(&attr1, PTHREAD_EXPLICIT_SCHED);
+	if(setInherited!=0){
+		printf("Problem set inherited 1: %d \n", setInherited);
+	}
+
+	setInherited=pthread_attr_setinheritsched(&attr2, PTHREAD_EXPLICIT_SCHED);
+	if(setInherited!=0){
+		printf("Problem set inherited 2: %d \n", setInherited);
+	}
+
+	setPolicy=pthread_attr_setschedpolicy(&attr1, SCHED_FIFO);
+	if(setPolicy!=0){
+		printf("Problem set policy 1: %d \n", setPolicy);
+	}
+
+	setPolicy=pthread_attr_setschedpolicy(&attr2, SCHED_FIFO);
+	if(setPolicy!=0){
+		printf("Problem set policy 2: %d \n", setPolicy);
+	}
+
+	param1.sched_priority = 70;
+	param2.sched_priority = 70;
+
+	checkschedParam=pthread_attr_setschedparam(&attr1, &param1);
+	if(checkschedParam!=0){
+		printf("Problem set param 1: %d \n", checkschedParam);
+	}
+
+	checkschedParam=pthread_attr_setschedparam(&attr2, &param2);
+	if(checkschedParam!=0){
+		printf("Problem set param 1: %d \n", checkschedParam);
+	}
+
+
+	//
 
 	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
 	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
-
-	//create a thread that launch the print_message_function with the arguments message1
-	pthread_setschedparam(thread1, SCHED_FIFO, &param1);
-	pthread_setschedparam(thread2, SCHED_FIFO, &param2); // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
 														// if it fails, return not 0
-	printf("pthread_create() for returns: %d\n", iret1);
-	printf("pthread_create() for returns: %d\n", iret2);
+	printf("pthread_create() 1 for returns: %d\n", iret1);
+	printf("pthread_create() 2 for returns: %d\n", iret2);
 
 	/* Wait till threads are complete before main continues. Unless we */
 	/* wait we run the risk of executing an exit which will terminate  */
@@ -432,27 +469,40 @@ void *testThread1(void *ptr) {
 	message = (char *) ptr;
 	struct timespec waitTime;
 	struct timespec start;
-	struct timespec end;
+	struct timespec previous_start;
 	struct timespec diff;
-	struct timespec remain;
 
 	struct timeStruct t_Result;
 	int sleepOK=0;
 
-	waitTime.tv_sec=1;
-	waitTime.tv_nsec=500000000;
+	//We set the begining if the thread in 1 second
+	clock_gettime(CLOCK_MONOTONIC, &waitTime);
+	waitTime.tv_sec+=1;
 
 	setTimeOrigin(&t_Result);
+	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 
 	while(ticks_t1<TIME_MAX+1){
 
 		/* wait until next shot */
-		sleepOK = clock_nanosleep(CLOCK_MONOTONIC, 0, &waitTime, &remain);
-
 		if(sleepOK == 0){
 
-			clock_gettime(CLOCK_MONOTONIC, &start);
+			//wait to continue until the next waiTime (next millisecond)
+			sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 
+			//get the time of the beginning of this cycle and calculate the interval since the previous cycle
+			clock_gettime(CLOCK_MONOTONIC, &start);
+			timespec_diff(&previous_start, &start, &diff);
+
+			//test if we are respecting the time interval limit
+			if(diff.tv_nsec>1300000)
+			{
+				cout << " " << endl;
+				cout << "Waiting superior to 1.3 msec" << endl;
+				cout << " " << endl;
+			}
+
+			//get the time since the beginning of the thread was launched
 			getTimeSinceOrigin(&t_Result);
 
 	  		//actual calculation
@@ -476,21 +526,21 @@ void *testThread1(void *ptr) {
 
 	  		ticks_t1++; // Increment the ticks value
 
-	  		clock_gettime(CLOCK_MONOTONIC, &end);
+	  		//put the value of the variable of start to previous start
+		  	previous_start.tv_sec=start.tv_sec;
+		  	previous_start.tv_nsec=start.tv_nsec;
 
-	  		timespec_diff(&start, &end, &diff);
+		  	//Do the calculation for the next time so start the loop
+		  	waitTime.tv_nsec+=900000;
+		  	if(waitTime.tv_nsec>= NSEC_PER_SEC){
+		  		waitTime.tv_sec+=1;
+		  		waitTime.tv_nsec-=NSEC_PER_SEC;
+		  	}
 
-	  		if(diff.tv_sec==0 && diff.tv_nsec < 1000000){
-	  			waitTime.tv_sec=0;
-	  			waitTime.tv_nsec=1000000-diff.tv_nsec;
-	  		}else{
-	  			cout << "The thread is not done in 1 ms" << endl;
-	  			cout << ticks_t1 << endl;
-	  		}
 		}else{
-
-			cout << "The thread is not done in 1 ms" << endl;
-
+			cout << "The clock nanosleep has encountered a problem." << endl;
+			cout << " " << endl;
+			return (void*) NULL;
 		}
 
   }
