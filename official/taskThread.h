@@ -3,7 +3,7 @@
 
 #include <time.h>
 #include <pthread.h>
-#include <mutex.h>
+#include <mutex>
 #include <iostream.h>
 #include <string.h>
 #include <stdio.h>

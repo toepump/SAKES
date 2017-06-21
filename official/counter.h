@@ -2,6 +2,7 @@
 #define COUNTER_H
 
 #include <iostream>
+#include <mutex>
 
 void counter(int channelSig);
 
