@@ -33,15 +33,12 @@
 #define NSEC_PER_SEC    (1000000000)           /* The number of nsecs per sec. */
 #define NSEC_PER_MSEC   (1000000)              //number of nsecs in milliseconds
 
-//constants
-const int MAX_PULSE;
-const int PROBE_STORAGE_SIZE;             // the arbitrary size of stored
-                                               // probe's storage
+
 //global variables
 int state = 0;                              //state of channels
 int netAngleIncrement = 0;                  //storage for temporary netAngleIncrement, to copy in to netAngleIncrement
 int RealNetAngleIncrement = 0;              //storage for actual netAngleIncrement, used while being probed
-const int INTERVAL = 1000000;                     //in nanosecond
+
 std::mutex mtx;                             //probingThread mutex
 std::mutex dataMtx;                         //mutex to protect data
 
