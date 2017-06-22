@@ -23,8 +23,9 @@
 //constants
 const int MAX_PULSE = 30000;
 const int PROBE_STORAGE_SIZE = 20000;                   // the arbitrary size of stored
-                                                // probe's storage
-const int INTERVAL = 1000000;                             //in nanosecond
+                                                        // probe's storage
+const int INTERVAL = 1000000;                           //in nanosecond
+const double PULSE_PER_DEGREE = (3000*2*2)/3;
 
 //global variables
 extern int state;                               //state of channels
