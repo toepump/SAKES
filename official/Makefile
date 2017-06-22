@@ -1,5 +1,5 @@
-all: main.o initCounter.o taskThread.o interruptThread.o counter.o probingThread.o printOutData.o
-	g++ -pthread -o main main.o initCounter.o taskThread.o interruptThread.o counter.o probingThread.o printOutData.o
+main: main.o initCounter.o taskThread.o interruptThread.o counter.o probingThread.o printOutData.o
+	g++ -pthread -o `pkg-config glib-2.0 --cflags --libs`  -std=c++11 main main.o initCounter.o taskThread.o interruptThread.o counter.o probingThread.o printOutData.o
 
 main.o: main.cpp common.h initCounter.h taskThread.h interruptThread.h
 	g++ -c `pkg-config glib-2.0 --cflags --libs`  -std=c++11 -lpthread main.cpp
