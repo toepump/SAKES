@@ -181,7 +181,7 @@ void polyEval(double coeffs[], struct encoder *encoder, struct timespec *monoton
 
 	//the time used must be expressed in second, between 0 and 1
 	for(i=0;i<MAXDEGREEPOLY-1;i++){
-		result+=coeffs[i]*pow(*time,MAXDEGREEPOLY-1-i);
+		result+=coeffs[i]*pow(time,MAXDEGREEPOLY-1-i);
 	}
 	result+=coeffs[MAXDEGREEPOLY-1];
 	encoder->angDeg=result;
