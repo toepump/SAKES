@@ -1,6 +1,9 @@
 #include "common.h"
 #include "taskThread.h"
 #include "probingThread.h"
+
+using namespace std;
+
 /*
 Purpose: thread for spwaning a probing thread every millisecond
          only launches a thread if previously spawned thread has Finished
