@@ -1,12 +1,14 @@
 #include "initCounter.h"
 #include "common.h"
 
+using namespace std;
+
 /*
 Purpose: initialize the data for the encoder counter and state
 */
 void initCounter(void){
 
-    std::cout << "Initialization Counter" << std::endl;
+    cout << "Initialization Counter" << endl;
     //Declaration of the initial state of the encoder signal//
     int initA;
     int initB;
