@@ -5,21 +5,7 @@
 *      Author: Mikey and Vincent
 */
 
-#include <iostream>
-#include <unistd.h>
-#include <fstream>
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include <sched.h>
-#include <sys/mman.h>
-#include <string.h>
-#include <pthread.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <glib-2.0/glib.h>
-#include <mutex>
+
 
 //user includes
 #include "common.h"

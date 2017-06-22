@@ -1,6 +1,22 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include <iostream>
+#include <unistd.h>
+#include <fstream>
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include <sched.h>
+#include <sys/mman.h>
+#include <string.h>
+#include <pthread.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <glib-2.0/glib.h>
+#include <mutex>
+
 #define NSEC_PER_SEC    (1000000000)           /* The number of nsecs per sec. */
 #define NSEC_PER_MSEC   (1000000)              //number of nsecs in milliseconds
 
