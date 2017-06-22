@@ -2,6 +2,8 @@
 #include "counter.h"
 #include "printOutData.h"
 
+using namespace std;
+
 void counter(int channelSig){
     init++;
 
