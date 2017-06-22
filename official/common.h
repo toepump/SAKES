@@ -1,14 +1,31 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include <iostream>
+#include <unistd.h>
+#include <fstream>
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include <sched.h>
+#include <sys/mman.h>
+#include <string.h>
+#include <pthread.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <glib-2.0/glib.h>
+#include <mutex>
+
 #define NSEC_PER_SEC    (1000000000)           /* The number of nsecs per sec. */
 #define NSEC_PER_MSEC   (1000000)              //number of nsecs in milliseconds
 
 //constants
 const int MAX_PULSE = 30000;
 const int PROBE_STORAGE_SIZE = 20000;                   // the arbitrary size of stored
-                                                // probe's storage
-const int INTERVAL = 1000000;                             //in nanosecond
+                                                        // probe's storage
+const int INTERVAL = 1000000;                           //in nanosecond
+const double PULSE_PER_DEGREE = (3000*2*2)/3;
 
 //global variables
 extern int state;                               //state of channels

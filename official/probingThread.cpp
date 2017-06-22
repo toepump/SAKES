@@ -7,9 +7,9 @@ Purpose: every millisecond, forcibly take mutex protecting encoder data
 void *probingThread(void *ptr){
     //do stuff on mutex protected data
     dataMtx.lock();
-    probeAngleDeg[index] = (double)RealNetAngleIncrement/ PULSE_PER_DEGREE; //store current netAngleDegree
+    probeAngleDeg[indexProbe] = (double)RealNetAngleIncrement/ PULSE_PER_DEGREE; //store current netAngleDegree
     dataMtx.unlock();
-
+    indexProbe++;
     //release mutex if finished
     mtx.unlock();
     return (void*) NULL;
