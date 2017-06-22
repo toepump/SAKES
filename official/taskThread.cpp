@@ -51,6 +51,7 @@ void *taskThread(void *ptr){
 
         //check if the previous thread completed or not
         if(!mtx.try_lock()){
+            cout << "GOT THE LOCK" << endl;
             //launch new probingThread
             pthread_join(theProbingThread, NULL);
 

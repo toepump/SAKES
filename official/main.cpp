@@ -5,8 +5,6 @@
 *      Author: Mikey and Vincent
 */
 
-
-
 //user includes
 #include "common.h"
 #include "taskThread.h"
