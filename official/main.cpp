@@ -81,13 +81,14 @@ int main(int argc, char const *argv[]) {
     pthread_attr_setschedpolicy(&attr, SCHED_FIFO);             //set the scheduling policy of attr1 as FIFIO
     pthread_attr_setschedparam(&attr, &parm);                   //set the scheduling parameter of attr1 as parm1
 
+    //TODO something up with the pthread_setschedparam function arguements. there are too many refer to other file
     //Creation of the taskThread
     iret1 = pthread_create(&theTaskThread, &attr, taskThread,(void*) message1);    //create a thread that launch the print_message_function with the arguments  message1
-    pthread_setschedparam(theTaskThread, SCHED_FIFO, &parm);                       // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
+    pthread_setschedparam(&attr, &parm);                       // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
                                                                                 // if it fails, return not 0
     //Creation of the interruptThread
     iret2 = pthread_create(&theInterruptThread, &attr, interruptThread, (void*) message2);
-    pthread_attr_setschedparam(theInterruptThread, SCHED_FIFO, &parm);
+    pthread_attr_setschedparam(&attr, &parm);
 
     //set RT-Preempt thread priorities
     pthread_setschedprio(theTaskThread, 40);
