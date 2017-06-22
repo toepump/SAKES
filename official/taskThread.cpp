@@ -25,7 +25,7 @@ void *taskThread(void *ptr){
         /* wait until next shot */
         clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_taskThread, NULL);   //delay until time stored in the timespec
 
-        pthread_t probingThread;
+        pthread_t theProbingThread;
         const char *message1 = "probingThread";
         int  iret1;
 
@@ -40,7 +40,7 @@ void *taskThread(void *ptr){
         pthread_attr_setschedparam(&attr, &parm);                               //set the scheduling parameter of attr1 as parm1
 
         //Creation of the probingThread
-        iret1 = pthread_create(&probingThread, &attr, probingThread,(void*) message1);      //create a thread that launch the print_message_function with the arguments  message1
+        iret1 = pthread_create(&theProbingThread, &attr, probingThread,(void*) message1);      //create a thread that launch the print_message_function with the arguments  message1
         pthread_setschedparam(probingThread, SCHED_FIFO, &parm);                            // sets the scheduling and parameters of thread1 with SCHED_FIFO and parm1
                                                                                             // if it fails, return not 0
         //set RT-Preempt thread priorities
