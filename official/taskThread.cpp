@@ -67,7 +67,7 @@ void *taskThread(void *ptr){
             cout<<"PROBINGTHREAD IS TOO SLOW"<<endl;
         }
         /* calculate next shot */
-        t_taskThread.tv_nsec += INTERVAL;
+        t_taskThread.tv_nsec += INTERVAL*3;
 
         while (t_taskThread.tv_nsec >= NSEC_PER_SEC) {
             t_taskThread.tv_nsec -= NSEC_PER_SEC;
