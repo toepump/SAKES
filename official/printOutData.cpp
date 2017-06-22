@@ -1,6 +1,8 @@
 #include "common.h"
 #include "printOutData.h"
 
+using namespace std;
+
 /*
 Purpose: print out data collected from the encoders including:
          index, interrupt number, calculated angle of encoder, and state
