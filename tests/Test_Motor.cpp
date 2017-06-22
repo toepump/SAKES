@@ -176,12 +176,12 @@ void polyEval(double coeffs[], struct encoder *encoder, struct timespec *monoton
 
 	int i=0;
 	double result=0.0;
-	double time=0.0;
-	time=double(monotonicTime->tv_nsec)/double(ONESECINNANO);
+	double timeT=0.0;
+	timeT=double(monotonicTime->tv_nsec)/double(ONESECINNANO);
 
 	//the time used must be expressed in second, between 0 and 1
 	for(i=0;i<MAXDEGREEPOLY-1;i++){
-		result+=coeffs[i]*pow(time,MAXDEGREEPOLY-1-i);
+		result+=coeffs[i]*pow(timeT,MAXDEGREEPOLY-1-i);
 	}
 	result+=coeffs[MAXDEGREEPOLY-1];
 	encoder->angDeg=result;
@@ -336,8 +336,8 @@ int fileOutputEncoder(struct outputEnc *output){
 		int i=0;
 		FILE *fj2=fopen("fileOutputEnc.dat","w");
 
-		fprintf(fj2,"indexOutput;"
-				"PolyAngInc; PolyAngDeg; MonotonicTimeSec; MonotonicTimeNano; \r\n");
+		fprintf(fj2,"indexOutputPoly;"
+				"PolyAngInc; PolyAngDeg; PolyMonotonicTimeSec; PolyMonotonicTimeNano; \r\n");
 
 		while(i<TIME_MAX_ENC){
 		    fprintf(fj2,"%d;"
