@@ -49,7 +49,11 @@ void *taskThread(void *ptr){
         //check if threads created correctly, if 0 then ok if. if not then wtf
         printf("pthread_create() for probingThread returns: %d\n",iret1);
 
-        //check if the previous thread completed or not
+        //check if the previous thread completed or not 
+        //TODO; the reason why the output is showing failures is becase trylock doesnt
+        //blcok the calling thread, it just continues execution so it shows TOO SLOW
+        //everytime. NEED CONDITION VARIABLE
+
         if(!mtx.try_lock()){
             cout << "GOT THE LOCK" << endl;
             //launch new probingThread
