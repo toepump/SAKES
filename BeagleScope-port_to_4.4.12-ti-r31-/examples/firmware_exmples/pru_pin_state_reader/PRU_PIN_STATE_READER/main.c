@@ -90,6 +90,7 @@ void main(void)
 	struct pru_rpmsg_transport transport;
 	uint16_t src, dst, len;
 	uint32_t prev_gpio_state;
+	uint32_t totalIncr;
 	volatile uint8_t *status;
 	
 	/* allow OCP master port access by the PRU so the PRU can read external memories */
@@ -121,8 +122,9 @@ void main(void)
 					/*  a ^ b istwo */
 					if ((__R31 ^ prev_gpio_state) & CHECK_BIT){
 							prev_gpio_state = __R31 & CHECK_BIT;
+							totalIncr=totalIncr+1;
 							if(prev_gpio_state==0){
-								pru_rpmsg_send(&transport, dst, src, "0\n", sizeof("0\n"));
+								pru_rpmsg_send(&transport, dst, src, totalIncr, sizeof(totalIncr));
 							}else if(prev_gpio_state==1){
 								pru_rpmsg_send(&transport, dst, src, "1\n", sizeof("1\n"));
 							}else{
