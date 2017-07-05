@@ -130,9 +130,9 @@ void main(void)
 							snprintf(str, sizeof str, "%lu", (unsigned long)prev_gpio_state); /* Method 1 */
 
 							if(prev_gpio_state==0){
-								pru_rpmsg_send(&transport, dst, src, &str, sizeof(11));
+								pru_rpmsg_send(&transport, dst, src, "0\n", sizeof("0\n"));
 							}else if(prev_gpio_state==1){
-								pru_rpmsg_send(&transport, dst, src, "\n a\n", sizeof("\n a\n"));
+								pru_rpmsg_send(&transport, dst, src, "1\n", sizeof("1\n"));
 							}else{
 								pru_rpmsg_send(&transport, dst, src, "inconnu\n", sizeof("inconnu\n"));
 							}
