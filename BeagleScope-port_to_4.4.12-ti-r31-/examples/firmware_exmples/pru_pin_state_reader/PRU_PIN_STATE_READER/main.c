@@ -118,9 +118,16 @@ void main(void)
 			/* Receive all available messages, multiple messages can be sent per kick */
 			while (pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS) {	
 				while(1)
-					if ((__R31 ^ prev_gpio_state) & CHECK_BIT) {
-						prev_gpio_state = __R31 & CHECK_BIT;	
-						pru_rpmsg_send(&transport, dst, src, "CHANGED\n", sizeof("CHANGED\n"));
+					if ((__R31 ^ prev_gpio_state) & CHECK_BIT){
+							prev_gpio_state = __R31 & CHECK_BIT;
+							if(prev_gpio_state==0){
+								pru_rpmsg_send(&transport, dst, src, "0\n", sizeof("0\n");
+							}elseif(prev_gpio_state==1){
+								pru_rpmsg_send(&transport, dst, src, "1\n", sizeof("1\n");
+							}else{
+								pru_rpmsg_send(&transport, dst, src, "inconnu\n", sizeof("inconnu\n"));
+							}
+
 					}		
 			}
 		}
