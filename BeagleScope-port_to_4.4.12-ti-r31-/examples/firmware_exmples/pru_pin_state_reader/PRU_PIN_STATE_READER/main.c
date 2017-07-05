@@ -124,7 +124,7 @@ void main(void)
 							prev_gpio_state = __R31 & CHECK_BIT;
 							totalIncr=totalIncr+1;
 							if(prev_gpio_state==0){
-								pru_rpmsg_send(&transport, dst, src, totalIncr, sizeof(totalIncr));
+								pru_rpmsg_send(&transport, dst, src, &totalIncr, sizeof(&totalIncr));
 							}else if(prev_gpio_state==1){
 								pru_rpmsg_send(&transport, dst, src, "1\n", sizeof("1\n"));
 							}else{
