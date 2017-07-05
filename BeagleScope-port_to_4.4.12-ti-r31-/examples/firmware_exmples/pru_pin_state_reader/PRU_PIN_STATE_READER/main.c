@@ -133,7 +133,7 @@ void main(void)
 						    y = (buf[0] <<  24) | (buf[1] << 16) | (buf[2] << 8) | buf[3];
 
 							if(prev_gpio_state==0){
-								pru_rpmsg_send(&transport, dst, src, &y, sizeof(&y));
+								pru_rpmsg_send(&transport, dst, src, y, sizeof(y));
 							}else if(prev_gpio_state==1){
 								pru_rpmsg_send(&transport, dst, src, "\n a\n", sizeof("\n a\n"));
 							}else{
