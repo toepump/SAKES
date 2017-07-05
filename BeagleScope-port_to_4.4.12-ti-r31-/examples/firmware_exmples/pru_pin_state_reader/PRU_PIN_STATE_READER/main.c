@@ -43,6 +43,8 @@
 #include <pru_rpmsg.h>
 #include "resource_table_1.h"
 
+#include <inttypes.h>
+
 
 volatile register uint32_t __R31;
 
