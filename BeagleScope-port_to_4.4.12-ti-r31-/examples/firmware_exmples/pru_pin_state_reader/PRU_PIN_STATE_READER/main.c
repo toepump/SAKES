@@ -93,9 +93,6 @@ void main(void)
 	uint16_t src, dst, len;
 	uint32_t prev_gpio_state;
 	volatile uint8_t *status;
-	
-	/* Try to create string*/
-	char str[11]; /* 11 bytes: 10 for the digits, 1 for the null character */
 
 	/* allow OCP master port access by the PRU so the PRU can read external memories */
 	CT_CFG.SYSCFG_bit.STANDBY_INIT = 0;
@@ -126,8 +123,6 @@ void main(void)
 					/*    a ^ b istwo */
 					if ((__R31 ^ prev_gpio_state) & CHECK_BIT){
 							prev_gpio_state = __R31 & CHECK_BIT;
-						    /* pack into buf string */
-							snprintf(str, sizeof str, "%lu", (unsigned long)prev_gpio_state); /* Method 1 */
 
 							if(prev_gpio_state==0){
 								pru_rpmsg_send(&transport, dst, src, "0\n", sizeof("0\n"));
