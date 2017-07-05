@@ -90,9 +90,12 @@ void main(void)
 	struct pru_rpmsg_transport transport;
 	uint16_t src, dst, len;
 	uint32_t prev_gpio_state;
-	uint32_t totalIncr;
 	volatile uint8_t *status;
 	
+	/* Try to create string*/
+    uint32_t y;
+    unsigned char buf[4];
+
 	/* allow OCP master port access by the PRU so the PRU can read external memories */
 	CT_CFG.SYSCFG_bit.STANDBY_INIT = 0;
 
@@ -122,11 +125,17 @@ void main(void)
 					/*    a ^ b istwo */
 					if ((__R31 ^ prev_gpio_state) & CHECK_BIT){
 							prev_gpio_state = __R31 & CHECK_BIT;
-							totalIncr=totalIncr+1;
+						    /* pack into buf string */
+						    buf[0] = prev_gpio_state >> 24;
+						    buf[1] = prev_gpio_state >> 16;
+						    buf[2] = prev_gpio_state >> 8;
+						    buf[3] = prev_gpio_state;
+						    y = (buf[0] <<  24) | (buf[1] << 16) | (buf[2] << 8) | buf[3];
+
 							if(prev_gpio_state==0){
-								pru_rpmsg_send(&transport, dst, src, &totalIncr, sizeof(&totalIncr));
+								pru_rpmsg_send(&transport, dst, src, &y, sizeof(&y));
 							}else if(prev_gpio_state==1){
-								pru_rpmsg_send(&transport, dst, src, "1\n", sizeof("1\n"));
+								pru_rpmsg_send(&transport, dst, src, "\n a\n", sizeof("\n a\n"));
 							}else{
 								pru_rpmsg_send(&transport, dst, src, "inconnu\n", sizeof("inconnu\n"));
 							}
