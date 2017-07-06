@@ -89,7 +89,7 @@ uint8_t payload[RPMSG_BUF_SIZE];
  * ADDED BY BABIN
  */
 
-int16_t result[256]; // 256
+int16_t result[2]; // 256
 
 /*
  * main.c
