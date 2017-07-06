@@ -139,9 +139,9 @@ void main(void)
 								pru_rpmsg_send(&transport, dst, src, &output, 4);
 							}else if(prev_gpio_state==1){
 								output=(int32_t)prev_gpio_state;
-								output=output-1;
-								pru_rpmsg_send(&transport, dst, src, &output, 4);
-								//pru_rpmsg_send(&transport, dst, src, "1\n", sizeof("1\n"));
+								//output=output-1;
+								//pru_rpmsg_send(&transport, dst, src, &output, 4);
+								pru_rpmsg_send(&transport, dst, src, "1\n", sizeof("1\n"));
 							}else{
 								pru_rpmsg_send(&transport, dst, src, "inconnu\n", sizeof("inconnu\n"));
 							}
