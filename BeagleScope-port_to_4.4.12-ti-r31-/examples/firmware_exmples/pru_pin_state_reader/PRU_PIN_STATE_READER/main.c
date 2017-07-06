@@ -89,7 +89,7 @@ uint8_t payload[RPMSG_BUF_SIZE];
  * ADDED BY BABIN
  */
 
-uint16_t result[256];
+uint16_t result[2]; // 256
 
 /*
  * main.c
@@ -133,7 +133,7 @@ void main(void)
 
 							if(prev_gpio_state==0){
 								result[0] = 50 * ((int16_t)prev_gpio_state - 512);
-								pru_rpmsg_send(&transport, dst, src, result, 490);
+								pru_rpmsg_send(&transport, dst, src, result, 236);
 							}else if(prev_gpio_state==1){
 								pru_rpmsg_send(&transport, dst, src, "1\n", sizeof("1\n"));
 							}else{
