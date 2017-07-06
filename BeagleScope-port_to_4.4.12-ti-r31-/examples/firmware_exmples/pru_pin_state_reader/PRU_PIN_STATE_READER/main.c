@@ -85,7 +85,7 @@ volatile register uint32_t __R31;
 uint8_t payload[RPMSG_BUF_SIZE];
 */
 
-int16_t payload[256]
+int16_t payload[256];
 
 /*
  * main.c
