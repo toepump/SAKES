@@ -81,16 +81,11 @@ volatile register uint32_t __R31;
  */
 #define CHECK_BIT	0x0001
 
-
+/* Babin
 uint8_t payload[RPMSG_BUF_SIZE];
+*/
 
-
-/*
- * ADDED BY BABIN
- */
-
-int16_t result[2]; // 256
-int32_t output;
+int16_t payload[256]
 
 /*
  * main.c
@@ -103,7 +98,7 @@ void main(void)
 	volatile uint8_t *status;
 	
 	/*Added by Babin*/
-	int16_t increment=0;
+	uint16_t increment=0;
 
 	/* allow OCP master port access by the PRU so the PRU can read external memories */
 	CT_CFG.SYSCFG_bit.STANDBY_INIT = 0;
@@ -135,25 +130,24 @@ void main(void)
 					if ((__R31 ^ prev_gpio_state) & CHECK_BIT){
 							prev_gpio_state = __R31 & CHECK_BIT;
 
-							/*
+							
 							if(prev_gpio_state==0){
-								//result[0] = 50 * ((int16_t)prev_gpio_state - 512);
-								output=(int32_t)(prev_gpio_state);
-								pru_rpmsg_send(&transport, dst, src, &output, 490);
+								
+								for (increment=0;increment<256;increment = increment+1)
+								{
+									payload[increment]=50 * ((int16_t)prev_gpio_state - 512);
+								}
+								pru_rpmsg_send(&transport, dst, src, payload, 490);
+								
 							}else if(prev_gpio_state==1){
-								//output=(int32_t)prev_gpio_state;
-								//pru_rpmsg_send(&transport, dst, src, &output, 4);
-								pru_rpmsg_send(&transport, dst, src, "3\n", sizeof("3\n"));
+								
+								for (increment=0;increment<256;increment = increment+1)
+								{
+									payload[increment]=50 * ((int16_t)prev_gpio_state - 512);
+								}
+								pru_rpmsg_send(&transport, dst, src, payload, 490);
 							}else{
 								pru_rpmsg_send(&transport, dst, src, "inconnu\n", sizeof("inconnu\n"));
-								*/
-							
-							increment=increment+2;
-							increment=increment-1;
-							pru_rpmsg_send(&transport, dst, src, &increment, sizeof(&increment));
-							
-
-
 					}		
 			}
 		}
