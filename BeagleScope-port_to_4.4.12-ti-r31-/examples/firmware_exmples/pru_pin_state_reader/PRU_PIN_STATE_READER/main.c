@@ -128,10 +128,10 @@ void main(void)
 					/*    a ^ b istwo */
 					if ((__R31 ^ prev_gpio_state) & CHECK_BIT){
 							prev_gpio_state = __R31 & CHECK_BIT;
-							output=(int32_t)prev_gpio_state;
+							output=prev_gpio_state;
 							
 							if(prev_gpio_state==0){
-								pru_rpmsg_send(&transport, dst, src, &output, 32);
+								pru_rpmsg_send(&transport, dst, src, &output, 100);
 								pru_rpmsg_send(&transport, dst, src, "a\n", sizeof("a\n"));
 								
 							}else if(prev_gpio_state==1){
