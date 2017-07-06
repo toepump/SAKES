@@ -90,6 +90,7 @@ uint8_t payload[RPMSG_BUF_SIZE];
  */
 
 int16_t result[2]; // 256
+int32_t output;
 
 /*
  * main.c
@@ -132,8 +133,9 @@ void main(void)
 							prev_gpio_state = __R31 & CHECK_BIT;
 
 							if(prev_gpio_state==0){
-								result[0] = 50 * ((int16_t)prev_gpio_state - 512);
-								pru_rpmsg_send(&transport, dst, src, result, 2);
+								//result[0] = 50 * ((int16_t)prev_gpio_state - 512);
+								output=(int32_t)prev_gpio_state;
+								pru_rpmsg_send(&transport, dst, src, &output, 4);
 							}else if(prev_gpio_state==1){
 								pru_rpmsg_send(&transport, dst, src, "1\n", sizeof("1\n"));
 							}else{
