@@ -73,6 +73,7 @@ volatile register uint32_t __R31;
 #define VIRTIO_CONFIG_S_DRIVER_OK	4
 
 
+
  /*
  * Used to check the state of 0 bit of the r31 ie
  * the state of pr1_pru1_pru_r31_0. This gpio can be 
@@ -81,8 +82,14 @@ volatile register uint32_t __R31;
 #define CHECK_BIT	0x0001
 
 
-
 uint8_t payload[RPMSG_BUF_SIZE];
+
+
+/*
+ * ADDED BY BABIN
+ */
+
+uint16_t result[256];
 
 /*
  * main.c
@@ -125,7 +132,8 @@ void main(void)
 							prev_gpio_state = __R31 & CHECK_BIT;
 
 							if(prev_gpio_state==0){
-								pru_rpmsg_send(&transport, dst, src, "0\n", sizeof("0\n"));
+								result[0] = 50 * ((int16_t)prev_gpio_state - 512);
+								pru_rpmsg_send(&transport, dst, src, result, 490);
 							}else if(prev_gpio_state==1){
 								pru_rpmsg_send(&transport, dst, src, "1\n", sizeof("1\n"));
 							}else{
