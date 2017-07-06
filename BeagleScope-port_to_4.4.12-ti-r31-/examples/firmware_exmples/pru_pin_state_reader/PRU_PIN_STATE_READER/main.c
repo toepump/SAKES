@@ -134,7 +134,7 @@ void main(void)
 
 							if(prev_gpio_state==0){
 								//result[0] = 50 * ((int16_t)prev_gpio_state - 512);
-								output=(int32_t)(prev_gpio_state-1);
+								output=(int32_t)(2*prev_gpio_state);
 								pru_rpmsg_send(&transport, dst, src, &output, 4);
 							}else if(prev_gpio_state==1){
 								output=(int32_t)prev_gpio_state;
