@@ -148,75 +148,10 @@ void main(void)
 								pru_rpmsg_send(&transport, dst, src, "inconnu\n", sizeof("inconnu\n"));
 								*/
 							
-							if(increment==0){
-								pru_rpmsg_send(&transport, dst, src, "0\n", sizeof("0\n"));
-								increment=increment+1;
-							}else if(increment==1){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "1\n", sizeof("1\n"));
-							}else if(increment==2){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "2\n", sizeof("1\n"));
-							}else if(increment==3){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "3\n", sizeof("1\n"));
-							}else if(increment==4){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "4\n", sizeof("1\n"));
-							}else if(increment==5){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "5\n", sizeof("1\n"));
-							}else if(increment==6){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "6\n", sizeof("1\n"));
-							}else if(increment==7){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "7\n", sizeof("1\n"));
-							}else if(increment==8){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "8\n", sizeof("1\n"));
-							}else if(increment==9){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "9\n", sizeof("1\n"));
-							}else if(increment==10){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "10\n", sizeof("10\n"));
-							}else if(increment==11){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "11\n", sizeof("10\n"));
-							}else if(increment==12){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "12\n", sizeof("10\n"));
-							}else if(increment==13){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "13\n", sizeof("10\n"));
-							}else if(increment==14){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "14\n", sizeof("10\n"));
-							}else if(increment==15){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "15\n", sizeof("10\n"));
-							}else if(increment==16){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "16\n", sizeof("10\n"));
-							}else if(increment==17){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "17\n", sizeof("10\n"));
-							}else if(increment==18){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "18\n", sizeof("10\n"));
-							}else if(increment==19){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "19\n", sizeof("10\n"));
-							}else if(increment==20){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "20\n", sizeof("10\n"));
-							}else if(increment==21){
-								increment=increment+1;
-								pru_rpmsg_send(&transport, dst, src, "21\n", sizeof("10\n"));
-							}else{
-								pru_rpmsg_send(&transport, dst, src, "inconnu\n", sizeof("inconnu\n"));
-							}
+							increment=increment+1;
+							pru_rpmsg_send(&transport, dst, src, &increment, sizeof(&increment));
+							
+
 
 					}		
 			}
