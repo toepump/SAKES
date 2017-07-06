@@ -85,7 +85,7 @@ volatile register uint32_t __R31;
 uint8_t payload[RPMSG_BUF_SIZE];
 */
 
-int16_t payload[256];
+int16_t payload[1];
 
 /*
  * main.c
@@ -132,20 +132,16 @@ void main(void)
 
 							
 							if(prev_gpio_state==0){
-								
-								for (increment=0;increment<256;increment = increment+1)
-								{
-									payload[increment]=50 * ((int16_t)prev_gpio_state - 512);
-								}
+
+									payload[0]=50 * ((int16_t)prev_gpio_state - 512);
+
 								pru_rpmsg_send(&transport, dst, src, payload, 490);
 								
 							}else if(prev_gpio_state==1){
 								
-								for (increment=0;increment<256;increment = increment+1)
-								{
-									payload[increment]=50 * ((int16_t)prev_gpio_state - 512);
-								}
-								pru_rpmsg_send(&transport, dst, src, payload, 490);
+									payload[0]=50 * ((int16_t)prev_gpio_state - 512);
+
+								pru_rpmsg_send(&transport, dst, src, payload, 300);
 							}else{
 								pru_rpmsg_send(&transport, dst, src, "inconnu\n", sizeof("inconnu\n"));
 							}		
