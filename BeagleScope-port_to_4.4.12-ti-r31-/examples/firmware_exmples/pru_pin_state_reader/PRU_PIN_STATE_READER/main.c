@@ -148,7 +148,8 @@ void main(void)
 								pru_rpmsg_send(&transport, dst, src, "inconnu\n", sizeof("inconnu\n"));
 								*/
 							
-							increment=increment+1;
+							increment=increment+2;
+							increment=increment-1;
 							pru_rpmsg_send(&transport, dst, src, &increment, sizeof(&increment));
 							
 
