@@ -103,7 +103,7 @@ void main(void)
 	volatile uint8_t *status;
 	
 	/*Added by Babin*/
-	uint16_t increment=0;
+	int16_t increment=0;
 
 	/* allow OCP master port access by the PRU so the PRU can read external memories */
 	CT_CFG.SYSCFG_bit.STANDBY_INIT = 0;
