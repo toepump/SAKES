@@ -133,7 +133,7 @@ void main(void)
 							
 							if(prev_gpio_state==0){
 
-								pru_rpmsg_send(&transport, dst, src, &c, 100);
+								pru_rpmsg_send(&transport, dst, src, &c, 10);
 								
 							}else if(prev_gpio_state==1){
 								
