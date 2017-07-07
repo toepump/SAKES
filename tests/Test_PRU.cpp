@@ -54,7 +54,7 @@ const int TIME_MAX_ENC = 5110; // time max for the loop in ms
 
 const int INTERVALMS =1000000; // in nanosecond
 
-const int INTERVAL_T1 = 90000000; //in nanosecond, interval for the thread 2
+const int INTERVAL_T1 = 1000000000; //in nanosecond, interval for the thread 2
 const int INTERVAL_T2 = 900000; //in nanosecond, interval for the thread 2
 
 const int ONESECINNANO = 1000000000; //one second in nanosecond unit
@@ -534,12 +534,14 @@ void *testThread1(void *ptr) {
 			timespec_diff(&previous_start, &start, &diff);
 
 			//test if we are respecting the time interval limit
+			/*
 			if(diff.tv_nsec>130000000)
 			{
 				cout << " " << endl;
 				cout << "Waiting superior to 130 msec" << endl;
 				cout << " " << endl;
 			}
+			*/
 
 
 			cout << "Before"<< endl;
@@ -548,7 +550,7 @@ void *testThread1(void *ptr) {
 			pollfds[0].fd = open(filename, O_RDONLY);
 			//result = read(fd, readBuf, MAX_BUFFER_SIZE);
 			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
-			cout << "Result "<< result  << endl;
+			//cout << "Result "<< result  << endl;
 			if(result > 0){
 			        number1= (int)(readBuf[0]);
 			        number2= (int)(readBuf[1]);
@@ -570,6 +572,7 @@ void *testThread1(void *ptr) {
 
 			finalResult=number1+number2*256+number3*256*256+number4*256*256*256;
 			cout << "The number send by the PRU is : " << finalResult << endl;
+			cout << "End " << endl;
 
 
 	  		//put the value of the variable of start to previous start
