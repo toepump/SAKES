@@ -17,6 +17,7 @@
 #include <pthread.h>
 #include <math.h>
 #include <poll.h>
+#include <fcntl.h>
 
 using namespace std;
 
@@ -537,7 +538,7 @@ void *testThread1(void *ptr) {
 			pollfds[0].fd = open(/dev/rpmsg_pru31, O_RDWR);
 			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
 			if(result > 0)
-			        number= (int*)readBuf;
+			        number= (int)readBuf;
 			/* Close the rpmsg_pru character device file */
 			close(pollfds[0].fd);
 
