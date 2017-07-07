@@ -505,6 +505,7 @@ void *testThread1(void *ptr) {
 	int result = 0;
 	int number;
 	char *filename = "/dev/rpmsg_pru31";
+	int fd;
 
 	int sleepOK=0;
 
@@ -537,9 +538,12 @@ void *testThread1(void *ptr) {
 
 			cout << "Before /n"<< endl;
 			/* Open the rpmsg_pru character device file */
-			pollfds[0].fd = open(filename, O_RDWR);
+			fd=open(filename, O_RDWR);
+			//pollfds[0].fd = open(filename, O_RDWR);
 			cout << "After poll /n"<< endl;
-			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
+			result = read(fd, readBuf, MAX_BUFFER_SIZE);
+			//result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
+			cout << "Result "<< result << "/n" << endl;
 			cout << "After result /n"<< endl;
 			if(result > 0){
 			        number= (int)readBuf;
