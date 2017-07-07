@@ -505,7 +505,7 @@ void *testThread1(void *ptr) {
 	struct pollfd pollfds[1];
 	int result = 0;
 	int number;
-	char *filename = "/dev/rpmsg_pru31";
+	char filename[16] = "/dev/rpmsg_pru31";
 	int fd;
 
 	int sleepOK=0;
