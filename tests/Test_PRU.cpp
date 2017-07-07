@@ -20,6 +20,7 @@
 using namespace std;
 
 #define NSEC_PER_SEC  (1000000000) /* The number of nsecs per sec. */
+#define MAX_BUFFER_SIZE 512
 
 void timespec_diff(struct timespec *start, struct timespec *stop,struct timespec *result);
 
@@ -497,6 +498,11 @@ void *testThread1(void *ptr) {
 	struct timespec previous_start;
 	struct timespec diff;
 
+	char readBuf[MAX_BUFFER_SIZE];
+	struct pollfd pollfds[1];
+	int result = 0;
+	int number;
+
 	int sleepOK=0;
 
 	//We set the begining if the thread in 1 second
@@ -525,29 +531,14 @@ void *testThread1(void *ptr) {
 				cout << " " << endl;
 			}
 
-			//get the time since the beginning of the thread was launched
-			//getTimeSinceOrigin(&t_Result);
 
-	  		//actual calculation
-			fetchAngInc(&kneePoly, &kneeCurrent); //take the value in kneeCurrent
-	  		fetchAngInc(&motorPoly, &motorCurrent);
-
-	  		angleIncToDeg(&kneeCurrent); //convert the value from inc to deg
-	  		angleIncToDeg(&motorCurrent);
-
-	  		calcVelAndAcc(&kneeCurrent, &kneePrevious);
-	  		calcVelAndAcc(&motorCurrent, &motorPrevious);
-
-	  		controller(&kneeCurrent, &motorCurrent, &maxon1);
-	  		cmdMotor(&maxon1);
-
-	  		//Copyb the data from current to previous
-	  		copyCurrToPrevEnc(&kneePrevious, &kneeCurrent); //copy the value from curr to previous
-	  		copyCurrToPrevEnc(&motorPrevious, &motorCurrent); //copy the value from curr to previous
-
-	  		storeIntoOutput(&kneeCurrent, &motorCurrent, &maxon1, &outputArray, ticks_t1);
-
-	  		ticks_t1++; // Increment the ticks value
+			/* Open the rpmsg_pru character device file */
+			pollfds[0].fd = open(/dev/rpmsg_pru30, O_RDWR);
+			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
+			if(result > 0)
+			        number= (int*)readBuf;
+			/* Close the rpmsg_pru character device file */
+			close(pollfds[0].fd);
 
 	  		//put the value of the variable of start to previous start
 		  	previous_start.tv_sec=start.tv_sec;
@@ -570,11 +561,8 @@ void *testThread1(void *ptr) {
 
 	//We wait 2 seconds to output the files
 	waitTime.tv_sec+=1;
-	waitTime.tv_sec+=1;
 	sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 
-
-	fileTestMotor(&outputArray);
 
 	return (void*) NULL;
 }

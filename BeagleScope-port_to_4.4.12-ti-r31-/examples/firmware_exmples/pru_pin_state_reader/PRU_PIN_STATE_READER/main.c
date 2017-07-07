@@ -92,6 +92,8 @@ void main(void)
 	uint16_t src, dst, len;
 	uint32_t prev_gpio_state;
 	volatile uint8_t *status;
+	
+	int output;
 
 	
 	/* allow OCP master port access by the PRU so the PRU can read external memories */
@@ -125,9 +127,11 @@ void main(void)
 							prev_gpio_state = __R31 & CHECK_BIT;
 							
 							if(prev_gpio_state==0){
-								pru_rpmsg_send(&transport, dst, src, "0\n", sizeof("0\n"));						
-							}else if(prev_gpio_state==1){							
-								pru_rpmsg_send(&transport, dst, src, "1\n", sizeof("1\n"));
+								output=output+1;
+								pru_rpmsg_send(&transport, dst, src, &output, sizeof(int));						
+							}else if(prev_gpio_state==1){
+								output=output+1;
+								pru_rpmsg_send(&transport, dst, src, &output, sizeof(int));	
 							}else{
 								pru_rpmsg_send(&transport, dst, src, "inconnu\n", sizeof("inconnu\n"));
 							}		
