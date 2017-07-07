@@ -49,7 +49,7 @@ echo "The firmware source is based on pru-software-support-package by TI and can
 echo "git clone git://git.ti.com/pru-software-support-package/pru-software-support-package.git"
 echo "******NOTE: use a resistor >470 ohms to connect to the LED, I have alredy made this mistake."
 echo "To continue, press any key:"
-read
+//read
 
 echo "-Building project"
 	cd PRU_PIN_STATE_READER

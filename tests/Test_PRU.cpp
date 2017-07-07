@@ -565,7 +565,7 @@ void *testThread1(void *ptr) {
 			        cout << " " << endl;
 			        */
 			}else{
-					cout << "Result not supperior to 0 :  /n"<< endl;
+					cout << "Result not superior to 0 :  /n"<< endl;
 			}
 			/* Close the rpmsg_pru character device file */
 			close(pollfds[0].fd);
