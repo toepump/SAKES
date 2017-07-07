@@ -53,7 +53,7 @@ const int TIME_MAX_ENC = 5110; // time max for the loop in ms
 
 const int INTERVALMS =1000000; // in nanosecond
 
-const int INTERVAL_T1 = 900000; //in nanosecond, interval for the thread 2
+const int INTERVAL_T1 = 90000000; //in nanosecond, interval for the thread 2
 const int INTERVAL_T2 = 900000; //in nanosecond, interval for the thread 2
 
 const int ONESECINNANO = 1000000000; //one second in nanosecond unit
@@ -527,14 +527,15 @@ void *testThread1(void *ptr) {
 			timespec_diff(&previous_start, &start, &diff);
 
 			//test if we are respecting the time interval limit
-			if(diff.tv_nsec>1300000)
+			if(diff.tv_nsec>130000000)
 			{
 				cout << " " << endl;
-				cout << "Waiting superior to 1.3 msec" << endl;
+				cout << "Waiting superior to 130 msec" << endl;
 				cout << " " << endl;
 			}
 
 
+			cout << "Before /n"<< endl;
 			/* Open the rpmsg_pru character device file */
 			pollfds[0].fd = open(filename, O_RDWR);
 			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
@@ -544,6 +545,8 @@ void *testThread1(void *ptr) {
 			close(pollfds[0].fd);
 
 			cout << "The results is : " << number << " . /n"<< endl;
+
+			cout << "After /n"<< endl;
 
 	  		//put the value of the variable of start to previous start
 		  	previous_start.tv_sec=start.tv_sec;
