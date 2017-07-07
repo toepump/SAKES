@@ -504,6 +504,7 @@ void *testThread1(void *ptr) {
 	struct pollfd pollfds[1];
 	int result = 0;
 	int number;
+	char *filename = "/dev/rpmsg_pru31";
 
 	int sleepOK=0;
 
@@ -535,7 +536,7 @@ void *testThread1(void *ptr) {
 
 
 			/* Open the rpmsg_pru character device file */
-			pollfds[0].fd = open(/dev/rpmsg_pru31, O_RDWR);
+			pollfds[0].fd = open(filename, O_RDWR);
 			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
 			if(result > 0)
 			        number= (int)readBuf;
