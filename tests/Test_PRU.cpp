@@ -540,9 +540,9 @@ void *testThread1(void *ptr) {
 			cout << "Before"<< endl;
 			/* Open the rpmsg_pru character device file */
 			//fd=open(filename, O_RDWR);
-			pollfds[0].fd = open(filename, O_RDONLY);
+			pollfds[0].fd = open(filename, O_RDWR);
 			//result = read(fd, readBuf, MAX_BUFFER_SIZE);
-			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
+			result = read(pollfds[0].fd, &readBuf, MAX_BUFFER_SIZE);
 			cout << "Result "<< result  << endl;
 			if(result > 0){
 			        number= (int)readBuf;
