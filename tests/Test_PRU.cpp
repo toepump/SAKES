@@ -538,13 +538,14 @@ void *testThread1(void *ptr) {
 
 			cout << "Before /n"<< endl;
 			/* Open the rpmsg_pru character device file */
-			fd=open(filename, O_RDWR);
-			//pollfds[0].fd = open(filename, O_RDWR);
+			//fd=open(filename, O_RDWR);
+			pollfds[0].fd = open(filename, O_RDWR);
 			cout << "After poll /n"<< endl;
-			result = read(fd, readBuf, MAX_BUFFER_SIZE);
-			//result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
-			cout << "Result "<< result << "/n" << endl;
+			//result = read(fd, readBuf, MAX_BUFFER_SIZE);
+			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
 			cout << "After result /n"<< endl;
+			cout << "Result "<< result << "/n" << endl;
+			cout << "After display result /n"<< endl;
 			if(result > 0){
 			        number= (int)readBuf;
 			        cout << "The results is : " << number << " . /n"<< endl;
