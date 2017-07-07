@@ -504,7 +504,10 @@ void *testThread1(void *ptr) {
 	char readBuf[MAX_BUFFER_SIZE];
 	struct pollfd pollfds[1];
 	int result = 0;
-	int number;
+	int number1;
+	int number2;
+	int number3;
+	int number4;
 	char filename[18] = "/dev/rpmsg_pru31";
 	int fd;
 
@@ -545,9 +548,15 @@ void *testThread1(void *ptr) {
 			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
 			cout << "Result "<< result  << endl;
 			if(result > 0){
-			        number= (int)(readBuf[0]);
+			        number1= (int)(readBuf[0]);
+			        number2= (int)(readBuf[1]);
+			        number3= (int)(readBuf[2]);
+			        number4= (int)(readBuf[3]);
 			        cout << "The readBuf  is : " << readBuf << endl;
-			        cout << "The number is : " << number << endl;
+			        cout << "The number 1 is : " << number1 << endl;
+			        cout << "The number 2 is : " << number2 << endl;
+			        cout << "The number 3 is : " << number3 << endl;
+			        cout << "The number 4 is : " << number4 << endl;
 			        cout << " " << endl;
 			}else{
 					cout << "Result not supperior to 0 :  /n"<< endl;
