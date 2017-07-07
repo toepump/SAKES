@@ -542,10 +542,10 @@ void *testThread1(void *ptr) {
 			//fd=open(filename, O_RDWR);
 			pollfds[0].fd = open(filename, O_RDWR);
 			//result = read(fd, readBuf, MAX_BUFFER_SIZE);
-			result = read(pollfds[0].fd, &readBuf, MAX_BUFFER_SIZE);
+			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
 			cout << "Result "<< result  << endl;
 			if(result > 0){
-			        number= readBuf-'0';
+			        number= atoi(readBuf);
 			        cout << "The readBuf is : " << readBuf << endl;
 			        cout << "The number is : " << number << endl;
 			        cout << " " << endl;
