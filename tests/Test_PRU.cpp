@@ -545,7 +545,7 @@ void *testThread1(void *ptr) {
 			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
 			cout << "Result "<< result  << endl;
 			if(result > 0){
-			        number= (int*)readBuf;
+			        number= (int)readBuf;
 			        cout << "The results is : " << number << endl;
 			        cout << " " << endl;
 			}else{
