@@ -539,12 +539,16 @@ void *testThread1(void *ptr) {
 			/* Open the rpmsg_pru character device file */
 			pollfds[0].fd = open(filename, O_RDWR);
 			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
-			if(result > 0)
+			if(result > 0){
 			        number= (int)readBuf;
+			        cout << "The results is : " << number << " . /n"<< endl;
+			}else{
+					cout << "Result not supperior to 0 :  /n"<< endl;
+			}
 			/* Close the rpmsg_pru character device file */
 			close(pollfds[0].fd);
 
-			cout << "The results is : " << number << " . /n"<< endl;
+
 
 			cout << "After /n"<< endl;
 
