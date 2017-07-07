@@ -541,24 +541,19 @@ void *testThread1(void *ptr) {
 			/* Open the rpmsg_pru character device file */
 			//fd=open(filename, O_RDWR);
 			pollfds[0].fd = open(filename, O_RDONLY);
-			cout << "After poll "<< endl;
 			//result = read(fd, readBuf, MAX_BUFFER_SIZE);
 			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
-			cout << "After result"<< endl;
 			cout << "Result "<< result  << endl;
-			cout << "After display result" << endl;
 			if(result > 0){
-			        number= (int)readBuf;
-			        cout << "The results is : " << number << " . /n"<< endl;
+			        number= (int*)readBuf;
+			        cout << "The results is : " << number << endl;
+			        cout << " " << endl;
 			}else{
 					cout << "Result not supperior to 0 :  /n"<< endl;
 			}
 			/* Close the rpmsg_pru character device file */
 			close(pollfds[0].fd);
 
-
-
-			cout << "After /n"<< endl;
 
 	  		//put the value of the variable of start to previous start
 		  	previous_start.tv_sec=start.tv_sec;
