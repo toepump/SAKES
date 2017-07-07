@@ -543,7 +543,7 @@ void *testThread1(void *ptr) {
 			/* Close the rpmsg_pru character device file */
 			close(pollfds[0].fd);
 
-			cout << "The results is : " << results << " . /n"<< endl;
+			cout << "The results is : " << number << " . /n"<< endl;
 
 	  		//put the value of the variable of start to previous start
 		  	previous_start.tv_sec=start.tv_sec;
