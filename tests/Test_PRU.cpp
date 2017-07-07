@@ -546,7 +546,7 @@ void *testThread1(void *ptr) {
 			cout << "Result "<< result  << endl;
 			if(result > 0){
 			        number= (int)(readBuf[0]);
-			        cout << "The readBuf is : " << readBuf << endl;
+			        cout << "The readBuf  is : " << readBuf << endl;
 			        cout << "The number is : " << number << endl;
 			        cout << " " << endl;
 			}else{
