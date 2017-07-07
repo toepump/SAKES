@@ -8,6 +8,10 @@
 #define PRU_NUM 1			// define which pru is used
 #define SHM_OFFSET 2048		// http://www.embedded-things.com/bbb/understanding-bbb-pru-shared-memory-access/
 
+int pru_init(void);
+void pru_load(int pru_num, char* datafile, char* codefile);
+void pru_stop(int pru_num);
+
 int pru_init(void)
 {
 	tpruss_intc_initdata pruss_intc_initdata = PRUSS_INTC_INITDATA;
