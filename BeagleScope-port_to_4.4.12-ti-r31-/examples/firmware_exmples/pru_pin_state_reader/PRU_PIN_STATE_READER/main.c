@@ -127,13 +127,13 @@ void main(void)
 							prev_gpio_state = __R31 & CHECK_BIT;
 							
 							if(prev_gpio_state==0){
-								//output=output+1;
-								//pru_rpmsg_send(&transport, dst, src, &output, sizeof(int));	
-								pru_rpmsg_send(&transport, dst, src, "0\n", sizeof("0\n"));
+								output=output+1;
+								pru_rpmsg_send(&transport, dst, src, &output, sizeof(int));	
+								//pru_rpmsg_send(&transport, dst, src, "0\n", sizeof("0\n"));
 							}else if(prev_gpio_state==1){
-								//output=output+1;
-								//pru_rpmsg_send(&transport, dst, src, &output, sizeof(int));	
-								pru_rpmsg_send(&transport, dst, src, "1\n", sizeof("1\n"));
+								output=output+1;
+								pru_rpmsg_send(&transport, dst, src, &output, sizeof(int));	
+								//pru_rpmsg_send(&transport, dst, src, "1\n", sizeof("1\n"));
 							}else{
 								pru_rpmsg_send(&transport, dst, src, "inconnu\n", sizeof("inconnu\n"));
 							}		
