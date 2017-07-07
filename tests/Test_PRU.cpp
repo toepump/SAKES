@@ -18,6 +18,7 @@
 #include <math.h>
 #include <poll.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 
 using namespace std;
 
@@ -536,16 +537,16 @@ void *testThread1(void *ptr) {
 			}
 
 
-			cout << "Before /n"<< endl;
+			cout << "Before"<< endl;
 			/* Open the rpmsg_pru character device file */
 			//fd=open(filename, O_RDWR);
 			pollfds[0].fd = open(filename, O_RDWR);
-			cout << "After poll /n"<< endl;
+			cout << "After poll "<< endl;
 			//result = read(fd, readBuf, MAX_BUFFER_SIZE);
 			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
-			cout << "After result /n"<< endl;
-			cout << "Result "<< result << "/n" << endl;
-			cout << "After display result /n"<< endl;
+			cout << "After result"<< endl;
+			cout << "Result "<< result  << endl;
+			cout << "After display result" << endl;
 			if(result > 0){
 			        number= (int)readBuf;
 			        cout << "The results is : " << number << " . /n"<< endl;
