@@ -93,7 +93,7 @@ void main(void)
 	uint32_t prev_gpio_state;
 	volatile uint8_t *status;
 	
-	int output=65;
+	int output=66;
 
 	
 	/* allow OCP master port access by the PRU so the PRU can read external memories */
