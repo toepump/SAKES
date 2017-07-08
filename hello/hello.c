@@ -41,7 +41,7 @@
 #define MAX_BUFFER_SIZE		512
 char readBuf[MAX_BUFFER_SIZE];
 
-#define NUM_MESSAGES		10
+#define NUM_MESSAGES		20
 #define DEVICE_NAME		"/dev/rpmsg_pru31"
 
 int main(void)
