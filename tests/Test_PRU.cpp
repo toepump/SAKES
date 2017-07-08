@@ -522,6 +522,8 @@ void *testThread1(void *ptr) {
 
 	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 
+	cout << "Beginning of loop " << endl;
+
 	while(ticks_t1<TIME_MAX+1){
 
 		/* wait until next shot */
