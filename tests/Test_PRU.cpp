@@ -536,6 +536,10 @@ void *testThread1(void *ptr) {
 			clock_gettime(CLOCK_MONOTONIC, &start);
 			timespec_diff(&previous_start, &start, &diff);
 
+			cout << "Before open channel to the PRU " << endl;
+
+			pollfds[0].fd = open(filename, O_RDONLY);
+
 			cout << "Before send to the PRU " << endl;
 
 			//Message to the PRU through the RPMsg channel
@@ -545,6 +549,11 @@ void *testThread1(void *ptr) {
 			}
 
 			cout << "After send to the PRU " << endl;
+
+			close(pollfds[0].fd);
+
+			cout << "After closing to the PRU " << endl;
+
 			//test if we are respecting the time interval limit
 			/*
 			if(diff.tv_nsec>130000000)
