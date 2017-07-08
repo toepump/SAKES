@@ -3,7 +3,7 @@ hello: hello.c
 
 PRU_RPMSG_ROOT:= /usr/lib/ti/pru-software-support-package/
 PRU_INCLUDE:= --include_path=/usr/include/arm-linux-gnueabihf/ --include_path=$(PRU_RPMSG_ROOT)include/ --include_path=$(PRU_RPMSG_ROOT)include/am335x/
-CODE_ROOT:=/root/hello/
+CODE_ROOT:=/root/SAKES/hello/
 PRU0_ROOT:= $(CODE_ROOT)pru0/
 PRU1_ROOT:= $(CODE_ROOT)pru1/
 LINKER_CMD_FILE:= hello.cmd
