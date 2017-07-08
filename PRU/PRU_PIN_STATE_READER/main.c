@@ -36,7 +36,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
-//#include <pru_cfg.h>
+#include <pru_cfg.h>
 #include <pru_intc.h>
 #include <rsc_types.h>
 #include <pru_virtqueue.h>
