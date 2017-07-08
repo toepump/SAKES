@@ -541,7 +541,7 @@ void *testThread1(void *ptr) {
 
 			//cout << "Before open channel to the PRU " << endl;
 
-			pollfds[0].fd = open(filename, O_RDONLY);
+			pollfds[0].fd = open(filename, O_RDWR);
 
 			//cout << "Before send to the PRU " << endl;
 
