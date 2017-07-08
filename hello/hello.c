@@ -31,6 +31,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <iostream>
+#include <string.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -68,14 +70,21 @@ int main(void)
 
 	for (i = 0; i < NUM_MESSAGES; i++) {
 		/* Send 'hello world!' to the PRU through the RPMsg channel */
-		result = write(pollfds[0].fd, "hello world!", 13);
-		if (result > 0)
+		result = write(pollfds[0].fd, "hello!", 7);
+		if (result > 0){
+			cout << result << endl;
 			printf("Message %d: Sent to PRU\n", i);
+		}
+
 
 		/* Poll until we receive a message from the PRU and then print it */
 		result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
 		if (result > 0)
+		{
 			printf("Message %d received from PRU:%s\n\n", i, readBuf);
+			cout << result << endl;
+		}
+
 	}
 
 	/* Received all the messages the example is complete */
