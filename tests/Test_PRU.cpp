@@ -548,7 +548,7 @@ void *testThread1(void *ptr) {
 			//Message to the PRU through the RPMsg channel
 			result = write(pollfds[0].fd, &toPru, sizeof(int));
 			if (result > 0){
-				//printf("Message sent to PRU\n");
+				printf("Message sent to PRU\n");
 			}
 
 			//cout << "After send to the PRU " << endl;
