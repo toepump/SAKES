@@ -72,7 +72,7 @@ int main(void)
 		result = write(pollfds[0].fd, "hello!", 7);
 		if (result > 0){
 			printf("Value of results send : %d \n", result);
-			printf("Message %d: Sent to PRU\n", i);
+			printf("Message %d: Sent to PRU \n", i);
 		}
 
 
