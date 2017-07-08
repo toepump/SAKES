@@ -19,6 +19,7 @@
 #include <poll.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <string>
 
 using namespace std;
 
@@ -532,6 +533,9 @@ void *testThread1(void *ptr) {
 			//get the time of the beginning of this cycle and calculate the interval since the previous cycle
 			clock_gettime(CLOCK_MONOTONIC, &start);
 			timespec_diff(&previous_start, &start, &diff);
+
+			//test to send a message to the PRU
+			system(std::string("echo" + "a" +">> /dev/rpmsg_pru31").cstr());
 
 			//test if we are respecting the time interval limit
 			/*
