@@ -54,13 +54,15 @@ void main(void)
 		
 			if (pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS) {
 			
-#ifdef PRU0
+//#ifdef PRU0
 			  pru_rpmsg_send(&transport,dst, src, "PRU0 responding\n", 17);
-#endif
+//#endif
+			  /*
 #ifdef PRU1
 			  pru_rpmsg_send(&transport,dst, src, "PRU1 responding\n", 17);
 #endif
 			  pru_rpmsg_send(&transport, dst, src, payload, len);
+*/
 			} else{
 			  CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
 
