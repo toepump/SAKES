@@ -41,7 +41,7 @@
 #define MAX_BUFFER_SIZE		512
 char readBuf[MAX_BUFFER_SIZE];
 
-#define NUM_MESSAGES		5
+#define NUM_MESSAGES		20
 #define DEVICE_NAME		"/dev/rpmsg_pru31"
 
 int main(void)
@@ -71,7 +71,7 @@ int main(void)
 		/* Send 'hello world!' to the PRU through the RPMsg channel */
 		result = write(pollfds[0].fd, "hello!", 7);
 		if (result > 0){
-			cout << result << endl;
+			printf("Value of results send \n", result);
 			printf("Message %d: Sent to PRU\n", i);
 		}
 
@@ -81,7 +81,7 @@ int main(void)
 		if (result > 0)
 		{
 			printf("Message %d received from PRU:%s\n\n", i, readBuf);
-			cout << result << endl;
+			printf("Value of results receive \n", result);
 		}
 
 	}
