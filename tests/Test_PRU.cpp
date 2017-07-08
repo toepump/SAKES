@@ -534,8 +534,10 @@ void *testThread1(void *ptr) {
 			clock_gettime(CLOCK_MONOTONIC, &start);
 			timespec_diff(&previous_start, &start, &diff);
 
-			//test to send a message to the PRU
-			system(std::string("echo" + "a" +">> /dev/rpmsg_pru31").cstr());
+			//Message to the PRU through the RPMsg channel
+			result = write(pollfds[0].fd, "send  angle!", 13);
+			if (result > 0)
+				printf("Message %d: Sent to PRU\n");
 
 			//test if we are respecting the time interval limit
 			/*
@@ -547,8 +549,6 @@ void *testThread1(void *ptr) {
 			}
 			*/
 
-
-			cout << "Before"<< endl;
 			/* Open the rpmsg_pru character device file */
 			//fd=open(filename, O_RDWR);
 			pollfds[0].fd = open(filename, O_RDONLY);
