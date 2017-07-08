@@ -16,11 +16,11 @@ LDFLAGS+= -L.
 
 am335x-pru0-fw: $(CODE_ROOT)main.c
 	$(PRU_TOOLS)clpru $(CFLAGS) $(PRU_INCLUDE) -ppd -ppa -fe $(PRU0_ROOT)/main0.object $(CODE_ROOT)main.c -D PRU0
-	$(PRU_TOOLS)clpru -z $(LINKER_CMD_FILE) -o $(PRU0_ROOT)am335x-pru0-fw $(PRU0_ROOT)/main0.object -l$(PRU_RPMSG_ROOT)lib/rpmsg_lib.lib
+	$(PRU_TOOLS)clpru -z $(LINKER_CMD_FILE) -o $(PRU0_ROOT)am335x-pru0-fw $(PRU0_ROOT)main0.object -l$(PRU_RPMSG_ROOT)lib/rpmsg_lib.lib
 
 am335x-pru1-fw: $(CODE_ROOT)main.c
 	$(PRU_TOOLS)clpru $(CFLAGS) $(PRU_INCLUDE) -ppd -ppa -fe $(PRU1_ROOT)/main1.object $(CODE_ROOT)main.c -D PRU1
-	$(PRU_TOOLS)clpru -z $(LINKER_CMD_FILE) -o $(PRU1_ROOT)am335x-pru1-fw $(PRU1_ROOT)/main1.object -l$(PRU_RPMSG_ROOT)lib/rpmsg_lib.lib
+	$(PRU_TOOLS)clpru -z $(LINKER_CMD_FILE) -o $(PRU1_ROOT)am335x-pru1-fw $(PRU1_ROOT)main1.object -l$(PRU_RPMSG_ROOT)lib/rpmsg_lib.lib
 
 install: am335x-pru0-fw am335x-pru1-fw
 	dmesg --clear
@@ -34,10 +34,10 @@ install: am335x-pru0-fw am335x-pru1-fw
 	modprobe pru_rproc
 	dmesg
 clean:
-	rm $(PRU0_ROOT)/am335x-pru0-fw
-	rm $(PRU1_ROOT)/am335x-pru1-fw
-	rm $(PRU0_ROOT)/*.object
-	rm $(PRU1_ROOT)/*.object
+	rm $(PRU0_ROOT)am335x-pru0-fw
+	rm $(PRU1_ROOT)am335x-pru1-fw
+	rm $(PRU0_ROOT)*.object
+	rm $(PRU1_ROOT)*.object
 	rm *.pp
 
 #stuff from the TI makefile that might be needed later
