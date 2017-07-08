@@ -539,11 +539,11 @@ void *testThread1(void *ptr) {
 			clock_gettime(CLOCK_MONOTONIC, &start);
 			timespec_diff(&previous_start, &start, &diff);
 
-			cout << "Before open channel to the PRU " << endl;
+			//cout << "Before open channel to the PRU " << endl;
 
 			pollfds[0].fd = open(filename, O_RDONLY);
 
-			cout << "Before send to the PRU " << endl;
+			//cout << "Before send to the PRU " << endl;
 
 			//Message to the PRU through the RPMsg channel
 			result = write(pollfds[0].fd, &toPru, sizeof(int));
@@ -551,11 +551,11 @@ void *testThread1(void *ptr) {
 				printf("Message %d: Sent to PRU\n");
 			}
 
-			cout << "After send to the PRU " << endl;
+			//cout << "After send to the PRU " << endl;
 
 			close(pollfds[0].fd);
 
-			cout << "After closing to the PRU " << endl;
+			//cout << "After closing to the PRU " << endl;
 
 			//test if we are respecting the time interval limit
 			/*
@@ -578,6 +578,7 @@ void *testThread1(void *ptr) {
 			        number2= (int)(readBuf[1]);
 			        number3= (int)(readBuf[2]);
 			        number4= (int)(readBuf[3]);
+			        cout << "The number send by the PRU is : " << finalResult << endl;
 			        /*
 			        cout << "The readBuf  is : " << readBuf << endl;
 			        cout << "The number 1 is : " << number1 << endl;
@@ -593,8 +594,8 @@ void *testThread1(void *ptr) {
 			close(pollfds[0].fd);
 
 			finalResult=number1+number2*256+number3*256*256+number4*256*256*256;
-			cout << "The number send by the PRU is : " << finalResult << endl;
-			cout << "End " << endl;
+
+			//cout << "End " << endl;
 
 
 	  		//put the value of the variable of start to previous start
