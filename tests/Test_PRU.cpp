@@ -548,7 +548,7 @@ void *testThread1(void *ptr) {
 			//Message to the PRU through the RPMsg channel
 			result = write(pollfds[0].fd, &toPru, sizeof(int));
 			if (result > 0){
-				printf("Message %d: Sent to PRU\n");
+				//printf("Message sent to PRU\n");
 			}
 
 			//cout << "After send to the PRU " << endl;
@@ -571,6 +571,8 @@ void *testThread1(void *ptr) {
 			//fd=open(filename, O_RDWR);
 			pollfds[0].fd = open(filename, O_RDONLY);
 			//result = read(fd, readBuf, MAX_BUFFER_SIZE);
+			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
+			//this is tricky
 			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
 			//cout << "Result "<< result  << endl;
 			if(result > 0){
