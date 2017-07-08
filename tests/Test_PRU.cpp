@@ -525,12 +525,18 @@ void *testThread1(void *ptr) {
 
 	cout << "Beginning of loop " << endl;
 
+	pollfds[0].fd = open(filename, O_RDWR);
+	if (pollfds[0].fd < 0){
+		printf("Failed to open \n");
+	}
+
 	while(ticks_t1<TIME_MAX+1){
 
 		toPru=30;
 
 		/* wait until next shot */
 		if(sleepOK == 0){
+			toPru=toPru+1;
 
 			//wait to continue until the next waiTime (next millisecond)
 			sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
@@ -538,11 +544,6 @@ void *testThread1(void *ptr) {
 			//get the time of the beginning of this cycle and calculate the interval since the previous cycle
 			clock_gettime(CLOCK_MONOTONIC, &start);
 			timespec_diff(&previous_start, &start, &diff);
-
-			//cout << "Before open channel to the PRU " << endl;
-
-			pollfds[0].fd = open(filename, O_RDWR);
-			toPru=toPru+1;
 
 			//cout << "Before send to the PRU " << endl;
 
@@ -554,7 +555,6 @@ void *testThread1(void *ptr) {
 
 			//cout << "After send to the PRU " << endl;
 
-			close(pollfds[0].fd);
 
 			//cout << "After closing to the PRU " << endl;
 
@@ -570,7 +570,7 @@ void *testThread1(void *ptr) {
 
 			/* Open the rpmsg_pru character device file */
 			//fd=open(filename, O_RDWR);
-			pollfds[0].fd = open(filename, O_RDONLY);
+
 			//result = read(fd, readBuf, MAX_BUFFER_SIZE);
 			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
 
@@ -592,9 +592,6 @@ void *testThread1(void *ptr) {
 			}else{
 					cout << "Result not superior to 0 :"<< endl;
 			}
-			/* Close the rpmsg_pru character device file */
-			close(pollfds[0].fd);
-
 			finalResult=number1+number2*256+number3*256*256+number4*256*256*256;
 
 			//cout << "End " << endl;
@@ -618,6 +615,9 @@ void *testThread1(void *ptr) {
 		}
 
 	}
+
+	/* Close the rpmsg_pru character device file */
+	close(pollfds[0].fd);
 
 	//We wait 2 seconds to output the files
 	waitTime.tv_sec+=1;
