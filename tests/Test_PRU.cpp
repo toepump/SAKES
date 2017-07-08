@@ -513,6 +513,7 @@ void *testThread1(void *ptr) {
 	int finalResult;
 	char filename[18] = "/dev/rpmsg_pru31";
 	int fd;
+	int toPru;
 
 	int sleepOK=0;
 
@@ -525,6 +526,8 @@ void *testThread1(void *ptr) {
 	cout << "Beginning of loop " << endl;
 
 	while(ticks_t1<TIME_MAX+1){
+
+		toPru=30;
 
 		/* wait until next shot */
 		if(sleepOK == 0){
@@ -543,7 +546,7 @@ void *testThread1(void *ptr) {
 			cout << "Before send to the PRU " << endl;
 
 			//Message to the PRU through the RPMsg channel
-			result = write(pollfds[0].fd, "send  angle!", 13);
+			result = write(pollfds[0].fd, &toPru, sizeof(int));
 			if (result > 0){
 				printf("Message %d: Sent to PRU\n");
 			}
