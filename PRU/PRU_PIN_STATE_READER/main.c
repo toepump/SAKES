@@ -81,7 +81,8 @@ volatile register uint32_t __R31;
  */
 #define CHECK_BIT	0x0001
 
-uint8_t payload[RPMSG_BUF_SIZE];
+//uint8_t payload[RPMSG_BUF_SIZE];
+unsigned char payload[RPMSG_BUF_SIZE];
 
 /*
  * main.c
@@ -118,7 +119,9 @@ void main(void)
 			/* Check bit 30 of register R31 to see if the ARM has kicked us */
 			if (__R31 & HOST_INT) {
 				/* Clear the event status */
-				CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
+
+				//CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
+
 				while(1){
 					/* Receive all available messages, multiple messages can be sent per kick */
 
@@ -131,12 +134,16 @@ void main(void)
 									if(pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS){
 										//pru_rpmsg_send(&transport,dst, src, "PRU1 responding\n", 17);
 										pru_rpmsg_send(&transport, dst, src, &output, sizeof(int));
+									}else{
+										CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
 									}
 								}else if(prev_gpio_state==1){
 									output=output-1;
 									if(pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS){
 										//pru_rpmsg_send(&transport,dst, src, "PRU1 responding\n", 17);
 										pru_rpmsg_send(&transport, dst, src, &output, sizeof(int));
+									}else{
+										CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
 									}
 								}else{
 									pru_rpmsg_send(&transport, dst, src, "inconnu\n", sizeof("inconnu\n"));

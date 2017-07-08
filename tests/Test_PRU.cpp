@@ -572,8 +572,7 @@ void *testThread1(void *ptr) {
 			pollfds[0].fd = open(filename, O_RDONLY);
 			//result = read(fd, readBuf, MAX_BUFFER_SIZE);
 			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
-			//this is tricky
-			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
+
 			//cout << "Result "<< result  << endl;
 			if(result > 0){
 			        number1= (int)(readBuf[0]);
@@ -590,7 +589,7 @@ void *testThread1(void *ptr) {
 			        cout << " " << endl;
 			        */
 			}else{
-					cout << "Result not superior to 0 :  /n"<< endl;
+					cout << "Result not superior to 0 :"<< endl;
 			}
 			/* Close the rpmsg_pru character device file */
 			close(pollfds[0].fd);
