@@ -128,12 +128,12 @@ void main(void)
 
 								if(prev_gpio_state==0){
 									output=output+1;
-									if(pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS) {
+									if(pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS){
 										pru_rpmsg_send(&transport, dst, src, &output, sizeof(int));
 									}
 								}else if(prev_gpio_state==1){
 									output=output+2;
-									if(pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS) {
+									if(pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS){
 										pru_rpmsg_send(&transport, dst, src, &output, sizeof(int));
 									}
 								}else{
