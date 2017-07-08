@@ -534,11 +534,15 @@ void *testThread1(void *ptr) {
 			clock_gettime(CLOCK_MONOTONIC, &start);
 			timespec_diff(&previous_start, &start, &diff);
 
+			cout << "Before send to the PRU " << endl;
+
 			//Message to the PRU through the RPMsg channel
 			result = write(pollfds[0].fd, "send  angle!", 13);
-			if (result > 0)
+			if (result > 0){
 				printf("Message %d: Sent to PRU\n");
+			}
 
+			cout << "After send to the PRU " << endl;
 			//test if we are respecting the time interval limit
 			/*
 			if(diff.tv_nsec>130000000)
