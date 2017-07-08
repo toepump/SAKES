@@ -80,8 +80,8 @@ int main(void)
 		result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
 		if (result > 0)
 		{
-			printf("Message %d received from PRU:%s\n\n", i, readBuf);
-			printf("Value of results receive : %d \n", result);
+			printf("Message %d received from PRU:%s\n", i, readBuf);
+			printf("Value of results receive : %d \n\n", result);
 		}
 
 	}
