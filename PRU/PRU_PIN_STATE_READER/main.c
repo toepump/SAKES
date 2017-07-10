@@ -79,7 +79,7 @@ volatile register uint32_t __R31;
  * the state of pr1_pru1_pru_r31_0. This gpio can be 
  * muxed to P8_45. 
  */
-#define CHECK_BIT	0x0004 //Before 0x0001
+#define CHECK_BIT	0x0002 //Before 0x0001
 
 //uint8_t payload[RPMSG_BUF_SIZE];
 unsigned char payload[RPMSG_BUF_SIZE];
