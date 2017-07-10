@@ -37,7 +37,7 @@
 
 #Do not change until you are making required changes in the firmware code.  
 HEADER=P8_
-PIN_NUMBER=43
+PIN_NUMBER=44
 #The firmware will need significant changes to port it to PRU_CORE 2
 PRU_CORE=1
 
@@ -76,5 +76,5 @@ echo "-Rebooting"
 	fi
 
 echo "********************************************************"
-echo -e "Done. Now \"echo S > /dev/rpmsg_pru31 && cat /dev/rpmsg_pru31\" and change the logical state of P8_45"
+echo -e "Done. Now \"echo S > /dev/rpmsg_pru31 && cat /dev/rpmsg_pru31\" and change the logical state of $HEADER$PIN_NUMBER"
 echo "********************************************************"
