@@ -132,7 +132,8 @@ void main(void)
 						CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
 					}
 
-						/*    a ^ b istwo */
+						/*    a ^ b, 0 if same, 1 if different */
+						/* a & b, 1 if a=1 and b=1, 0 otherwise */
 						if ((__R31 ^ prev_gpio_state) & CHECK_BIT){
 								prev_gpio_state = __R31 & CHECK_BIT;
 								if(prev_gpio_state==0){
