@@ -114,43 +114,36 @@ void main(void)
 	pru_virtqueue_init(&transport.virtqueue1, &resourceTable.rpmsg_vring1, TO_ARM_HOST, FROM_ARM_HOST);
 
 	/* Create the RPMsg channel between the PRU and ARM user space using the transport structure. */
-	//while (pru_rpmsg_channel(RPMSG_NS_CREATE, &transport, CHAN_NAME, CHAN_DESC, CHAN_PORT) != PRU_RPMSG_SUCCESS){
+	while (pru_rpmsg_channel(RPMSG_NS_CREATE, &transport, CHAN_NAME, CHAN_DESC, CHAN_PORT) != PRU_RPMSG_SUCCESS){
 		while (1) {
 			/* Check bit 30 of register R31 to see if the ARM has kicked us */
 			if (__R31 & HOST_INT) {
 				/* Clear the event status */
-
-				//CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
-
-				while(1){
+				CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
 					/* Receive all available messages, multiple messages can be sent per kick */
-
-					if(pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS){
+					while(pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS){
 						//pru_rpmsg_send(&transport,dst, src, "PRU1 responding\n", 17);
-						pru_rpmsg_send(&transport, dst, src, &output, sizeof(int));
-					}else{
-						CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
-					}
+						while(1){
+							/*    a ^ b, 0 if same, 1 if different */
+							/* a & b, 1 if a=1 and b=1, 0 otherwise */
 
-						/*    a ^ b, 0 if same, 1 if different */
-						/* a & b, 1 if a=1 and b=1, 0 otherwise */
-						if ((__R31 ^ prev_gpio_state) & CHECK_BIT){
-								prev_gpio_state = __R31 & CHECK_BIT;
-								if(prev_gpio_state==0){
-									output=output+1;
-
-								}else if(prev_gpio_state==1){
-									output=output-1;
-								}else{
-									pru_rpmsg_send(&transport, dst, src, "inconnu\n", sizeof("inconnu\n"));
-								}
+							if ((__R31 ^ prev_gpio_state) & CHECK_BIT){
+									prev_gpio_state = __R31 & CHECK_BIT;
+									if(prev_gpio_state==0){
+										output=output+1;
+										pru_rpmsg_send(&transport, dst, src, &output, sizeof(int));
+									}else if(prev_gpio_state==1){
+										output=output-1;
+										pru_rpmsg_send(&transport, dst, src, &output, sizeof(int));
+									}else{
+										pru_rpmsg_send(&transport, dst, src, "inconnu\n", sizeof("inconnu\n"));
+									}
+							}
 						}
-
-
-				}
+					}
 			}
 		}
-	//}
+	}
 }
 
 
