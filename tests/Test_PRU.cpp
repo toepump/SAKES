@@ -517,7 +517,7 @@ void *testThread1(void *ptr) {
 	int number4;
 
 	int finalResult;
-	char filename[18] = "/dev/rpmsg_pru31";
+	char filename[18] = "/dev/rpmsg_pru30";
 	int fd;
 	int toPru;
 
