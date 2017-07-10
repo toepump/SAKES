@@ -33,10 +33,10 @@ am335x-pru1-fw: $(CODE_ROOT)main.c
 	$(PRU_TOOLS)clpru -z $(LINKER_CMD_FILE) -o $(PRU1_ROOT)am335x-pru1-fw $(PRU1_ROOT)main1.object -l$(PRU_RPMSG_ROOT)lib/rpmsg_lib.lib
 
 install:
-	config-pin -a $HEADER$PIN_NUMBER1 pruin
-	config-pin -q $HEADER$PIN_NUMBER1
-	config-pin -a $HEADER$PIN_NUMBER2 pruin
-	config-pin -q $HEADER$PIN_NUMBER2
+	config-pin -a P8_45 pruin
+	config-pin -q P8_45
+	config-pin -a P8_46 pruin
+	config-pin -q P8_46
 	config-pin -a $HEADER$PIN_NUMBER3 pruin
 	config-pin -q $HEADER$PIN_NUMBER3
 	config-pin -a $HEADER$PIN_NUMBER4 pruin
