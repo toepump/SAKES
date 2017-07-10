@@ -551,7 +551,7 @@ void *testThread1(void *ptr) {
 
 			//get the time of the beginning of this cycle and calculate the interval since the previous cycle
 			clock_gettime(CLOCK_MONOTONIC, &start);
-			timespec_diff(&previous_start, &start, &durationCommuciation);
+			timespec_diff(&previous_start, &start, &diff);
 
 
 			//cout << "Before send to the PRU " << endl;
@@ -593,8 +593,8 @@ void *testThread1(void *ptr) {
 			//Get time after receiving the message
 			clock_gettime(CLOCK_MONOTONIC, &receiveMessage);
 			//Calculation of the tine difference between send and receive
-			timespec_diff(&sendMessage, &receiveMessage, &diff);
-			answerTime[ticks_t1]=sendMessage.tv_nsec;
+			timespec_diff(&sendMessage, &receiveMessage, &durationCommuciation);
+			answerTime[ticks_t1]=durationCommuciation.tv_nsec;
 
 
 
