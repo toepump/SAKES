@@ -589,12 +589,15 @@ void *testThread1(void *ptr) {
 			        number2= (int)(readBuf[1]);
 			        number3= (int)(readBuf[2]);
 			        number4= (int)(readBuf[3]);
-			        cout << "The ticks is : " << ticks_t1 << endl;
-			        cout << "The number send by the PRU is : " << finalResult[ticks_t1] << endl;
 			}else{
 					cout << "Result not superior to 0 :"<< endl;
 			}
 			finalResult[ticks_t1]=number1+number2*256+number3*256*256+number4*256*256*256;
+			if(ticks_t1%50==0){
+		        cout << "The ticks is : " << ticks_t1 << endl;
+		        cout << "The number send by the PRU is : " << finalResult[ticks_t1] << endl;
+			}
+
 
 			//Get time after receiving the message
 			clock_gettime(CLOCK_MONOTONIC, &receiveMessage);
