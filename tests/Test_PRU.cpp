@@ -506,7 +506,7 @@ void *testThread1(void *ptr) {
 	struct timespec sendMessage;
 	struct timespec receiveMessage;
 	struct timespec durationCommuciation;
-	int answerTime[100];
+	struct timespec answerTime[100];
 
 	char readBuf[MAX_BUFFER_SIZE];
 	struct pollfd pollfds[1];
@@ -597,7 +597,7 @@ void *testThread1(void *ptr) {
 			clock_gettime(CLOCK_MONOTONIC, &receiveMessage);
 			//Calculation of the tine difference between send and receive
 			timespec_diff(&sendMessage, &receiveMessage, &durationCommuciation);
-			answerTime[ticks_t1]=durationCommuciation.tv_nsec;
+			answerTime[ticks_t1]=durationCommuciation;
 
 
 
@@ -621,9 +621,9 @@ void *testThread1(void *ptr) {
 		ticks_t1=ticks_t1+1;
 		if(ticks_t1==100){
 			for(i=0;i<100;i++){
-				meanTimePRU = durationCommuciation[i].tv_nsec + durationCommuciation[i].tv_sec*1000000000 + meanTimePRU;
-				if(durationCommuciation[i].tv_nsec + durationCommuciation[i].tv_sec*1000000000 > maxTimePRU){
-					maxTimePRU=durationCommuciation[i].tv_nsec + durationCommuciation[i].tv_sec*1000000000;
+				meanTimePRU = answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 + meanTimePRU;
+				if(answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 > maxTimePRU){
+					maxTimePRU=answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000;
 				}
 			}
 			meanTimePRU=int(double(meanTimePRU)/100.0);
