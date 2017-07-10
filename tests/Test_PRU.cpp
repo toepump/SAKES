@@ -506,7 +506,7 @@ void *testThread1(void *ptr) {
 	struct timespec sendMessage;
 	struct timespec receiveMessage;
 	struct timespec durationCommuciation;
-	struct timespec answerTime[100];
+	struct timespec answerTime[1000];
 
 	char readBuf[MAX_BUFFER_SIZE];
 	struct pollfd pollfds[1];
