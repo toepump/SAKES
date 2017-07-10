@@ -20,6 +20,8 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
+using namespace std;
+
 
 #define NSEC_PER_SEC  (1000000000) /* The number of nsecs per sec. */
 #define MAX_BUFFER_SIZE 512
