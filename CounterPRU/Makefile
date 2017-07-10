@@ -10,15 +10,6 @@ PRU1_ROOT:= $(CODE_ROOT)pru1/
 LINKER_CMD_FILE:= hello.cmd
 PRU_TOOLS:=/usr/bin/
 
-#The pin to put in Mode 6, PRUIN
-HEADER=P8_
-PIN_NUMBER1=45
-PIN_NUMBER2=46
-PIN_NUMBER3=44
-PIN_NUMBER4=43
-PIN_NUMBER5=42
-PIN_NUMBER6=41
-
 CFLAGS=-v3 -O2 --endian=little --hardware_mac=on
 
 LDFLAGS+= -L.
@@ -33,18 +24,18 @@ am335x-pru1-fw: $(CODE_ROOT)main.c
 	$(PRU_TOOLS)clpru -z $(LINKER_CMD_FILE) -o $(PRU1_ROOT)am335x-pru1-fw $(PRU1_ROOT)main1.object -l$(PRU_RPMSG_ROOT)lib/rpmsg_lib.lib
 
 install:
+	config-pin -a P8_41 pruin
+	config-pin -q P8_41
+	config-pin -a P8_42 pruin
+	config-pin -q P8_42
+	config-pin -a P8_43 pruin
+	config-pin -q P8_43
+	config-pin -a P8_44 pruin
+	config-pin -q P8_44
 	config-pin -a P8_45 pruin
 	config-pin -q P8_45
 	config-pin -a P8_46 pruin
 	config-pin -q P8_46
-	config-pin -a $HEADER$PIN_NUMBER3 pruin
-	config-pin -q $HEADER$PIN_NUMBER3
-	config-pin -a $HEADER$PIN_NUMBER4 pruin
-	config-pin -q $HEADER$PIN_NUMBER4
-	config-pin -a $HEADER$PIN_NUMBER5 pruin
-	config-pin -q $HEADER$PIN_NUMBER5
-	config-pin -a $HEADER$PIN_NUMBER6 pruin
-	config-pin -q $HEADER$PIN_NUMBER6 
 	am335x-pru0-fw am335x-pru1-fw
 	dmesg --clear
 	cp $(PRU0_ROOT)/am335x-pru0-fw /lib/firmware
