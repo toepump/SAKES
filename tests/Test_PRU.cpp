@@ -589,7 +589,7 @@ void *testThread1(void *ptr) {
 			        number2= (int)(readBuf[1]);
 			        number3= (int)(readBuf[2]);
 			        number4= (int)(readBuf[3]);
-			        //cout << "The number send by the PRU is : " << finalResult << endl;
+			        cout << "The number send by the PRU is : " << finalResult[ticks_t1] << endl;
 			}else{
 					cout << "Result not superior to 0 :"<< endl;
 			}
