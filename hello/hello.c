@@ -71,7 +71,7 @@ int main(void)
 		/* Send 'hello world!' to the PRU through the RPMsg channel */
 		result = write(pollfds[0].fd, "hello!", 7);
 		if (result > 0){
-			printf("Value of results send : %d \n", result);
+			//printf("Value of results send : %d \n", result);
 			printf("Message %d: Sent to PRU \n", i);
 		}
 
@@ -81,7 +81,7 @@ int main(void)
 		if (result > 0)
 		{
 			printf("Message %d received from PRU:%s\n", i, readBuf);
-			printf("Value of results receive : %d \n\n", result);
+			//printf("Value of results receive : %d \n\n", result);
 		}
 
 	}
