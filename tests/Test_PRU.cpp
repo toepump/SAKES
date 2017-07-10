@@ -19,12 +19,11 @@
 #include <poll.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <string>
 
-using namespace std;
 
 #define NSEC_PER_SEC  (1000000000) /* The number of nsecs per sec. */
 #define MAX_BUFFER_SIZE 512
+#define DEVICE_PATH "/dev/rpmsg_pru31"
 
 void timespec_diff(struct timespec *start, struct timespec *stop,struct timespec *result);
 
@@ -50,7 +49,7 @@ void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
 
-const int TIME_MAX = 2010; // time max for the loop in ms
+const int TIME_MAX = 100; // time max for the loop in ms
 const int TIME_MAX_ENC = 5110; // time max for the loop in ms
 
 const int INTERVALMS =1000000; // in nanosecond
@@ -525,7 +524,8 @@ void *testThread1(void *ptr) {
 
 	cout << "Beginning of loop " << endl;
 
-	pollfds[0].fd = open(filename, O_RDWR);
+	/* Open the rpmsg_pru character device file */
+	pollfds[0].fd = open(DEVICE_PATH, O_RDWR);
 	if (pollfds[0].fd < 0){
 		printf("Failed to open \n");
 	}
@@ -552,12 +552,6 @@ void *testThread1(void *ptr) {
 			if (result > 0){
 				printf("Message sent to PRU\n");
 			}
-
-			//cout << "After send to the PRU " << endl;
-
-
-			//cout << "After closing to the PRU " << endl;
-
 			//test if we are respecting the time interval limit
 			/*
 			if(diff.tv_nsec>130000000)
@@ -567,13 +561,7 @@ void *testThread1(void *ptr) {
 				cout << " " << endl;
 			}
 			*/
-
-			/* Open the rpmsg_pru character device file */
-			//fd=open(filename, O_RDWR);
-
-			//result = read(fd, readBuf, MAX_BUFFER_SIZE);
 			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
-
 			//cout << "Result "<< result  << endl;
 			if(result > 0){
 			        number1= (int)(readBuf[0]);
@@ -581,21 +569,10 @@ void *testThread1(void *ptr) {
 			        number3= (int)(readBuf[2]);
 			        number4= (int)(readBuf[3]);
 			        cout << "The number send by the PRU is : " << finalResult << endl;
-			        /*
-			        cout << "The readBuf  is : " << readBuf << endl;
-			        cout << "The number 1 is : " << number1 << endl;
-			        cout << "The number 2 is : " << number2 << endl;
-			        cout << "The number 3 is : " << number3 << endl;
-			        cout << "The number 4 is : " << number4 << endl;
-			        cout << " " << endl;
-			        */
 			}else{
 					cout << "Result not superior to 0 :"<< endl;
 			}
 			finalResult=number1+number2*256+number3*256*256+number4*256*256*256;
-
-			//cout << "End " << endl;
-
 
 	  		//put the value of the variable of start to previous start
 		  	previous_start.tv_sec=start.tv_sec;
@@ -613,7 +590,8 @@ void *testThread1(void *ptr) {
 			cout << " " << endl;
 			return (void*) NULL;
 		}
-
+		cout << "Loop number : " << ticks_t1 << endl;
+		ticks_t1=ticks_t1+1;
 	}
 
 	/* Close the rpmsg_pru character device file */
@@ -676,8 +654,3 @@ void *testThread2(void *ptr) {
   t_Thread2.tv_sec++;
   t_Thread2.tv_sec++;
   clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
-
-  fileOutputEncoder(&outputKneePoly);
-
-	return (void*) NULL;
-}

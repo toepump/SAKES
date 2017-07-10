@@ -574,9 +574,6 @@ void *testThread1(void *ptr) {
 			}
 			finalResult=number1+number2*256+number3*256*256+number4*256*256*256;
 
-			//cout << "End " << endl;
-
-
 	  		//put the value of the variable of start to previous start
 		  	previous_start.tv_sec=start.tv_sec;
 		  	previous_start.tv_nsec=start.tv_nsec;
