@@ -503,6 +503,11 @@ void *testThread1(void *ptr) {
 	struct timespec previous_start;
 	struct timespec diff;
 
+	struct timespec sendMessage;
+	struct timespec receiveMessage;
+	struct timespec durationCommuciation;
+	int answerTime[100];
+
 	char readBuf[MAX_BUFFER_SIZE];
 	struct pollfd pollfds[1];
 	int result = 0;
@@ -517,6 +522,7 @@ void *testThread1(void *ptr) {
 	int toPru;
 
 	int sleepOK=0;
+	int i=0;
 
 	//We set the begining if the thread in 1 second
 	clock_gettime(CLOCK_MONOTONIC, &waitTime);
@@ -545,15 +551,23 @@ void *testThread1(void *ptr) {
 
 			//get the time of the beginning of this cycle and calculate the interval since the previous cycle
 			clock_gettime(CLOCK_MONOTONIC, &start);
-			timespec_diff(&previous_start, &start, &diff);
+			timespec_diff(&previous_start, &start, &durationCommuciation);
+
 
 			//cout << "Before send to the PRU " << endl;
 
+
+			//Get the time before sending a message
+			clock_gettime(CLOCK_MONOTONIC, &sendMessage);
+
 			//Message to the PRU through the RPMsg channel
 			result = write(pollfds[0].fd, &toPru, sizeof(int));
+			/*
 			if (result > 0){
 				printf("Message sent to PRU\n");
 			}
+			*/
+
 			//test if we are respecting the time interval limit
 			/*
 			if(diff.tv_nsec>130000000)
@@ -570,11 +584,19 @@ void *testThread1(void *ptr) {
 			        number2= (int)(readBuf[1]);
 			        number3= (int)(readBuf[2]);
 			        number4= (int)(readBuf[3]);
-			        cout << "The number send by the PRU is : " << finalResult << endl;
+			        //cout << "The number send by the PRU is : " << finalResult << endl;
 			}else{
 					cout << "Result not superior to 0 :"<< endl;
 			}
 			finalResult=number1+number2*256+number3*256*256+number4*256*256*256;
+
+			//Get time after receiving the message
+			clock_gettime(CLOCK_MONOTONIC, &receiveMessage);
+			//Calculation of the tine difference between send and receive
+			timespec_diff(&sendMessage, &receiveMessage, &diff);
+			answerTime[ticks_t1]=sendMessage.tv_nsec;
+
+
 
 	  		//put the value of the variable of start to previous start
 		  	previous_start.tv_sec=start.tv_sec;
@@ -592,12 +614,16 @@ void *testThread1(void *ptr) {
 			cout << " " << endl;
 			return (void*) NULL;
 		}
-		cout << "Loop number : " << ticks_t1 << endl;
+		//cout << "Loop number : " << ticks_t1 << endl;
 		ticks_t1=ticks_t1+1;
 	}
 
 	/* Close the rpmsg_pru character device file */
 	close(pollfds[0].fd);
+
+	for(i=0;i<100;i++){
+		cout << answerTime[i] << "  ";
+	}
 
 	//We wait 2 seconds to output the files
 	waitTime.tv_sec+=1;
