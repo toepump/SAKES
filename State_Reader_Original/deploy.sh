@@ -37,7 +37,7 @@
 
 #Do not change until you are making required changes in the firmware code.  
 HEADER=P8_
-PIN_NUMBER=41
+PIN_NUMBER=42
 #The firmware will need significant changes to port it to PRU_CORE 2
 PRU_CORE=1
 

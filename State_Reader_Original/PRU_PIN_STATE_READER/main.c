@@ -76,7 +76,7 @@ volatile register uint32_t __R31;
  * the state of pr1_pru1_pru_r31_0. This gpio can be 
  * muxed to P8_45.
  */
-#define CHECK_BIT	0x0016
+#define CHECK_BIT	0x0032
 
 
 
