@@ -49,7 +49,7 @@ void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
 
-const int TIME_MAX = 1000; // time max for the loop in ms
+const int TIME_MAX = 100; // time max for the loop in ms
 const int TIME_MAX_ENC = 5110; // time max for the loop in ms
 
 const int INTERVALMS =1000000; // in nanosecond

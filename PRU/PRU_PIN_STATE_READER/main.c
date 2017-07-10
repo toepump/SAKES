@@ -43,8 +43,6 @@
 #include <pru_rpmsg.h>
 #include "resource_table_1.h"
 
-#include <inttypes.h>
-
 
 volatile register uint32_t __R31;
 
@@ -73,16 +71,16 @@ volatile register uint32_t __R31;
 #define VIRTIO_CONFIG_S_DRIVER_OK	4
 
 
-
  /*
  * Used to check the state of 0 bit of the r31 ie
  * the state of pr1_pru1_pru_r31_0. This gpio can be 
- * muxed to P8_45. 
+ * muxed to P8_45.
  */
-#define CHECK_BIT	0x0001 //Before 0x0001
+#define CHECK_BIT	0x0032
 
-//uint8_t payload[RPMSG_BUF_SIZE];
-unsigned char payload[RPMSG_BUF_SIZE];
+
+
+uint8_t payload[RPMSG_BUF_SIZE];
 
 /*
  * main.c
@@ -93,9 +91,6 @@ void main(void)
 	uint16_t src, dst, len;
 	uint32_t prev_gpio_state;
 	volatile uint8_t *status;
-	
-	int output=5;
-
 	
 	/* allow OCP master port access by the PRU so the PRU can read external memories */
 	CT_CFG.SYSCFG_bit.STANDBY_INIT = 0;
@@ -114,33 +109,19 @@ void main(void)
 	pru_virtqueue_init(&transport.virtqueue1, &resourceTable.rpmsg_vring1, TO_ARM_HOST, FROM_ARM_HOST);
 
 	/* Create the RPMsg channel between the PRU and ARM user space using the transport structure. */
-	while (pru_rpmsg_channel(RPMSG_NS_CREATE, &transport, CHAN_NAME, CHAN_DESC, CHAN_PORT) != PRU_RPMSG_SUCCESS){
-		while (1) {
-			/* Check bit 30 of register R31 to see if the ARM has kicked us */
-			if (__R31 & HOST_INT) {
-				/* Clear the event status */
-				CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
-					/* Receive all available messages, multiple messages can be sent per kick */
-					while(pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS){
-						//pru_rpmsg_send(&transport,dst, src, "PRU1 responding\n", 17);
-						while(1){
-							/*    a ^ b, 0 if same, 1 if different */
-							/* a & b, 1 if a=1 and b=1, 0 otherwise */
-
-							if ((__R31 ^ prev_gpio_state) & CHECK_BIT){
-									prev_gpio_state = __R31 & CHECK_BIT;
-									if(prev_gpio_state==0){
-										output=output+1;
-										pru_rpmsg_send(&transport, dst, src, &output, sizeof(int));
-									}else if(prev_gpio_state==1){
-										output=output-1;
-										pru_rpmsg_send(&transport, dst, src, &output, sizeof(int));
-									}else{
-										pru_rpmsg_send(&transport, dst, src, "inconnu\n", sizeof("inconnu\n"));
-									}
-							}
-						}
-					}
+	while (pru_rpmsg_channel(RPMSG_NS_CREATE, &transport, CHAN_NAME, CHAN_DESC, CHAN_PORT) != PRU_RPMSG_SUCCESS);
+	while (1) {
+		/* Check bit 30 of register R31 to see if the ARM has kicked us */
+		if (__R31 & HOST_INT) {
+			/* Clear the event status */
+			CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
+			/* Receive all available messages, multiple messages can be sent per kick */
+			while (pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS) {	
+				while(1)
+					if ((__R31 ^ prev_gpio_state) & CHECK_BIT) {
+						prev_gpio_state = __R31 & CHECK_BIT;	
+						pru_rpmsg_send(&transport, dst, src, "CHANGED\n", sizeof("CHANGED\n"));
+					}		
 			}
 		}
 	}

@@ -51,7 +51,7 @@ void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
 
-const int TIME_MAX = 100; // time max for the loop in ms
+const int TIME_MAX = 1000; // time max for the loop in ms
 const int TIME_MAX_ENC = 5110; // time max for the loop in ms
 
 const int INTERVALMS =1000000; // in nanosecond
@@ -516,7 +516,7 @@ void *testThread1(void *ptr) {
 	int number3;
 	int number4;
 
-	int finalResult;
+	int finalResult[1000];
 	char filename[18] = "/dev/rpmsg_pru31";
 	int fd;
 	int toPru;
@@ -591,7 +591,7 @@ void *testThread1(void *ptr) {
 			}else{
 					cout << "Result not superior to 0 :"<< endl;
 			}
-			finalResult=number1+number2*256+number3*256*256+number4*256*256*256;
+			finalResult[ticks_t1]=number1+number2*256+number3*256*256+number4*256*256*256;
 
 			//Get time after receiving the message
 			clock_gettime(CLOCK_MONOTONIC, &receiveMessage);
@@ -619,7 +619,7 @@ void *testThread1(void *ptr) {
 		}
 		//cout << "Loop number : " << ticks_t1 << endl;
 		ticks_t1=ticks_t1+1;
-		if(ticks_t1==100){
+		if(ticks_t1==1000){
 			for(i=0;i<100;i++){
 				meanTimePRU = answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 + meanTimePRU;
 				if(answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 > maxTimePRU){
@@ -629,6 +629,13 @@ void *testThread1(void *ptr) {
 			meanTimePRU=int(double(meanTimePRU)/100.0);
 			cout << " THe mean time is : " << meanTimePRU << endl;
 			cout << " The max time is : " << maxTimePRU << endl;
+
+			cout << " Angle a t=0 : " << finalResult[0] << endl;
+			cout << " Angle a t=200 : " << finalResult[200] << endl;
+			cout << " Angle a t=400 : " << finalResult[400] << endl;
+			cout << " Angle a t=600 : " << finalResult[600] << endl;
+			cout << " Angle a t=800 : " << finalResult[800] << endl;
+			cout << " Angle a t=900 : " << finalResult[900] << endl;
 		}
 	}
 
