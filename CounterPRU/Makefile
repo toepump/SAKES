@@ -24,6 +24,17 @@ am335x-pru1-fw: $(CODE_ROOT)main.c
 	$(PRU_TOOLS)clpru -z $(LINKER_CMD_FILE) -o $(PRU1_ROOT)am335x-pru1-fw $(PRU1_ROOT)main1.object -l$(PRU_RPMSG_ROOT)lib/rpmsg_lib.lib
 
 install:
+	am335x-pru0-fw am335x-pru1-fw
+	dmesg --clear
+	cp $(PRU0_ROOT)/am335x-pru0-fw /lib/firmware
+	cp $(PRU1_ROOT)/am335x-pru1-fw /lib/firmware
+	rmmod -f pru_rproc
+	dmesg
+	echo 'separator'
+	echo 'separator'
+	dmesg --clear
+	modprobe pru_rproc
+	dmesg
 	config-pin -a P8_41 pruin
 	config-pin -q P8_41
 	config-pin -a P8_42 pruin
@@ -36,17 +47,6 @@ install:
 	config-pin -q P8_45
 	config-pin -a P8_46 pruin
 	config-pin -q P8_46
-	am335x-pru0-fw am335x-pru1-fw
-	dmesg --clear
-	cp $(PRU0_ROOT)/am335x-pru0-fw /lib/firmware
-	cp $(PRU1_ROOT)/am335x-pru1-fw /lib/firmware
-	rmmod -f pru_rproc
-	dmesg
-	echo 'separator'
-	echo 'separator'
-	dmesg --clear
-	modprobe pru_rproc
-	dmesg
 	
 clean:
 	rm $(PRU0_ROOT)am335x-pru0-fw
