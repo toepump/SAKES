@@ -32,18 +32,7 @@ am335x-pru1-fw: $(CODE_ROOT)main.c
 	$(PRU_TOOLS)clpru $(CFLAGS) $(PRU_INCLUDE) -ppd -ppa -fe $(PRU1_ROOT)/main1.object $(CODE_ROOT)main.c -D PRU1
 	$(PRU_TOOLS)clpru -z $(LINKER_CMD_FILE) -o $(PRU1_ROOT)am335x-pru1-fw $(PRU1_ROOT)main1.object -l$(PRU_RPMSG_ROOT)lib/rpmsg_lib.lib
 
-install: am335x-pru0-fw am335x-pru1-fw
-	dmesg --clear
-	cp $(PRU0_ROOT)/am335x-pru0-fw /lib/firmware
-	cp $(PRU1_ROOT)/am335x-pru1-fw /lib/firmware
-	rmmod -f pru_rproc
-	dmesg
-	echo 'separator'
-	echo 'separator'
-	dmesg --clear
-	modprobe pru_rproc
-	dmesg
-	#Configure the pinmux in for the following pin, added by Vincent
+install:
 	config-pin -a $HEADER$PIN_NUMBER1 pruin
 	config-pin -q $HEADER$PIN_NUMBER1
 	config-pin -a $HEADER$PIN_NUMBER2 pruin
@@ -55,7 +44,18 @@ install: am335x-pru0-fw am335x-pru1-fw
 	config-pin -a $HEADER$PIN_NUMBER5 pruin
 	config-pin -q $HEADER$PIN_NUMBER5
 	config-pin -a $HEADER$PIN_NUMBER6 pruin
-	config-pin -q $HEADER$PIN_NUMBER6
+	config-pin -q $HEADER$PIN_NUMBER6 
+	am335x-pru0-fw am335x-pru1-fw
+	dmesg --clear
+	cp $(PRU0_ROOT)/am335x-pru0-fw /lib/firmware
+	cp $(PRU1_ROOT)/am335x-pru1-fw /lib/firmware
+	rmmod -f pru_rproc
+	dmesg
+	echo 'separator'
+	echo 'separator'
+	dmesg --clear
+	modprobe pru_rproc
+	dmesg
 	
 clean:
 	rm $(PRU0_ROOT)am335x-pru0-fw
