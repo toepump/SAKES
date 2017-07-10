@@ -612,7 +612,8 @@ void *testThread1(void *ptr) {
 			cout << " " << endl;
 			return (void*) NULL;
 		}
-
+		cout << "Loop number : " << ticks_t1 << endl;
+		ticks_t1=ticks_t1+1;
 	}
 
 	/* Close the rpmsg_pru character device file */
