@@ -616,12 +616,11 @@ void *testThread1(void *ptr) {
 		}
 		//cout << "Loop number : " << ticks_t1 << endl;
 		ticks_t1=ticks_t1+1;
-	}
-
-
-
-	for(i=0;i<100;i++){
-		cout << answerTime[i] << "  ";
+		if(ticks_t1==100){
+			for(i=0;i<100;i++){
+				cout << answerTime[i] << "  ";
+			}
+		}
 	}
 
 	/* Close the rpmsg_pru character device file */
