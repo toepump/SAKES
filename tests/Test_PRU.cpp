@@ -618,6 +618,7 @@ void *testThread1(void *ptr) {
 		ticks_t1=ticks_t1+1;
 		if(ticks_t1==100){
 			for(i=0;i<100;i++){
+				cout << "Taaaa" << endl;
 				cout << answerTime[i] << "  ";
 			}
 		}
