@@ -558,7 +558,9 @@ void *testThread1(void *ptr) {
 
 
 			//cout << "Before send to the PRU " << endl;
-
+			if(ticks_t1==0){
+				cout << "Beginning of loop " << endl;
+			}
 
 			//Get the time before sending a message
 			clock_gettime(CLOCK_MONOTONIC, &sendMessage);
@@ -611,6 +613,10 @@ void *testThread1(void *ptr) {
 		  		waitTime.tv_sec+=1;
 		  		waitTime.tv_nsec-=NSEC_PER_SEC;
 		  	}
+
+			if(ticks_t1==0){
+				cout << "End of first loop " << endl;
+			}
 
 		}else{
 			cout << "The clock nanosleep has encountered a problem." << endl;
