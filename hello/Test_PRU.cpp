@@ -524,6 +524,7 @@ void *testThread1(void *ptr) {
 
 	cout << "Beginning of loop " << endl;
 
+	/* Open the rpmsg_pru character device file */
 	pollfds[0].fd = open(DEVICE_PATH, O_RDWR);
 	if (pollfds[0].fd < 0){
 		printf("Failed to open \n");
@@ -551,12 +552,6 @@ void *testThread1(void *ptr) {
 			if (result > 0){
 				printf("Message sent to PRU\n");
 			}
-
-			//cout << "After send to the PRU " << endl;
-
-
-			//cout << "After closing to the PRU " << endl;
-
 			//test if we are respecting the time interval limit
 			/*
 			if(diff.tv_nsec>130000000)
@@ -566,13 +561,7 @@ void *testThread1(void *ptr) {
 				cout << " " << endl;
 			}
 			*/
-
-			/* Open the rpmsg_pru character device file */
-			//fd=open(filename, O_RDWR);
-
-			//result = read(fd, readBuf, MAX_BUFFER_SIZE);
 			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
-
 			//cout << "Result "<< result  << endl;
 			if(result > 0){
 			        number1= (int)(readBuf[0]);
@@ -580,14 +569,6 @@ void *testThread1(void *ptr) {
 			        number3= (int)(readBuf[2]);
 			        number4= (int)(readBuf[3]);
 			        cout << "The number send by the PRU is : " << finalResult << endl;
-			        /*
-			        cout << "The readBuf  is : " << readBuf << endl;
-			        cout << "The number 1 is : " << number1 << endl;
-			        cout << "The number 2 is : " << number2 << endl;
-			        cout << "The number 3 is : " << number3 << endl;
-			        cout << "The number 4 is : " << number4 << endl;
-			        cout << " " << endl;
-			        */
 			}else{
 					cout << "Result not superior to 0 :"<< endl;
 			}
