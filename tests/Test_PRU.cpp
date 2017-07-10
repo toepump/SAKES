@@ -618,12 +618,14 @@ void *testThread1(void *ptr) {
 		ticks_t1=ticks_t1+1;
 	}
 
-	/* Close the rpmsg_pru character device file */
-	close(pollfds[0].fd);
+
 
 	for(i=0;i<100;i++){
 		cout << answerTime[i] << "  ";
 	}
+
+	/* Close the rpmsg_pru character device file */
+	close(pollfds[0].fd);
 
 	//We wait 2 seconds to output the files
 	waitTime.tv_sec+=1;
