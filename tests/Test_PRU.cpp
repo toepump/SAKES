@@ -524,6 +524,9 @@ void *testThread1(void *ptr) {
 	int sleepOK=0;
 	int i=0;
 
+	int maxTimePRU=0;
+	int meanTimePRU=0;
+
 	//We set the begining if the thread in 1 second
 	clock_gettime(CLOCK_MONOTONIC, &waitTime);
 	waitTime.tv_sec+=1;
@@ -618,9 +621,14 @@ void *testThread1(void *ptr) {
 		ticks_t1=ticks_t1+1;
 		if(ticks_t1==100){
 			for(i=0;i<100;i++){
-				cout << "Taaaa" << endl;
-				cout << answerTime[i] << "  ";
+				meanTimePRU = durationCommuciation[i].tv_nsec + durationCommuciation[i].tv_sec*1000000000 + meanTimePRU;
+				if(durationCommuciation[i].tv_nsec + durationCommuciation[i].tv_sec*1000000000 > maxTimePRU){
+					maxTimePRU=durationCommuciation[i].tv_nsec + durationCommuciation[i].tv_sec*1000000000;
+				}
 			}
+			meanTimePRU=int(double(meanTimePRU)/100.0);
+			cout << " THe mean time is : " << meanTimePRU << endl;
+			cout << " The max time is : " << maxTimePRU << endl;
 		}
 	}
 
