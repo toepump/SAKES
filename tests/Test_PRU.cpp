@@ -792,6 +792,7 @@ void *testThread1(void *ptr) {
 
 	/* Close the rpmsg_pru character device file */
 	close(pollfds[0].fd);
+	cout << "End of the loop." << endl;
 
 	fileIntG(timeOutput, 10000);
 	//We wait 2 seconds to output the files
