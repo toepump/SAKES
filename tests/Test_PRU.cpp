@@ -558,7 +558,7 @@ int fileIntAngle(int *table, int length){
 	int timeNano;
 
 	FILE *fj1=fopen("FileAngle.dat","w+");
-	fprintf(fj1,"indexOutput; Time (ns)\r\n");
+	fprintf(fj1,"indexOutputAngle; Angle(increment)\r\n");
 
 	while(i<length){
 
@@ -863,7 +863,7 @@ void *testThread1(void *ptr) {
 	cout << "End of the loop." << endl;
 
 	fileIntG(timeOutput, 55000);
-	fileIntAngle(timeOutput, 55000);
+	fileIntAngle(finalResult, 55000);
 	//We wait 2 seconds to output the files
 	waitTime.tv_sec+=1;
 	sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
