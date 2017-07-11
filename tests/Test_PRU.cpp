@@ -919,7 +919,7 @@ void *testThread2(void *ptr) {
 	fileTimespecD(sendMessage, 10000);
 	fileTimespecF(endReadMessage, 10000);
 
-	fileIntG(&timeOutput, 10000);
+	fileIntG(timeOutput, 10000);
 
 	cout << " Angle a t=0 : " << finalResult[0] << endl;
 	cout << " Angle a t=2000 : " << finalResult[2000] << endl;
