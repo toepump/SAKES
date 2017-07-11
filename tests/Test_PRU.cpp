@@ -788,6 +788,10 @@ void *testThread1(void *ptr) {
 		*/
 		//cout << "Loop number : " << ticks_t1 << endl;
 		ticks_t1=ticks_t1+1;
+
+		if(ticks_t1%1000==0){
+			cout << "Caca" << endl;
+		}
 	}
 
 	/* Close the rpmsg_pru character device file */
