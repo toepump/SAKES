@@ -62,6 +62,12 @@ void main(void)
  
 	while (pru_rpmsg_channel(RPMSG_NS_CREATE, &transport, CHAN_NAME, CHAN_DESC, CHAN_PORT) != PRU_RPMSG_SUCCESS);
 	while (1){
+		prev_state_A=0;
+		prev_state_B=0;
+		prev_state_Z=0;
+		encoder_state=0;
+		angle=0;
+
 
 		if (__R31 & HOST_INT){
 	        
