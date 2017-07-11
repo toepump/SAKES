@@ -67,7 +67,7 @@ void main(void)
 	        
 			/*Send message if one received from encoder */
 			if (pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS){
-				pru_rpmsg_send(&transport,dst, src, &angle, sizeof(int));
+				pru_rpmsg_send(&transport,dst, src, &prev_state_A, sizeof(int));
 			}else{
 			  CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
 			}
