@@ -58,22 +58,43 @@ void main(void)
 	/* Create the RPMsg channel between the PRU and ARM user space using the transport structure. */
 	// In a real-time environment, rather than waiting forever, this can probably be run loop-after-loop
 	// until success is achieved.  At that point, set a flag and then enable the send/receive functionality
+
+	//Initialization of the variables
+	prev_state_A=0;
+	prev_state_B=0;
+	prev_state_Z=0;
+	encoder_state=50;
 	angle=12000;
+
+	//Initialization of the state
+
+	if ((__R31 ^ prev_state_A) & CHECK_BIT_A) {
+		prev_state_A = 1;
+		if ((__R31 ^ prev_state_B) & CHECK_BIT_B) {
+			prev_state_B = 1;
+			encoder_state=11;
+		}else{
+			prev_state_B = 0;
+			encoder_state=10;
+		}
+	}else{
+		prev_state_A = 0;
+		if ((__R31 ^ prev_state_B) & CHECK_BIT_B) {
+			prev_state_B = 1;
+			encoder_state=1;
+		}else{
+			prev_state_B = 0;
+			encoder_state=0;
+		}
+	}
  
 	while (pru_rpmsg_channel(RPMSG_NS_CREATE, &transport, CHAN_NAME, CHAN_DESC, CHAN_PORT) != PRU_RPMSG_SUCCESS);
 	while (1){
-		prev_state_A=0;
-		prev_state_B=0;
-		prev_state_Z=0;
-		encoder_state=0;
-		angle=0;
-
-
 		if (__R31 & HOST_INT){
 	        
 			/*Send message if one received from encoder */
 			if (pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS){
-				pru_rpmsg_send(&transport,dst, src, &prev_state_Z, sizeof(int));
+				pru_rpmsg_send(&transport,dst, src, &angle, sizeof(int));
 			}else{
 			  CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
 			}
