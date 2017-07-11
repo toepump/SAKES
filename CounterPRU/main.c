@@ -64,7 +64,7 @@ void main(void)
 	prev_state_B=0;
 	prev_state_Z=0;
 	encoder_state=50;
-	angle=12000;
+	angle=800;
 
 	//Initialization of the state
 
@@ -73,18 +73,22 @@ void main(void)
 		if ((__R31 ^ prev_state_B) & CHECK_BIT_B) {
 			prev_state_B = 1;
 			encoder_state=11;
+			angle=12000;
 		}else{
 			prev_state_B = 0;
 			encoder_state=10;
+			angle=12000;
 		}
 	}else{
 		prev_state_A = 0;
 		if ((__R31 ^ prev_state_B) & CHECK_BIT_B) {
 			prev_state_B = 1;
 			encoder_state=1;
+			angle=12000;
 		}else{
 			prev_state_B = 0;
 			encoder_state=0;
+			angle=12000;
 		}
 	}
  
