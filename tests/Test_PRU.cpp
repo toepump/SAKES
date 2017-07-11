@@ -708,6 +708,14 @@ void *testThread1(void *ptr) {
 
 	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 
+	/* Open the rpmsg_pru character device file */
+	pollfds[0].fd = open(DEVICE_PATH, O_RDWR);
+	if (pollfds[0].fd < 0){
+		printf("Failed to open \n");
+	}
+
+	printf("The path is open \n");
+
 	while(ticks_t1<TIME_MAX+1){
 
 		/* wait until next shot */
@@ -825,14 +833,6 @@ void *testThread2(void *ptr) {
   clock_gettime(CLOCK_MONOTONIC, &t_Thread2);
   /* start after one second */
   t_Thread2.tv_sec++;
-
-	/* Open the rpmsg_pru character device file */
-	pollfds[0].fd = open(DEVICE_PATH, O_RDWR);
-	if (pollfds[0].fd < 0){
-		printf("Failed to open \n");
-	}
-
-	printf("The path is open \n");
 
   while(ticks_t2<int(maxTicks)) {
 
