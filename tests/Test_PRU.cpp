@@ -375,6 +375,7 @@ int fileTimespec(struct timespec *time, int length, char *s){
 
 	int i=0;
 	int timeMilli;
+	double TimeMilliDouble;
 	FILE *fj1=fopen(s,"w");
 
 	fprintf(fj1,"indexOutput; Time (ms)");
@@ -382,7 +383,8 @@ int fileTimespec(struct timespec *time, int length, char *s){
 	while(i<length){
 
 		timeMilli=time->tv_sec*1000000000+time->tv_nsec;
-		timeMilli=int(double(timeMilli)/1000.0);
+		TimeMilliDouble=double(timeMilli)/1000.0;
+		timeMilli=int(TimeMilliDouble);
 		fprintf(fj1,"%d;%f\r\n",i+1,timeMilli);
 		i++ ;
 	}
@@ -673,8 +675,8 @@ void *testThread2(void *ptr) {
 	int result = 0;
 	int incrementOutput=0;
 
-	char sendTime[10]="SendTime";
-	char readTime[10]="ReadTime";
+	char sendTime[14]="SendTime.dat";
+	char readTime[14]="ReadTime.dat";
 
 	toPru=30;
 
