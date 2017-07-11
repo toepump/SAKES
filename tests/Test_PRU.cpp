@@ -699,7 +699,6 @@ void *testThread1(void *ptr) {
 
 	int sleepOK=0;
 	struct pollfd pollfds[1];
-	int fd;
 
 	//We set the begining if the thread in 1 second
 	clock_gettime(CLOCK_MONOTONIC, &waitTime);
