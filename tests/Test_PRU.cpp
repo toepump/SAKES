@@ -441,7 +441,7 @@ int fetchDataBuffer(int *angle){
 	}else{
 		cout << "Result not superior to 0 :"<< endl;
 	}
-	&angle=number1+number2*256+number3*256*256+number4*256*256*256;
+	*angle=number1+number2*256+number3*256*256+number4*256*256*256;
 
 	return 0;
 }
@@ -539,6 +539,9 @@ void *testThread1(void *ptr) {
 	struct timespec diff;
 
 	struct timespec loopTime[10000];
+	int i;
+	int maxTimeLoop=0;
+	int meanTimeLoop=0;
 
 	int sleepOK=0;
 
@@ -599,6 +602,20 @@ void *testThread1(void *ptr) {
 		ticks_t1=ticks_t1+1;
 	}
 
+
+	cout << "End of loop, i= " << 10000 << endl;
+	for(i=1;i<10000;i++){
+		meanTimeLoop = loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000 + meanTimeLoop;
+		if(loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000 > maxTimeLoop){
+			maxTimeLoop=loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000;
+		}
+	}
+
+	meanTimeLoop=int(double(meanTimeLoop)/9999.0);
+
+	cout << " THe mean time of loop is : " << meanTimeLoop << endl;
+	cout << " The max time of loop is : " << maxTimeLoop << endl;
+
 	//We wait 2 seconds to output the files
 	waitTime.tv_sec+=1;
 	sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
@@ -623,8 +640,6 @@ void *testThread2(void *ptr) {
 
 	int maxTimePRU=0;
 	int meanTimePRU=0;
-	int maxTimeLoop=0;
-	int meanTimeLoop=0;
 
 	struct timespec sendMessage;
 	struct timespec receiveMessage;
