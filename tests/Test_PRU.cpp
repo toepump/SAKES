@@ -561,6 +561,9 @@ int setParamThreadFIFO(pthread_attr_t attr, struct sched_param param, int priori
 }
 
 int fetchDataBuffer(int *angle){
+
+	/*
+	 * Need to add other parameter such as pollfds declaration
 	char readBuf[MAX_BUFFER_SIZE];
 
 	int number1;
@@ -587,10 +590,14 @@ int fetchDataBuffer(int *angle){
 	}
 	*angle=number1+number2*256+number3*256*256+number4*256*256*256;
 
+*/
 	return 0;
+
+
 }
 
 int main(int argc, char* argv[]){
+
 
 	//Creation of the thread
 	pthread_t thread1, thread2;
