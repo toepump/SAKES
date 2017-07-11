@@ -618,6 +618,12 @@ void *testThread1(void *ptr) {
 			cout << " " << endl;
 			return (void*) NULL;
 		}
+
+
+		if(ticks_t1%1000==0){
+			cout << "Ticks: " << ticks_t1 << endl;
+			cout << "Angle: " << finalResult[ticks_t1] << endl;
+		}
 		//cout << "Loop number : " << ticks_t1 << endl;
 		ticks_t1=ticks_t1+1;
 	}
