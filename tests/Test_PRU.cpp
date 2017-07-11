@@ -45,6 +45,9 @@ int fileOutputEncoder(struct outputEnc *output);
 int fileTimespecA(struct timespec *time, int length);
 int fileTimespecB(struct timespec *time, int length);
 int fileTimespecC(struct timespec *time, int length);
+int fileTimespecD(struct timespec *time, int length);
+int fileTimespecE(struct timespec *time, int length);
+int fileTimespecF(struct timespec *time, int length);
 
 
 int setTimeOrigin(struct timeStruct *time);
@@ -419,6 +422,66 @@ int fileTimespecC(struct timespec *time, int length){
 	int timeNano;
 
 	FILE *fj1=fopen("FileC.dat","w");
+	fprintf(fj1,"indexOutput; Time (ns)\r\n");
+
+	while(i<length){
+
+		timeNano=time[i].tv_sec*1000000000+time[i].tv_nsec;
+		fprintf(fj1,"%d;%d\r\n",i+1,timeNano);
+		i++ ;
+	}
+	fclose(fj1);
+	return 0;
+}
+
+int fileTimespecD(struct timespec *time, int length){
+
+	cout << "Printing of the output starts" << endl;
+
+	int i=0;
+	int timeNano;
+
+	FILE *fj1=fopen("FileD.dat","w");
+	fprintf(fj1,"indexOutput; Time (ns)\r\n");
+
+	while(i<length){
+
+		timeNano=time[i].tv_sec*1000000000+time[i].tv_nsec;
+		fprintf(fj1,"%d;%d\r\n",i+1,timeNano);
+		i++ ;
+	}
+	fclose(fj1);
+	return 0;
+}
+
+int fileTimespecE(struct timespec *time, int length){
+
+	cout << "Printing of the output starts" << endl;
+
+	int i=0;
+	int timeNano;
+
+	FILE *fj1=fopen("FileE.dat","w");
+	fprintf(fj1,"indexOutput; Time (ns)\r\n");
+
+	while(i<length){
+
+		timeNano=time[i].tv_sec*1000000000+time[i].tv_nsec;
+		fprintf(fj1,"%d;%d\r\n",i+1,timeNano);
+		i++ ;
+	}
+	fclose(fj1);
+	return 0;
+}
+
+int fileTimespecF(struct timespec *time, int length){
+
+	cout << "Printing of the output starts" << endl;
+
+	int i=0;
+	int timeNano;
+
+	FILE *fj1=fopen("FileF.dat","w");
 	fprintf(fj1,"indexOutput; Time (ns)\r\n");
 
 	while(i<length){
@@ -822,21 +885,9 @@ void *testThread2(void *ptr) {
 	fileTimespecA(sendingMessage, 10000);
 	fileTimespecB(receivingMessage, 10000);
 	fileTimespecC(totalTime, 10000);
-
-
-	testValue1=sendingMessage[2000].tv_nsec+sendingMessage[2000].tv_sec*1000000000;
-	cout << "test value : " << testValue1 << endl;
-
-	testValue1=sendingMessage[4000].tv_nsec+sendingMessage[4000].tv_sec*1000000000;
-	cout << "test value : " << testValue1 << endl;
-
-	testValue1=sendingMessage[6000].tv_nsec+sendingMessage[6000].tv_sec*1000000000;
-	cout << "test value : " << testValue1 << endl;
-
-	testValue1=sendingMessage[8000].tv_nsec+sendingMessage[8000].tv_sec*1000000000;
-	cout << "test value : " << testValue1 << endl;
-
-
+	fileTimespecD(sendMessage, 10000);
+	fileTimespecE(readMessage, 10000);
+	fileTimespecF(endReadMessage, 10000);
 
 	cout << " Angle a t=0 : " << finalResult[0] << endl;
 	cout << " Angle a t=2000 : " << finalResult[2000] << endl;
