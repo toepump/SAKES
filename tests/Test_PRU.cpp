@@ -743,38 +743,38 @@ void *testThread2(void *ptr) {
 
   while(ticks_t2<int(maxTicks)) {
 
-  	/* wait until next shot */
-  	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
+	  /* wait until next shot */
+	  clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
 
-  	//Get the time before sending a message
-  	clock_gettime(CLOCK_MONOTONIC, &sendMessage[ticks_t2]);
+	  //Get the time before sending a message
+	  clock_gettime(CLOCK_MONOTONIC, &sendMessage[ticks_t2]);
 
-  	//fetchDataBuffer(&angle);
+	  //fetchDataBuffer(&angle);
 
-	//Message to the PRU through the RPMsg channel
-	result = write(pollfds[0].fd, &toPru, sizeof(int));
+	  //Message to the PRU through the RPMsg channel
+	  result = write(pollfds[0].fd, &toPru, sizeof(int));
 
-  	clock_gettime(CLOCK_MONOTONIC, &readMessage[ticks_t2]);
+	  clock_gettime(CLOCK_MONOTONIC, &readMessage[ticks_t2]);
 
-	result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
-	if(result > 0){
-		number1= (int)(readBuf[0]);
-		number2= (int)(readBuf[1]);
-		number3= (int)(readBuf[2]);
-		number4= (int)(readBuf[3]);
-	}else{
-		cout << "Result not superior to 0 :"<< endl;
-	}
-	angle=number1+number2*256+number3*256*256+number4*256*256*256;
-  	finalResult[ticks_t2]=angle;
+	  result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
+	  if(result > 0){
+		  number1= (int)(readBuf[0]);
+		  number2= (int)(readBuf[1]);
+		  number3= (int)(readBuf[2]);
+		  number4= (int)(readBuf[3]);
+	  }else{
+		  cout << "Result not superior to 0 :"<< endl;
+	  }
+	  angle=number1+number2*256+number3*256*256+number4*256*256*256;
+	  finalResult[ticks_t2]=angle;
 
-	//Get time after receiving the message
-	clock_gettime(CLOCK_MONOTONIC, &endReadMessage[ticks_t2]);
+	  //Get time after receiving the message
+	  clock_gettime(CLOCK_MONOTONIC, &endReadMessage[ticks_t2]);
 
-  	//Put the difference in loopTime
+	  //Put the difference in loopTime
 
   	/*
-  	//We get the time to
+  		//We get the time to
   	clock_gettime(CLOCK_MONOTONIC, &timePoly);
 
 	//simulation of the polynomial
@@ -788,15 +788,15 @@ void *testThread2(void *ptr) {
 
 	*/
 
-  	ticks_t2++; // Increment the ticks value
+	  ticks_t2++; // Increment the ticks value
 
-	/* calculate next shot */
-  	t_Thread2.tv_nsec += INTERVAL_T2;
-  	while (t_Thread2.tv_nsec >= NSEC_PER_SEC) {
-  		t_Thread2.tv_nsec -= NSEC_PER_SEC;
-  		t_Thread2.tv_sec++;
-  	}
-  }
+	  /* calculate next shot */
+	  t_Thread2.tv_nsec += INTERVAL_T2;
+	  while (t_Thread2.tv_nsec >= NSEC_PER_SEC) {
+		  t_Thread2.tv_nsec -= NSEC_PER_SEC;
+		  t_Thread2.tv_sec++;
+	  }
+  	  }
 
 	/* Close the rpmsg_pru character device file */
 	close(pollfds[0].fd);
@@ -822,6 +822,21 @@ void *testThread2(void *ptr) {
 	fileTimespecA(sendingMessage, 10000);
 	fileTimespecB(receivingMessage, 10000);
 	fileTimespecC(totalTime, 10000);
+
+
+	testValue1=sendingMessage[2000].tv_nsec+sendingMessage[2000].tv_sec*1000000000;
+	cout << "test value : " << testValue1 << endl;
+
+	testValue1=sendingMessage[4000].tv_nsec+sendingMessage[4000].tv_sec*1000000000;
+	cout << "test value : " << testValue1 << endl;
+
+	testValue1=sendingMessage[6000].tv_nsec+sendingMessage[6000].tv_sec*1000000000;
+	cout << "test value : " << testValue1 << endl;
+
+	testValue1=sendingMessage[8000].tv_nsec+sendingMessage[8000].tv_sec*1000000000;
+	cout << "test value : " << testValue1 << endl;
+
+
 
 	cout << " Angle a t=0 : " << finalResult[0] << endl;
 	cout << " Angle a t=2000 : " << finalResult[2000] << endl;
