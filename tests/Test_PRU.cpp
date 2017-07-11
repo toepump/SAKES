@@ -726,17 +726,16 @@ void *testThread1(void *ptr) {
 	  		//put the value of the variable of start to previous start
 		  	previous_start.tv_sec=start.tv_sec;
 		  	previous_start.tv_nsec=start.tv_nsec;
+		  	cout << "Caca 1" << endl;
 
 			  //Get the time before sending a message
-			  //clock_gettime(CLOCK_MONOTONIC, &sendMessage[ticks_t2]);
 			  clock_gettime(CLOCK_MONOTONIC, &sendMessage1);
 
 			  //fetchDataBuffer(&angle);
-
+			  cout << "Caca 2" << endl;
 			  //Message to the PRU through the RPMsg channel
 			  result = write(pollfds[0].fd, &toPru, sizeof(int));
-
-			  //clock_gettime(CLOCK_MONOTONIC, &readMessage[ticks_t2]);
+			  cout << "Caca3" << endl;
 
 			  result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
 			  if(result > 0){
@@ -749,6 +748,7 @@ void *testThread1(void *ptr) {
 			  }
 			  angle=number1+number2*256+number3*256*256+number4*256*256*256;
 			  finalResult[ticks_t1]=angle;
+			  cout << "Caca4" << endl;
 
 			  //Get time after receiving the message
 			  //clock_gettime(CLOCK_MONOTONIC, &endReadMessage[ticks_t2]);
