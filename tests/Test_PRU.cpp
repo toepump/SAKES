@@ -738,6 +738,8 @@ void *testThread1(void *ptr) {
 			  cout << "Caca3" << endl;
 
 			  result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
+			  cout << "Caca4" << endl;
+
 			  if(result > 0){
 				  number1= (int)(readBuf[0]);
 				  number2= (int)(readBuf[1]);
