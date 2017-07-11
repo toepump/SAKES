@@ -632,11 +632,11 @@ int main(int argc, char* argv[]){
 		printf("Problem set param 1: %d \n", checkschedParam);
 	}
 
-	//iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
+	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
 
-	//printf("pthread_create() 1 for returns: %d\n", iret1); // if it fails, return not 0
+	printf("pthread_create() 1 for returns: %d\n", iret1); // if it fails, return not 0
 
-
+	/*
 
 	checkAttrInit=pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
 	if(checkAttrInit!=0){
@@ -664,14 +664,14 @@ int main(int argc, char* argv[]){
 	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
 		printf("pthread_create() 2 for returns: %d\n", iret2);
 
-
+		*/
 
 	/* Wait till threads are complete before main continues. Unless we */
 	/* wait we run the risk of executing an exit which will terminate  */
 	/* the process and all threads before the threads have completed.  */
 
-	//pthread_join( thread1, NULL);
-	pthread_join( thread2, NULL);
+	pthread_join( thread1, NULL);
+	//pthread_join( thread2, NULL);
 
 	exit(EXIT_SUCCESS);
 }
