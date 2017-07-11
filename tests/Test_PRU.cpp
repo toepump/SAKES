@@ -42,7 +42,7 @@ int storeIntoOutput(struct encoder *encKnee, struct encoder *encMotor, struct mo
 int storeEncoderStruct(struct encoder *encoder, struct outputEnc *output, int increment);
 int fileTestMotor(struct output *output);
 int fileOutputEncoder(struct outputEnc *output);
-int fileTimespec(struct timespec *time, int length, char *s);
+int fileTimespec(struct timespec *time, int length, char s);
 
 
 int setTimeOrigin(struct timeStruct *time);
@@ -369,15 +369,15 @@ int fileOutputEncoder(struct outputEnc *output){
 	return 0;
 }
 
-int fileTimespec(struct timespec *time, int length, char *s){
+int fileTimespec(struct timespec *time, int length, char s){
 
 	cout << "Printing of the output starts" << endl;
 
-	char buf[0x100];
+	char buf[64];
 	int i=0;
 	int timeMilli;
 	double TimeMilliDouble;
-	snprintf(buf, sizeof(buf), "%s", s);
+	sprintf(buf,"%s"", s);
 
 	FILE *fj1=fopen(buf,"w");
 	fprintf(fj1,"indexOutput; Time (ms)");
