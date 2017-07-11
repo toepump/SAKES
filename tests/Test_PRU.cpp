@@ -56,9 +56,6 @@ int getTimeSinceOrigin(struct timeStruct *time);
 
 int fetchDataBuffer(int *angle);
 
-struct pollfd pollfds[1];
-int fd;
-
 void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
@@ -695,14 +692,14 @@ void *testThread1(void *ptr) {
 	char readBuf[MAX_BUFFER_SIZE];
 
 	int number1, number2, number3, number4;
-	int toPru;
+	int toPru=30;
 	int result = 0;
 
 	int timeOutput[20000];
 
 	int sleepOK=0;
-
-	toPru=30;
+	struct pollfd pollfds[1];
+	int fd;
 
 	//We set the begining if the thread in 1 second
 	clock_gettime(CLOCK_MONOTONIC, &waitTime);
@@ -726,16 +723,16 @@ void *testThread1(void *ptr) {
 	  		//put the value of the variable of start to previous start
 		  	previous_start.tv_sec=start.tv_sec;
 		  	previous_start.tv_nsec=start.tv_nsec;
-		  	cout << "Caca 1" << endl;
 
 			  //Get the time before sending a message
 			  clock_gettime(CLOCK_MONOTONIC, &sendMessage1);
 
 			  //fetchDataBuffer(&angle);
-			  cout << "Caca 2" << endl;
+
 			  //Message to the PRU through the RPMsg channel
 			  result = write(pollfds[0].fd, &toPru, sizeof(int));
-			  cout << "Caca3" << endl;
+
+			  cout << "Caca3, result:" << result << endl;
 
 			  result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
 			  cout << "Caca4" << endl;
