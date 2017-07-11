@@ -684,24 +684,6 @@ void *testThread2(void *ptr) {
 	answerTime[ticks_t1]=durationCommuciation;
   	//Put the difference in loopTime
 
-	cout << "End of loop, i= " << 10000 << endl;
-	for(i=1;i<10000;i++){
-		meanTimePRU = answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 + meanTimePRU;
-		if(answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 > maxTimePRU){
-			maxTimePRU=answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000;
-		}
-	meanTimePRU=int(double(meanTimePRU)/9999.0);
-
-	cout << " THe mean time of communication is : " << meanTimePRU << endl;
-	cout << " The max time of communication is : " << maxTimePRU << endl;
-
-	cout << " Angle a t=0 : " << finalResult[0] << endl;
-	cout << " Angle a t=2000 : " << finalResult[2000] << endl;
-	cout << " Angle a t=4000 : " << finalResult[4000] << endl;
-	cout << " Angle a t=6000 : " << finalResult[6000] << endl;
-	cout << " Angle a t=8000 : " << finalResult[8000] << endl;
-	cout << " Angle a t=9000 : " << finalResult[9000] << endl;
-	}
   	/*
   	//We get the time to
   	clock_gettime(CLOCK_MONOTONIC, &timePoly);
@@ -729,6 +711,25 @@ void *testThread2(void *ptr) {
 
 	/* Close the rpmsg_pru character device file */
 	close(pollfds[0].fd);
+
+	cout << "End of loop, i= " << 10000 << endl;
+	for(i=1;i<10000;i++){
+		meanTimePRU = answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 + meanTimePRU;
+		if(answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 > maxTimePRU){
+			maxTimePRU=answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000;
+		}
+	meanTimePRU=int(double(meanTimePRU)/9999.0);
+
+	cout << " THe mean time of communication is : " << meanTimePRU << endl;
+	cout << " The max time of communication is : " << maxTimePRU << endl;
+
+	cout << " Angle a t=0 : " << finalResult[0] << endl;
+	cout << " Angle a t=2000 : " << finalResult[2000] << endl;
+	cout << " Angle a t=4000 : " << finalResult[4000] << endl;
+	cout << " Angle a t=6000 : " << finalResult[6000] << endl;
+	cout << " Angle a t=8000 : " << finalResult[8000] << endl;
+	cout << " Angle a t=9000 : " << finalResult[9000] << endl;
+	}
 
 	//We wait 2 seconds to output the files
 	t_Thread2.tv_sec++;
