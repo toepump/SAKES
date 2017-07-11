@@ -861,9 +861,8 @@ void *testThread2(void *ptr) {
 	  //clock_gettime(CLOCK_MONOTONIC, &endReadMessage[ticks_t2]);
 	  clock_gettime(CLOCK_MONOTONIC, &endReadMessage1);
 
-		timespec_diff(&sendMessage1, &endReadMessage1, &totalTimeInLoop);
-		timeOutput[ticks_t2]=totalTimeInLoop.tv_sec+totalTimeInLoop.tv_nsec*1000000000;
-		cout << " ticks : " << ticks_t2 << endl;
+	timespec_diff(&sendMessage1, &endReadMessage1, &totalTimeInLoop);
+	timeOutput[ticks_t2]=totalTimeInLoop.tv_sec+totalTimeInLoop.tv_nsec*1000000000;
 
 	  //Put the difference in loopTime
   	/*
