@@ -502,7 +502,7 @@ int fileIntG(int *table, int length){
 	int i=0;
 	int timeNano;
 
-	FILE *fj1=fopen("FileG.dat","w");
+	FILE *fj1=fopen("FileG.dat","w+");
 	fprintf(fj1,"indexOutput; Time (ns)\r\n");
 
 	while(i<length){
@@ -748,14 +748,14 @@ void *testThread1(void *ptr) {
 				  cout << "Result not superior to 0 :"<< endl;
 			  }
 			  angle=number1+number2*256+number3*256*256+number4*256*256*256;
-			  finalResult[ticks_t2]=angle;
+			  finalResult[ticks_t1]=angle;
 
 			  //Get time after receiving the message
 			  //clock_gettime(CLOCK_MONOTONIC, &endReadMessage[ticks_t2]);
 			  clock_gettime(CLOCK_MONOTONIC, &endReadMessage1);
 
 			timespec_diff(&sendMessage1, &endReadMessage1, &totalTimeInLoop);
-			timeOutput[ticks_t2]=totalTimeInLoop.tv_sec*ONESECINNANO+totalTimeInLoop.tv_nsec;
+			timeOutput[ticks_t1]=totalTimeInLoop.tv_sec*ONESECINNANO+totalTimeInLoop.tv_nsec;
 
 			//test if we are respecting the time interval limit
 			/*
