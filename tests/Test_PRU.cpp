@@ -760,17 +760,20 @@ void *testThread2(void *ptr) {
 	double timeRatio=double(INTERVALMS)/double(INTERVAL_T2);
 	double maxTicks = double(TIME_MAX)*timeRatio+1000.0;
 
-	struct timespec sendMessage[10000];
-	struct timespec readMessage[10000];
-	struct timespec endReadMessage[10000];
+	struct timespec sendMessage1;
+	struct timespec endReadMessage1;
+	struct timespec sendMessage[15000];
+	struct timespec readMessage[15000];
+	struct timespec endReadMessage[15000];
 
 	struct timespec debut;
 	struct timespec fin;
 	struct timespec ecart;
 
-	struct timespec sendingMessage[10000];
-	struct timespec receivingMessage[10000];
-	struct timespec totalTime[10000];
+	struct timespec sendingMessage[15000];
+	struct timespec receivingMessage[15000];
+	struct timespec totalTime[15000];
+	struct timespec totalTimeInLoop[15000];
 
 	int finalResult[10000];
 	char filename[18] = "/dev/rpmsg_pru31";
@@ -811,6 +814,7 @@ void *testThread2(void *ptr) {
 
 	  //Get the time before sending a message
 	  clock_gettime(CLOCK_MONOTONIC, &sendMessage[ticks_t2]);
+	  clock_gettime(CLOCK_MONOTONIC, &sendMessage1);
 
 	  //fetchDataBuffer(&angle);
 
@@ -833,6 +837,12 @@ void *testThread2(void *ptr) {
 
 	  //Get time after receiving the message
 	  clock_gettime(CLOCK_MONOTONIC, &endReadMessage[ticks_t2]);
+	  clock_gettime(CLOCK_MONOTONIC, &endReadMessage1);
+
+		debut=sendMessage1;
+		fin=endReadMessage1;
+		timespec_diff(&debut, &fin, &ecart);
+		totalTimeInLoop[incrementOutput]=ecart;
 
 	  //Put the difference in loopTime
 
@@ -886,7 +896,7 @@ void *testThread2(void *ptr) {
 	//fileTimespecB(receivingMessage, 10000);
 	fileTimespecC(totalTime, 10000);
 	fileTimespecD(sendMessage, 10000);
-	//fileTimespecE(readMessage, 10000);
+	fileTimespecE(totalTimeInLoop, 10000);
 	fileTimespecF(endReadMessage, 10000);
 
 	cout << " Angle a t=0 : " << finalResult[0] << endl;
