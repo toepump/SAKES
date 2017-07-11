@@ -649,8 +649,11 @@ void *testThread1(void *ptr) {
 		}
 	}
 
+	cout << " Before closing : " << endl;
 	/* Close the rpmsg_pru character device file */
 	close(pollfds[0].fd);
+
+	cout << " After closing : "<< endl;
 
 	//We wait 2 seconds to output the files
 	waitTime.tv_sec+=1;
