@@ -686,7 +686,7 @@ void *testThread2(void *ptr) {
 	struct timespec readMessage[10000];
 	struct timespec endReadMessage[10000];
 	struct timespec sendingMessage[10000-1];
-	struct timespec recevingMessage[10000-1];
+	struct timespec receivingMessage[10000-1];
 
 	int finalResult[10000];
 	char filename[18] = "/dev/rpmsg_pru31";
@@ -783,11 +783,11 @@ void *testThread2(void *ptr) {
 
 	for(incrementOutput=0;incrementOutput<10000;incrementOutput++){
 		timespec_diff(&sendMessage[incrementOutput], &readMessage[incrementOutput], &sendingMessage[incrementOutput]);
-		timespec_diff(&readMessage[incrementOutput], &endReadMessage[incrementOutput], &recevingMessage[incrementOutput]);
+		timespec_diff(&readMessage[incrementOutput], &endReadMessage[incrementOutput], &receivingMessage[incrementOutput]);
 	}
 
 	fileTimespecA(sendingMessage, 10000);
-	fileTimespecB(sendingMessage, 10000);
+	fileTimespecB(receivingMessage, 10000);
 
 	cout << " Angle a t=0 : " << finalResult[0] << endl;
 	cout << " Angle a t=2000 : " << finalResult[2000] << endl;
@@ -796,6 +796,8 @@ void *testThread2(void *ptr) {
 	cout << " Angle a t=8000 : " << finalResult[8000] << endl;
 	cout << " Angle a t=9000 : " << finalResult[9000] << endl;
 
+	cout << " Angle a t=6000 : " << sendingMessage[4000] << endl;
+	cout << " Angle a t=8000 : " << receivingMessage[4000] << endl;
 
 	//We wait 2 seconds to output the files
 	t_Thread2.tv_sec++;
