@@ -699,8 +699,7 @@ void *testThread2(void *ptr) {
 	int result = 0;
 	int incrementOutput=0;
 
-	char* sendTime ="SendTime.dat";
-	char* readTime ="ReadTime.dat";
+	int testValue1;
 
 	toPru=30;
 
@@ -786,6 +785,10 @@ void *testThread2(void *ptr) {
 		timespec_diff(&readMessage[incrementOutput], &endReadMessage[incrementOutput], &receivingMessage[incrementOutput]);
 	}
 
+	testValue1=readMessage[4000].tv_nsec;
+	cout << " Angle a t=2000 : " << testValue1 << endl;
+
+
 	fileTimespecA(sendingMessage, 10000);
 	fileTimespecB(receivingMessage, 10000);
 
@@ -795,9 +798,6 @@ void *testThread2(void *ptr) {
 	cout << " Angle a t=6000 : " << finalResult[6000] << endl;
 	cout << " Angle a t=8000 : " << finalResult[8000] << endl;
 	cout << " Angle a t=9000 : " << finalResult[9000] << endl;
-
-	cout << " Angle a t=6000 : " << sendingMessage[4000] << endl;
-	cout << " Angle a t=8000 : " << receivingMessage[4000] << endl;
 
 	//We wait 2 seconds to output the files
 	t_Thread2.tv_sec++;
