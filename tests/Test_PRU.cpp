@@ -677,8 +677,8 @@ void *testThread2(void *ptr) {
 	int result = 0;
 	int incrementOutput=0;
 
-	char sendTime[14]="SendTime.dat";
-	char readTime[14]="ReadTime.dat";
+	char* sendTime ="SendTime.dat";
+	char* readTime ="ReadTime.dat";
 
 	toPru=30;
 
