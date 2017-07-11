@@ -719,7 +719,7 @@ void *testThread2(void *ptr) {
 	}else{
 		cout << "Result not superior to 0 :"<< endl;
 	}
-	*angle=number1+number2*256+number3*256*256+number4*256*256*256;
+	angle=number1+number2*256+number3*256*256+number4*256*256*256;
   	finalResult[ticks_t2]=angle;
 
 	//Get time after receiving the message
@@ -760,8 +760,8 @@ void *testThread2(void *ptr) {
 		timespec_diff(&readMessage[incrementOutput], &endReadMessage[incrementOutput], &recevingMessage[incrementOutput]);
 	}
 
-	fileTimespec(&sendingMessage, 10000, &sendTime);
-	fileTimespec(&sendingMessage, 10000, &readTime);
+	fileTimespec(sendingMessage, 10000, &sendTime);
+	fileTimespec(sendingMessage, 10000, &readTime);
 
 	cout << " Angle a t=0 : " << finalResult[0] << endl;
 	cout << " Angle a t=2000 : " << finalResult[2000] << endl;
