@@ -732,13 +732,13 @@ void *testThread1(void *ptr) {
 			sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 
 			//get the time of the beginning of this cycle and calculate the interval since the previous cycle
-			clock_gettime(CLOCK_MONOTONIC, &start);
-			if(ticks_t1>0){
-				timespec_diff(&previous_start, &start, &diff);
-			}
+			//clock_gettime(CLOCK_MONOTONIC, &start);
+			//if(ticks_t1>0){
+				//timespec_diff(&previous_start, &start, &diff);
+			//}
 	  		//put the value of the variable of start to previous start
-		  	previous_start.tv_sec=start.tv_sec;
-		  	previous_start.tv_nsec=start.tv_nsec;
+		  	//previous_start.tv_sec=start.tv_sec;
+		  	//previous_start.tv_nsec=start.tv_nsec;
 
 			  //Get the time before sending a message
 			  clock_gettime(CLOCK_MONOTONIC, &sendMessage1);
