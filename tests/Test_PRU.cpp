@@ -682,9 +682,11 @@ void *testThread1(void *ptr) {
 	struct timespec previous_start;
 	struct timespec diff;
 
+	/*Coomunication with the PRU*/
 	struct timespec sendMessage1;
 	struct timespec endReadMessage1;
 	struct timespec totalTimeInLoop;
+	struct pollfd pollfds[1];
 
 	int finalResult[20000];
 	char filename[18] = "/dev/rpmsg_pru31";
@@ -698,7 +700,7 @@ void *testThread1(void *ptr) {
 	int timeOutput[20000];
 
 	int sleepOK=0;
-	struct pollfd pollfds[1];
+
 
 	//We set the begining if the thread in 1 second
 	clock_gettime(CLOCK_MONOTONIC, &waitTime);
