@@ -685,8 +685,8 @@ void *testThread2(void *ptr) {
 	struct timespec sendMessage[10000];
 	struct timespec readMessage[10000];
 	struct timespec endReadMessage[10000];
-	struct timespec sendingMessage[10000-1];
-	struct timespec receivingMessage[10000-1];
+	struct timespec sendingMessage[10000];
+	struct timespec receivingMessage[10000];
 
 	int finalResult[10000];
 	char filename[18] = "/dev/rpmsg_pru31";
