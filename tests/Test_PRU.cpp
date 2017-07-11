@@ -48,6 +48,7 @@ int fileTimespecC(struct timespec *time, int length);
 int fileTimespecD(struct timespec *time, int length);
 int fileTimespecE(struct timespec *time, int length);
 int fileTimespecF(struct timespec *time, int length);
+int fileIntG(int *table, int length);
 
 
 int setTimeOrigin(struct timeStruct *time);
@@ -494,6 +495,26 @@ int fileTimespecF(struct timespec *time, int length){
 	return 0;
 }
 
+int fileIntG(int *table, int length){
+
+	cout << "Printing of the output starts" << endl;
+
+	int i=0;
+	int timeNano;
+
+	FILE *fj1=fopen("FileG.dat","w");
+	fprintf(fj1,"indexOutput; Time (ns)\r\n");
+
+	while(i<length){
+
+		timeNano=table[i];
+		fprintf(fj1,"%d;%d\r\n",i+1,timeNano);
+		i++ ;
+	}
+	fclose(fj1);
+	return 0;
+}
+
 int setTimeOrigin(struct timeStruct *time){
 
 	struct timespec timeFetcher;
@@ -773,7 +794,7 @@ void *testThread2(void *ptr) {
 	struct timespec sendingMessage[15000];
 	struct timespec receivingMessage[15000];
 	struct timespec totalTime[15000];
-	struct timespec totalTimeInLoop[15000];
+	struct timespec totalTimeInLoop;
 
 	int finalResult[10000];
 	char filename[18] = "/dev/rpmsg_pru31";
@@ -787,6 +808,7 @@ void *testThread2(void *ptr) {
 	int incrementOutput=0;
 
 	int testValue1;
+	int timeOutput[15000];
 
 	toPru=30;
 
@@ -813,7 +835,7 @@ void *testThread2(void *ptr) {
 	  clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
 
 	  //Get the time before sending a message
-	  clock_gettime(CLOCK_MONOTONIC, &sendMessage[ticks_t2]);
+	  //clock_gettime(CLOCK_MONOTONIC, &sendMessage[ticks_t2]);
 	  clock_gettime(CLOCK_MONOTONIC, &sendMessage1);
 
 	  //fetchDataBuffer(&angle);
@@ -836,16 +858,13 @@ void *testThread2(void *ptr) {
 	  finalResult[ticks_t2]=angle;
 
 	  //Get time after receiving the message
-	  clock_gettime(CLOCK_MONOTONIC, &endReadMessage[ticks_t2]);
+	  //clock_gettime(CLOCK_MONOTONIC, &endReadMessage[ticks_t2]);
 	  clock_gettime(CLOCK_MONOTONIC, &endReadMessage1);
 
-		debut=sendMessage1;
-		fin=endReadMessage1;
-		timespec_diff(&debut, &fin, &ecart);
-		totalTimeInLoop[incrementOutput]=ecart;
+		timespec_diff(&sendMessage1, &endReadMessage1, &totalTimeInLoop);
+		timeOutput[ticks_t2]=totalTimeInLoop.tv_sec+totalTimeInLoop.tv_nsec*1000000000;
 
 	  //Put the difference in loopTime
-
   	/*
   		//We get the time to
   	clock_gettime(CLOCK_MONOTONIC, &timePoly);
@@ -864,16 +883,17 @@ void *testThread2(void *ptr) {
 	  ticks_t2++; // Increment the ticks value
 
 	  /* calculate next shot */
-	  t_Thread2.tv_nsec += INTERVAL_T2;
-	  while (t_Thread2.tv_nsec >= NSEC_PER_SEC) {
-		  t_Thread2.tv_nsec -= NSEC_PER_SEC;
-		  t_Thread2.tv_sec++;
-	  }
-  	  }
+	  	  t_Thread2.tv_nsec += INTERVAL_T2;
+	  	  while (t_Thread2.tv_nsec >= NSEC_PER_SEC) {
+	  		  t_Thread2.tv_nsec -= NSEC_PER_SEC;
+	  		  _Thread2.tv_sec++;
+	  	  }
+  	}
 
 	/* Close the rpmsg_pru character device file */
 	close(pollfds[0].fd);
 
+	/*
 	for(incrementOutput=0;incrementOutput<10000;incrementOutput++){
 
 		debut=sendMessage[incrementOutput];
@@ -891,13 +911,15 @@ void *testThread2(void *ptr) {
 		timespec_diff(&debut, &fin, &ecart);
 		totalTime[incrementOutput]=ecart;
 	}
+	*/
 
 	//fileTimespecA(sendingMessage, 10000);
 	//fileTimespecB(receivingMessage, 10000);
 	fileTimespecC(totalTime, 10000);
 	fileTimespecD(sendMessage, 10000);
-	fileTimespecE(totalTimeInLoop, 10000);
 	fileTimespecF(endReadMessage, 10000);
+
+	fileIntG(&timeOutput, 10000);
 
 	cout << " Angle a t=0 : " << finalResult[0] << endl;
 	cout << " Angle a t=2000 : " << finalResult[2000] << endl;
