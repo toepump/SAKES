@@ -44,6 +44,7 @@ int fileTestMotor(struct output *output);
 int fileOutputEncoder(struct outputEnc *output);
 int fileTimespecA(struct timespec *time, int length);
 int fileTimespecB(struct timespec *time, int length);
+int fileTimespecC(struct timespec *time, int length);
 
 
 int setTimeOrigin(struct timeStruct *time);
@@ -410,6 +411,26 @@ int fileTimespecB(struct timespec *time, int length){
 	return 0;
 }
 
+int fileTimespecC(struct timespec *time, int length){
+
+	cout << "Printing of the output starts" << endl;
+
+	int i=0;
+	int timeNano;
+
+	FILE *fj1=fopen("FileC.dat","w");
+	fprintf(fj1,"indexOutput; Time (ms)");
+
+	while(i<length){
+
+		timeNano=time[i].tv_sec*1000000000+time[i].tv_nsec;
+		fprintf(fj1,"%d;%d\r\n",i+1,timeNano);
+		i++ ;
+	}
+	fclose(fj1);
+	return 0;
+}
+
 int setTimeOrigin(struct timeStruct *time){
 
 	struct timespec timeFetcher;
@@ -679,8 +700,10 @@ void *testThread2(void *ptr) {
 	struct timespec sendMessage[10000];
 	struct timespec readMessage[10000];
 	struct timespec endReadMessage[10000];
+
 	struct timespec sendingMessage[10000];
 	struct timespec receivingMessage[10000];
+	struct timespec totalTime[10000];
 
 	int finalResult[10000];
 	char filename[18] = "/dev/rpmsg_pru31";
@@ -777,10 +800,12 @@ void *testThread2(void *ptr) {
 	for(incrementOutput=0;incrementOutput<10000;incrementOutput++){
 		timespec_diff(&sendMessage[incrementOutput], &readMessage[incrementOutput], &sendingMessage[incrementOutput]);
 		timespec_diff(&readMessage[incrementOutput], &endReadMessage[incrementOutput], &receivingMessage[incrementOutput]);
+		timespec_diff(&sendMessage[incrementOutput], &endReadMessage[incrementOutput], &totalTime[incrementOutput]);
 	}
 
 	fileTimespecA(sendingMessage, 10000);
 	fileTimespecB(receivingMessage, 10000);
+	fileTimespecC(totalTime, 10000);
 
 	cout << " Angle a t=0 : " << finalResult[0] << endl;
 	cout << " Angle a t=2000 : " << finalResult[2000] << endl;
