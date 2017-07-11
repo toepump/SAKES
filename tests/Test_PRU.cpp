@@ -558,13 +558,11 @@ void *testThread1(void *ptr) {
 			//get the time of the beginning of this cycle and calculate the interval since the previous cycle
 			clock_gettime(CLOCK_MONOTONIC, &start);
 			timespec_diff(&previous_start, &start, &diff);
+	  		//put the value of the variable of start to previous start
+		  	previous_start.tv_sec=start.tv_sec;
+		  	previous_start.tv_nsec=start.tv_nsec;
+		  	//Put the difference in loopTime
 			loopTime[ticks_t1]=diff;
-
-
-			//cout << "Before send to the PRU " << endl;
-			if(ticks_t1==0){
-				cout << "Beginning of loop " << endl;
-			}
 
 			//Get the time before sending a message
 			clock_gettime(CLOCK_MONOTONIC, &sendMessage);
@@ -604,22 +602,12 @@ void *testThread1(void *ptr) {
 			timespec_diff(&sendMessage, &receiveMessage, &durationCommuciation);
 			answerTime[ticks_t1]=durationCommuciation;
 
-
-
-	  		//put the value of the variable of start to previous start
-		  	previous_start.tv_sec=start.tv_sec;
-		  	previous_start.tv_nsec=start.tv_nsec;
-
 		  	//Do the calculation for the next time so start the loop
 		  	waitTime.tv_nsec+=INTERVAL_T1;
 		  	if(waitTime.tv_nsec>= NSEC_PER_SEC){
 		  		waitTime.tv_sec+=1;
 		  		waitTime.tv_nsec-=NSEC_PER_SEC;
 		  	}
-
-			if(ticks_t1==0){
-				cout << "End of first loop " << endl;
-			}
 
 		}else{
 			cout << "The clock nanosleep has encountered a problem." << endl;
@@ -629,6 +617,7 @@ void *testThread1(void *ptr) {
 		//cout << "Loop number : " << ticks_t1 << endl;
 		ticks_t1=ticks_t1+1;
 		if(ticks_t1==1000){
+			cout << "End of loop, i=1000 " << endl;
 			for(i=0;i<1000;i++){
 				meanTimePRU = answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 + meanTimePRU;
 				if(answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 > maxTimePRU){
