@@ -68,6 +68,7 @@ void main(void)
 
 	//Initialization of the state
 
+	/*
 	if ((__R31 ^ prev_state_A) & CHECK_BIT_A) {
 		prev_state_A = 1;
 		if ((__R31 ^ prev_state_B) & CHECK_BIT_B) {
@@ -91,91 +92,94 @@ void main(void)
 			angle=8000;
 		}
 	}
+	*/
  
 	while (pru_rpmsg_channel(RPMSG_NS_CREATE, &transport, CHAN_NAME, CHAN_DESC, CHAN_PORT) != PRU_RPMSG_SUCCESS);
-	while (1){
-		if (__R31 & HOST_INT){
-	        
-			/*Send message if one received from encoder */
-			if (pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS){
-				pru_rpmsg_send(&transport,dst, src, &angle, sizeof(int));
-			}else{
-			  CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
-			}
+	{
+		while (1){
+				if (__R31 & HOST_INT){
 
-			/*
-			if ((__R31 ^ prev_state_A) & CHECK_BIT_A){
-				if(prev_state_A==0)
-				{
-					prev_state_A=__R31 & CHECK_BIT_A;
-					if(encoder_state==1){
-						encoder_state=11;
-						angle=angle-1;
-					}else if(encoder_state==0){
-						encoder_state=10;
-						angle=angle+1;
+					/*Send message if one received from encoder */
+					if (pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS){
+						pru_rpmsg_send(&transport,dst, src, &angle, sizeof(int));
 					}else{
-						angle=200;
+					  CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
 					}
-				}else{
-					prev_state_A=__R31 & CHECK_BIT_A;
-					if(encoder_state==10){
-						encoder_state=0;
+
+					/*
+					if ((__R31 ^ prev_state_A) & CHECK_BIT_A){
+						if(prev_state_A==0)
+						{
+							prev_state_A=__R31 & CHECK_BIT_A;
+							if(encoder_state==1){
+								encoder_state=11;
+								angle=angle-1;
+							}else if(encoder_state==0){
+								encoder_state=10;
+								angle=angle+1;
+							}else{
+								angle=200;
+							}
+						}else{
+							prev_state_A=__R31 & CHECK_BIT_A;
+							if(encoder_state==10){
+								encoder_state=0;
+								angle=angle-1;
+							}else if(encoder_state==11){
+								encoder_state=1;
+								angle=angle+1;
+							}else{
+								angle=200;
+							}
+						}
+					}else if((__R31 ^ prev_state_B) & CHECK_BIT_B){
+						if(prev_state_B==0)
+						{
+							prev_state_B=__R31 & CHECK_BIT_B;
+							if(encoder_state==0){
+								encoder_state=1;
+								angle=angle-1;
+							}else if(encoder_state==10){
+								encoder_state=11;
+								angle=angle+1;
+							}else{
+								angle=200;
+							}
+						}else{
+							prev_state_B=__R31 & CHECK_BIT_B;
+							if(encoder_state==11){
+								encoder_state=10;
+								angle=angle-1;
+							}else if(encoder_state==1){
+								encoder_state=0;
+								angle=angle+1;
+							}else{
+								angle=200;
+							}
+						}
+
+					}
+					*/
+
+
+					/*
+					if ((__R31 ^ prev_state_A) & CHECK_BIT_A){
+						prev_state_A = __R31 & CHECK_BIT_A;
+						angle=angle+10;
+					}
+
+					if ((__R31 ^ prev_state_B) & CHECK_BIT_B){
+						prev_state_B = __R31 & CHECK_BIT_B;
 						angle=angle-1;
-					}else if(encoder_state==11){
-						encoder_state=1;
-						angle=angle+1;
-					}else{
-						angle=200;
 					}
+
+					if ((__R31 ^ prev_state_Z) & CHECK_BIT_Z){
+						prev_state_Z = __R31 & CHECK_BIT_Z;
+						angle=12000;
+					}
+					*/
+
 				}
-			}else if((__R31 ^ prev_state_B) & CHECK_BIT_B){
-				if(prev_state_B==0)
-				{
-					prev_state_B=__R31 & CHECK_BIT_B;
-					if(encoder_state==0){
-						encoder_state=1;
-						angle=angle-1;
-					}else if(encoder_state==10){
-						encoder_state=11;
-						angle=angle+1;
-					}else{
-						angle=200;
-					}
-				}else{
-					prev_state_B=__R31 & CHECK_BIT_B;
-					if(encoder_state==11){
-						encoder_state=10;
-						angle=angle-1;
-					}else if(encoder_state==1){
-						encoder_state=0;
-						angle=angle+1;
-					}else{
-						angle=200;
-					}
-				}
-
 			}
-			*/
-
-
-			/*
-			if ((__R31 ^ prev_state_A) & CHECK_BIT_A){
-				prev_state_A = __R31 & CHECK_BIT_A;
-				angle=angle+10;
-			}
-
-			if ((__R31 ^ prev_state_B) & CHECK_BIT_B){
-				prev_state_B = __R31 & CHECK_BIT_B;
-				angle=angle-1;
-			}
-
-			if ((__R31 ^ prev_state_Z) & CHECK_BIT_Z){
-				prev_state_Z = __R31 & CHECK_BIT_Z;
-				angle=12000;
-			}
-			*/
-
-		}
 	}
 }
