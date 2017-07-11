@@ -685,7 +685,7 @@ void *testThread1(void *ptr) {
 	struct timespec previous_start;
 	struct timespec diff;
 
-	struct timespec loopTime[10000];
+	struct timespec loopTime[20000];
 	int i;
 	int maxTimeLoop=0;
 	int meanTimeLoop=0;
