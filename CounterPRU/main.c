@@ -74,7 +74,17 @@ void main(void)
 
 			if ((__R31 ^ prev_state_A) & CHECK_BIT_A) {
 				prev_state_A = __R31 & CHECK_BIT_A;
-				angle=angle+1;
+				angle=angle+10;
+			}
+
+			if ((__R31 ^ prev_state_B) & CHECK_BIT_B) {
+				prev_state_B = __R31 & CHECK_BIT_B;
+				angle=angle-1;
+			}
+
+			if ((__R31 ^ prev_state_Z) & CHECK_BIT_Z) {
+				prev_state_Z = __R31 & CHECK_BIT_Z;
+				angle=12000;
 			}
 
 		}
