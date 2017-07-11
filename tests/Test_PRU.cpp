@@ -538,6 +538,8 @@ void *testThread1(void *ptr) {
 	struct timespec previous_start;
 	struct timespec diff;
 
+	struct timespec loopTime[10000];
+
 	int sleepOK=0;
 
 	//We set the begining if the thread in 1 second
@@ -562,7 +564,6 @@ void *testThread1(void *ptr) {
 	  		//put the value of the variable of start to previous start
 		  	previous_start.tv_sec=start.tv_sec;
 		  	previous_start.tv_nsec=start.tv_nsec;
-		  	//Put the difference in loopTime
 			loopTime[ticks_t1]=diff;
 
 			//test if we are respecting the time interval limit
@@ -629,7 +630,6 @@ void *testThread2(void *ptr) {
 	struct timespec receiveMessage;
 	struct timespec durationCommuciation;
 	struct timespec answerTime[10000];
-	struct timespec loopTime[10000];
 
 	int finalResult[10000];
 	char filename[18] = "/dev/rpmsg_pru31";
@@ -661,15 +661,14 @@ void *testThread2(void *ptr) {
   	clock_gettime(CLOCK_MONOTONIC, &sendMessage);
 
   	fetchDataBuffer(&angle);
-  	finalResult[ticks_2]=angle;
+  	finalResult[ticks_t2]=angle;
 
 	//Get time after receiving the message
 	clock_gettime(CLOCK_MONOTONIC, &receiveMessage);
 	//Calculation of the tine difference between send and receive
 	timespec_diff(&sendMessage, &receiveMessage, &durationCommuciation);
 	answerTime[ticks_t1]=durationCommuciation;
-
-
+  	//Put the difference in loopTime
 
 	cout << "End of loop, i= " << 10000 << endl;
 	for(i=1;i<10000;i++){
