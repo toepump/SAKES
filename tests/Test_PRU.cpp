@@ -42,6 +42,7 @@ int storeIntoOutput(struct encoder *encKnee, struct encoder *encMotor, struct mo
 int storeEncoderStruct(struct encoder *encoder, struct outputEnc *output, int increment);
 int fileTestMotor(struct output *output);
 int fileOutputEncoder(struct outputEnc *output);
+int fileTimespec(struct timespec *time, int length, char s);
 
 
 int setTimeOrigin(struct timeStruct *time);
@@ -368,6 +369,27 @@ int fileOutputEncoder(struct outputEnc *output){
 	return 0;
 }
 
+int fileTimespec(struct timespec *time, int length, char s){
+
+	cout << "Printing of the output starts" << endl;
+
+	int i=0;
+	int timeMilli;
+	FILE *fj1=fopen(s,"w");
+
+	fprintf(fj1,"indexOutput; Time (ms)";
+
+	while(i<length){
+
+		timeMilli=*time->tv_sec*1000000000+*time->tv_nsec;
+		timeMilli=int(double(timeMilli)/1000.0);
+		fprintf(fj1,"%d;%f\r\n",i+1,timeMilli);
+		i++ ;
+	}
+	fclose(fj1);
+	return 0;
+}
+
 int setTimeOrigin(struct timeStruct *time){
 
 	struct timespec timeFetcher;
@@ -634,22 +656,29 @@ void *testThread2(void *ptr) {
 	double timeRatio=double(INTERVALMS)/double(INTERVAL_T2);
 	double maxTicks = double(TIME_MAX)*timeRatio+1000.0;
 
-	/* TO fecth Data Buffer */
-	int maxTimePRU=0;
-	int meanTimePRU=0;
-
-	struct timespec sendMessage;
-	struct timespec receiveMessage;
-	struct timespec durationCommuciation;
-	struct timespec answerTime[10000];
+	struct timespec sendMessage[10000];
+	struct timespec readMessage[10000];
+	struct timespec endReadMessage[10000];
+	struct timespec sendingMessage[10000-1];
+	struct timespec recevingMessage[10000-1];
 
 	int finalResult[10000];
 	char filename[18] = "/dev/rpmsg_pru31";
 	int angle;
-	int i;
+	char readBuf[MAX_BUFFER_SIZE];
+
+	int number1, number2, number3, number4;
+
+	int toPru;
+	int result = 0;
+	int incrementOutput=0;
+
+	char sendTime[8]="SendTime";
+	char readTime[8]="ReadTime";
+
+	toPru=30;
 
 	//End fetch data buffer
-
 
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
@@ -672,16 +701,30 @@ void *testThread2(void *ptr) {
   	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
 
   	//Get the time before sending a message
-  	clock_gettime(CLOCK_MONOTONIC, &sendMessage);
+  	clock_gettime(CLOCK_MONOTONIC, &sendMessage[ticks_t2]);
 
-  	fetchDataBuffer(&angle);
+  	//fetchDataBuffer(&angle);
+
+	//Message to the PRU through the RPMsg channel
+	result = write(pollfds[0].fd, &toPru, sizeof(int));
+
+  	clock_gettime(CLOCK_MONOTONIC, &readMessage[ticks_t2]);
+
+	result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
+	if(result > 0){
+		number1= (int)(readBuf[0]);
+		number2= (int)(readBuf[1]);
+		number3= (int)(readBuf[2]);
+		number4= (int)(readBuf[3]);
+	}else{
+		cout << "Result not superior to 0 :"<< endl;
+	}
+	*angle=number1+number2*256+number3*256*256+number4*256*256*256;
   	finalResult[ticks_t2]=angle;
 
 	//Get time after receiving the message
-	clock_gettime(CLOCK_MONOTONIC, &receiveMessage);
-	//Calculation of the tine difference between send and receive
-	timespec_diff(&sendMessage, &receiveMessage, &durationCommuciation);
-	answerTime[ticks_t1]=durationCommuciation;
+	clock_gettime(CLOCK_MONOTONIC, &endReadMessage[ticks_t2]);
+
   	//Put the difference in loopTime
 
   	/*
@@ -712,17 +755,13 @@ void *testThread2(void *ptr) {
 	/* Close the rpmsg_pru character device file */
 	close(pollfds[0].fd);
 
-	cout << "End of loop, i= " << 10000 << endl;
-	for(i=1;i<10000;i++){
-		meanTimePRU = answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 + meanTimePRU;
-		if(answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 > maxTimePRU){
-			maxTimePRU=answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000;
-		}
+	for(incrementOutput=0;incrementOutput<10000;incrementOutput++){
+		timespec_diff(&sendMessage[incrementOutput], &readMessage[incrementOutput], &sendingMessage[incrementOutput]);
+		timespec_diff(&readMessage[incrementOutput], &endReadMessage[incrementOutput], &recevingMessage[incrementOutput]);
 	}
-	meanTimePRU=int(double(meanTimePRU)/9999.0);
 
-	cout << " THe mean time of communication is : " << meanTimePRU << endl;
-	cout << " The max time of communication is : " << maxTimePRU << endl;
+	fileTimespec(*sendingMessage, 10000, sendTime);
+	fileTimespec(*sendingMessage, 10000, readTime);
 
 	cout << " Angle a t=0 : " << finalResult[0] << endl;
 	cout << " Angle a t=2000 : " << finalResult[2000] << endl;

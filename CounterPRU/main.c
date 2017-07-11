@@ -103,6 +103,7 @@ void main(void)
 			  CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
 			}
 
+			/*
 			if ((__R31 ^ prev_state_A) & CHECK_BIT_A){
 				if(prev_state_A==0)
 				{
@@ -153,7 +154,9 @@ void main(void)
 						angle=200;
 					}
 				}
+
 			}
+			*/
 
 
 			/*
