@@ -47,6 +47,8 @@ int fileOutputEncoder(struct outputEnc *output);
 int setTimeOrigin(struct timeStruct *time);
 int getTimeSinceOrigin(struct timeStruct *time);
 
+int fetchDataBuffer(int *angle);
+
 void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
@@ -411,6 +413,39 @@ int setParamThreadFIFO(pthread_attr_t attr, struct sched_param param, int priori
 	return checkParam;
 }
 
+int fetchDataBuffer(int *angle){
+
+	struct pollfd pollfds[1];
+	char readBuf[MAX_BUFFER_SIZE];
+
+	int number1;
+	int number2;
+	int number3;
+	int number4;
+
+	int toPru;
+	int result = 0;
+	int fd;
+
+	toPru=30;
+
+	//Message to the PRU through the RPMsg channel
+	result = write(pollfds[0].fd, &toPru, sizeof(int));
+
+	result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
+	if(result > 0){
+		number1= (int)(readBuf[0]);
+		number2= (int)(readBuf[1]);
+		number3= (int)(readBuf[2]);
+		number4= (int)(readBuf[3]);
+	}else{
+		cout << "Result not superior to 0 :"<< endl;
+	}
+	&angle=number1+number2*256+number3*256*256+number4*256*256*256;
+
+	return 0;
+}
+
 int main(int argc, char* argv[]){
 
 	//Creation of the thread
@@ -503,32 +538,8 @@ void *testThread1(void *ptr) {
 	struct timespec previous_start;
 	struct timespec diff;
 
-	struct timespec sendMessage;
-	struct timespec receiveMessage;
-	struct timespec durationCommuciation;
-	struct timespec answerTime[10000];
-	struct timespec loopTime[10000];
-
-	char readBuf[MAX_BUFFER_SIZE];
-	struct pollfd pollfds[1];
-	int result = 0;
-	int number1;
-	int number2;
-	int number3;
-	int number4;
-
-	int finalResult[10000];
-	char filename[18] = "/dev/rpmsg_pru31";
-	int fd;
-	int toPru;
-
 	int sleepOK=0;
 	int i=0;
-
-	int maxTimePRU=0;
-	int meanTimePRU=0;
-	int maxTimeLoop=0;
-	int meanTimeLoop=0;
 
 	//We set the begining if the thread in 1 second
 	clock_gettime(CLOCK_MONOTONIC, &waitTime);
@@ -536,19 +547,7 @@ void *testThread1(void *ptr) {
 
 	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 
-
-
-	/* Open the rpmsg_pru character device file */
-	pollfds[0].fd = open(DEVICE_PATH, O_RDWR);
-	if (pollfds[0].fd < 0){
-		printf("Failed to open \n");
-	}
-
-	cout << "Beginning of loop " << endl;
-
 	while(ticks_t1<TIME_MAX+1){
-
-		toPru=30;
 
 		/* wait until next shot */
 		if(sleepOK == 0){
@@ -568,43 +567,15 @@ void *testThread1(void *ptr) {
 		  	//Put the difference in loopTime
 			loopTime[ticks_t1]=diff;
 
-			//Get the time before sending a message
-			clock_gettime(CLOCK_MONOTONIC, &sendMessage);
-
-			//Message to the PRU through the RPMsg channel
-			result = write(pollfds[0].fd, &toPru, sizeof(int));
-			/*
-			if (result > 0){
-				printf("Message sent to PRU\n");
-			}
-			*/
-
 			//test if we are respecting the time interval limit
 			/*
 			if(diff.tv_nsec>130000000)
-			{
+				{
 				cout << " " << endl;
 				cout << "Waiting superior to 130 msec" << endl;
 				cout << " " << endl;
 			}
 			*/
-			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
-			//cout << "Result "<< result  << endl;
-			if(result > 0){
-			        number1= (int)(readBuf[0]);
-			        number2= (int)(readBuf[1]);
-			        number3= (int)(readBuf[2]);
-			        number4= (int)(readBuf[3]);
-			}else{
-					cout << "Result not superior to 0 :"<< endl;
-			}
-			finalResult[ticks_t1]=number1+number2*256+number3*256*256+number4*256*256*256;
-
-			//Get time after receiving the message
-			clock_gettime(CLOCK_MONOTONIC, &receiveMessage);
-			//Calculation of the tine difference between send and receive
-			timespec_diff(&sendMessage, &receiveMessage, &durationCommuciation);
-			answerTime[ticks_t1]=durationCommuciation;
 
 		  	//Do the calculation for the next time so start the loop
 		  	waitTime.tv_nsec+=INTERVAL_T1;
@@ -632,37 +603,6 @@ void *testThread1(void *ptr) {
 	close(pollfds[0].fd);
 
 
-		cout << "End of loop, i=1000 " << endl;
-		for(i=1;i<10000;i++){
-			meanTimePRU = answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 + meanTimePRU;
-			if(answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 > maxTimePRU){
-				maxTimePRU=answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000;
-			}
-
-			meanTimeLoop = loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000 + meanTimeLoop;
-			if(loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000 > maxTimeLoop){
-				maxTimeLoop=loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000;
-			}
-
-
-		}
-		meanTimePRU=int(double(meanTimePRU)/9999.0);
-		meanTimeLoop=int(double(meanTimeLoop)/9999.0);
-
-		cout << " THe mean time of communication is : " << meanTimePRU << endl;
-		cout << " The max time of communication is : " << maxTimePRU << endl;
-
-		cout << " THe mean time of loop is : " << meanTimeLoop << endl;
-		cout << " The max time of loop is : " << maxTimeLoop << endl;
-
-		cout << " Angle a t=0 : " << finalResult[0] << endl;
-		cout << " Angle a t=2000 : " << finalResult[2000] << endl;
-		cout << " Angle a t=4000 : " << finalResult[4000] << endl;
-		cout << " Angle a t=6000 : " << finalResult[6000] << endl;
-		cout << " Angle a t=8000 : " << finalResult[8000] << endl;
-		cout << " Angle a t=9000 : " << finalResult[9000] << endl;
-
-
 	//We wait 2 seconds to output the files
 	waitTime.tv_sec+=1;
 	sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
@@ -681,6 +621,25 @@ void *testThread2(void *ptr) {
 	double timeRatio=double(INTERVALMS)/double(INTERVAL_T2);
 	double maxTicks = double(TIME_MAX)*timeRatio+1000.0;
 
+	int fd;
+
+	int maxTimePRU=0;
+	int meanTimePRU=0;
+	int maxTimeLoop=0;
+	int meanTimeLoop=0;
+
+	struct timespec sendMessage;
+	struct timespec receiveMessage;
+	struct timespec durationCommuciation;
+	struct timespec answerTime[10000];
+	struct timespec loopTime[10000];
+
+	int finalResult[10000];
+	char filename[18] = "/dev/rpmsg_pru31";
+	int fd;
+	int angle;
+
+
 	/*Stuff I want to do*/
 	/*here should start the things used with the rt preempt patch*/
 
@@ -688,11 +647,60 @@ void *testThread2(void *ptr) {
   /* start after one second */
   t_Thread2.tv_sec++;
 
+	/* Open the rpmsg_pru character device file */
+	pollfds[0].fd = open(DEVICE_PATH, O_RDWR);
+	if (pollfds[0].fd < 0){
+		printf("Failed to open \n");
+	}
+
   while(ticks_t2<int(maxTicks)) {
 
   	/* wait until next shot */
   	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
 
+  	//Get the time before sending a message
+  	clock_gettime(CLOCK_MONOTONIC, &sendMessage);
+
+  	fetchDataBuffer(&angle);
+  	finalResult[ticks_2]=angle;
+
+	//Get time after receiving the message
+	clock_gettime(CLOCK_MONOTONIC, &receiveMessage);
+	//Calculation of the tine difference between send and receive
+	timespec_diff(&sendMessage, &receiveMessage, &durationCommuciation);
+	answerTime[ticks_t1]=durationCommuciation;
+
+
+
+	cout << "End of loop, i= " << 10000 << endl;
+	for(i=1;i<10000;i++){
+		meanTimePRU = answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 + meanTimePRU;
+		if(answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 > maxTimePRU){
+			maxTimePRU=answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000;
+		}
+		meanTimeLoop = loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000 + meanTimeLoop;
+		if(loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000 > maxTimeLoop){
+			maxTimeLoop=loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000;
+		}
+	}
+
+	meanTimePRU=int(double(meanTimePRU)/9999.0);
+	meanTimeLoop=int(double(meanTimeLoop)/9999.0);
+
+	cout << " THe mean time of communication is : " << meanTimePRU << endl;
+	cout << " The max time of communication is : " << maxTimePRU << endl;
+
+	cout << " THe mean time of loop is : " << meanTimeLoop << endl;
+	cout << " The max time of loop is : " << maxTimeLoop << endl;
+
+	cout << " Angle a t=0 : " << finalResult[0] << endl;
+	cout << " Angle a t=2000 : " << finalResult[2000] << endl;
+	cout << " Angle a t=4000 : " << finalResult[4000] << endl;
+	cout << " Angle a t=6000 : " << finalResult[6000] << endl;
+	cout << " Angle a t=8000 : " << finalResult[8000] << endl;
+	cout << " Angle a t=9000 : " << finalResult[9000] << endl;
+
+  	/*
   	//We get the time to
   	clock_gettime(CLOCK_MONOTONIC, &timePoly);
 
@@ -704,6 +712,8 @@ void *testThread2(void *ptr) {
 	polyAngToIncAng(&motorPoly.angDeg, &motorPoly); //convert the value to ang
 
 	storeEncoderStruct(&kneePoly, &outputKneePoly, ticks_t2);
+
+	*/
 
   	ticks_t2++; // Increment the ticks value
 
