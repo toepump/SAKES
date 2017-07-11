@@ -376,7 +376,7 @@ int fileTimespec(struct timespec *time, int length, char *s){
 	int i=0;
 	int timeMilli;
 	double TimeMilliDouble;
-	FILE *fj1=fopen(s,"w");
+	FILE *fj1=fopen("%s",s,"w");
 
 	fprintf(fj1,"indexOutput; Time (ms)");
 
