@@ -817,7 +817,7 @@ void *testThread2(void *ptr) {
 	  //Message to the PRU through the RPMsg channel
 	  result = write(pollfds[0].fd, &toPru, sizeof(int));
 
-	  clock_gettime(CLOCK_MONOTONIC, &readMessage[ticks_t2]);
+	  //clock_gettime(CLOCK_MONOTONIC, &readMessage[ticks_t2]);
 
 	  result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
 	  if(result > 0){
@@ -867,11 +867,11 @@ void *testThread2(void *ptr) {
 	for(incrementOutput=0;incrementOutput<10000;incrementOutput++){
 
 		debut=sendMessage[incrementOutput];
-		fin=readMessage[incrementOutput];
+		//fin=readMessage[incrementOutput];
 		timespec_diff(&debut, &fin, &ecart);
 		sendingMessage[incrementOutput]=ecart;
 
-		debut=readMessage[incrementOutput];
+		//debut=readMessage[incrementOutput];
 		fin=endReadMessage[incrementOutput];
 		timespec_diff(&debut, &fin, &ecart);
 		receivingMessage[incrementOutput]=ecart;
@@ -882,11 +882,11 @@ void *testThread2(void *ptr) {
 		totalTime[incrementOutput]=ecart;
 	}
 
-	fileTimespecA(sendingMessage, 10000);
-	fileTimespecB(receivingMessage, 10000);
+	//fileTimespecA(sendingMessage, 10000);
+	//fileTimespecB(receivingMessage, 10000);
 	fileTimespecC(totalTime, 10000);
 	fileTimespecD(sendMessage, 10000);
-	fileTimespecE(readMessage, 10000);
+	//fileTimespecE(readMessage, 10000);
 	fileTimespecF(endReadMessage, 10000);
 
 	cout << " Angle a t=0 : " << finalResult[0] << endl;
