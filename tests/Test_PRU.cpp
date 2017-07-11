@@ -51,7 +51,7 @@ void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
 
-const int TIME_MAX = 1000; // time max for the loop in ms
+const int TIME_MAX = 10000; // time max for the loop in ms
 const int TIME_MAX_ENC = 5110; // time max for the loop in ms
 
 const int INTERVALMS =1000000; // in nanosecond
@@ -506,8 +506,8 @@ void *testThread1(void *ptr) {
 	struct timespec sendMessage;
 	struct timespec receiveMessage;
 	struct timespec durationCommuciation;
-	struct timespec answerTime[1000];
-	struct timespec loopTime[1000];
+	struct timespec answerTime[10000];
+	struct timespec loopTime[10000];
 
 	char readBuf[MAX_BUFFER_SIZE];
 	struct pollfd pollfds[1];
@@ -517,7 +517,7 @@ void *testThread1(void *ptr) {
 	int number3;
 	int number4;
 
-	int finalResult[1000];
+	int finalResult[10000];
 	char filename[18] = "/dev/rpmsg_pru31";
 	int fd;
 	int toPru;
@@ -620,40 +620,42 @@ void *testThread1(void *ptr) {
 		}
 		//cout << "Loop number : " << ticks_t1 << endl;
 		ticks_t1=ticks_t1+1;
-		if(ticks_t1==1000){
-			cout << "End of loop, i=1000 " << endl;
-			for(i=1;i<1000;i++){
-				meanTimePRU = answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 + meanTimePRU;
-				if(answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 > maxTimePRU){
-					maxTimePRU=answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000;
-				}
-
-				meanTimeLoop = loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000 + meanTimeLoop;
-				if(loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000 > maxTimeLoop){
-					maxTimeLoop=loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000;
-				}
-
-
-			}
-			meanTimePRU=int(double(meanTimePRU)/999.0);
-			meanTimeLoop=int(double(meanTimeLoop)/999.0);
-
-			cout << " THe mean time of communication is : " << meanTimePRU << endl;
-			cout << " The max time of communication is : " << maxTimePRU << endl;
-
-			cout << " THe mean time of loop is : " << meanTimeLoop << endl;
-			cout << " The max time of loop is : " << maxTimeLoop << endl;
-
-			cout << " Angle a t=0 : " << finalResult[0] << endl;
-			cout << " Angle a t=200 : " << finalResult[200] << endl;
-			cout << " Angle a t=400 : " << finalResult[400] << endl;
-			cout << " Angle a t=600 : " << finalResult[600] << endl;
-			cout << " Angle a t=800 : " << finalResult[800] << endl;
-			cout << " Angle a t=900 : " << finalResult[900] << endl;
-		}
 	}
 	/* Close the rpmsg_pru character device file */
 	close(pollfds[0].fd);
+
+
+		cout << "End of loop, i=1000 " << endl;
+		for(i=1;i<10000;i++){
+			meanTimePRU = answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 + meanTimePRU;
+			if(answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 > maxTimePRU){
+				maxTimePRU=answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000;
+			}
+
+			meanTimeLoop = loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000 + meanTimeLoop;
+			if(loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000 > maxTimeLoop){
+				maxTimeLoop=loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000;
+			}
+
+
+		}
+		meanTimePRU=int(double(meanTimePRU)/9999.0);
+		meanTimeLoop=int(double(meanTimeLoop)/9999.0);
+
+		cout << " THe mean time of communication is : " << meanTimePRU << endl;
+		cout << " The max time of communication is : " << maxTimePRU << endl;
+
+		cout << " THe mean time of loop is : " << meanTimeLoop << endl;
+		cout << " The max time of loop is : " << maxTimeLoop << endl;
+
+		cout << " Angle a t=0 : " << finalResult[0] << endl;
+		cout << " Angle a t=2000 : " << finalResult[2000] << endl;
+		cout << " Angle a t=4000 : " << finalResult[4000] << endl;
+		cout << " Angle a t=6000 : " << finalResult[6000] << endl;
+		cout << " Angle a t=8000 : " << finalResult[8000] << endl;
+		cout << " Angle a t=9000 : " << finalResult[9000] << endl;
+
+
 	//We wait 2 seconds to output the files
 	waitTime.tv_sec+=1;
 	sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
