@@ -702,7 +702,7 @@ void *testThread2(void *ptr) {
 	cout << " Angle a t=6000 : " << finalResult[6000] << endl;
 	cout << " Angle a t=8000 : " << finalResult[8000] << endl;
 	cout << " Angle a t=9000 : " << finalResult[9000] << endl;
-
+	}
   	/*
   	//We get the time to
   	clock_gettime(CLOCK_MONOTONIC, &timePoly);
