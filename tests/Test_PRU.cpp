@@ -49,6 +49,9 @@ int getTimeSinceOrigin(struct timeStruct *time);
 
 int fetchDataBuffer(int *angle);
 
+struct pollfd pollfds[1];
+int fd;
+
 void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
@@ -59,7 +62,7 @@ const int TIME_MAX_ENC = 5110; // time max for the loop in ms
 const int INTERVALMS =1000000; // in nanosecond
 
 const int INTERVAL_T1 = 1000000; //in nanosecond, interval for the thread 2
-const int INTERVAL_T2 = 900000; //in nanosecond, interval for the thread 2
+const int INTERVAL_T2 = 1000000; //in nanosecond, interval for the thread 2
 
 const int ONESECINNANO = 1000000000; //one second in nanosecond unit
 double INTERVAL_S=double(INTERVALMS)/1000000000.0;
@@ -414,8 +417,6 @@ int setParamThreadFIFO(pthread_attr_t attr, struct sched_param param, int priori
 }
 
 int fetchDataBuffer(int *angle){
-
-	struct pollfd pollfds[1];
 	char readBuf[MAX_BUFFER_SIZE];
 
 	int number1;
@@ -425,7 +426,6 @@ int fetchDataBuffer(int *angle){
 
 	int toPru;
 	int result = 0;
-	int fd;
 
 	toPru=30;
 
@@ -635,9 +635,6 @@ void *testThread2(void *ptr) {
 	double maxTicks = double(TIME_MAX)*timeRatio+1000.0;
 
 	/* TO fecth Data Buffer */
-	struct pollfd pollfds[1];
-	int fd;
-
 	int maxTimePRU=0;
 	int meanTimePRU=0;
 
@@ -666,6 +663,8 @@ void *testThread2(void *ptr) {
 	if (pollfds[0].fd < 0){
 		printf("Failed to open \n");
 	}
+
+	printf("The path is open \n");
 
   while(ticks_t2<int(maxTicks)) {
 
