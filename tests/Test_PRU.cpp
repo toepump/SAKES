@@ -632,9 +632,9 @@ int main(int argc, char* argv[]){
 		printf("Problem set param 1: %d \n", checkschedParam);
 	}
 
-	iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
+	//iret1 = pthread_create(&thread1, &attr1, testThread1, (void*) message1);
 
-	printf("pthread_create() 1 for returns: %d\n", iret1); // if it fails, return not 0
+	//printf("pthread_create() 1 for returns: %d\n", iret1); // if it fails, return not 0
 
 
 
@@ -670,7 +670,7 @@ int main(int argc, char* argv[]){
 	/* wait we run the risk of executing an exit which will terminate  */
 	/* the process and all threads before the threads have completed.  */
 
-	pthread_join( thread1, NULL);
+	//pthread_join( thread1, NULL);
 	pthread_join( thread2, NULL);
 
 	exit(EXIT_SUCCESS);
@@ -684,11 +684,6 @@ void *testThread1(void *ptr) {
 	struct timespec start;
 	struct timespec previous_start;
 	struct timespec diff;
-
-	struct timespec loopTime[20000];
-	int i;
-	int maxTimeLoop=0;
-	int meanTimeLoop=0;
 
 	int sleepOK=0;
 
@@ -714,7 +709,6 @@ void *testThread1(void *ptr) {
 	  		//put the value of the variable of start to previous start
 		  	previous_start.tv_sec=start.tv_sec;
 		  	previous_start.tv_nsec=start.tv_nsec;
-			loopTime[ticks_t1]=diff;
 
 			//test if we are respecting the time interval limit
 			/*
@@ -748,21 +742,6 @@ void *testThread1(void *ptr) {
 		//cout << "Loop number : " << ticks_t1 << endl;
 		ticks_t1=ticks_t1+1;
 	}
-
-
-	cout << "End of loop, i= " << 10000 << endl;
-	for(i=1;i<10000;i++){
-		meanTimeLoop = loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000 + meanTimeLoop;
-		if(loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000 > maxTimeLoop){
-			maxTimeLoop=loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000;
-		}
-	}
-
-	meanTimeLoop=int(double(meanTimeLoop)/9999.0);
-
-	cout << " THe mean time of loop is : " << meanTimeLoop << endl;
-	cout << " The max time of loop is : " << maxTimeLoop << endl;
-
 	//We wait 2 seconds to output the files
 	waitTime.tv_sec+=1;
 	sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
@@ -862,7 +841,7 @@ void *testThread2(void *ptr) {
 	  clock_gettime(CLOCK_MONOTONIC, &endReadMessage1);
 
 	timespec_diff(&sendMessage1, &endReadMessage1, &totalTimeInLoop);
-	timeOutput[ticks_t2]=totalTimeInLoop.tv_sec+totalTimeInLoop.tv_nsec*1000000000;
+	timeOutput[ticks_t2]=totalTimeInLoop.tv_sec+totalTimeInLoop.tv_nsec*ONESECINNANO;
 
 	  //Put the difference in loopTime
   	/*
@@ -920,13 +899,6 @@ void *testThread2(void *ptr) {
 	//fileTimespecF(endReadMessage, 10000);
 
 	fileIntG(timeOutput, 10000);
-
-	cout << " Angle a t=0 : " << finalResult[0] << endl;
-	cout << " Angle a t=2000 : " << finalResult[2000] << endl;
-	cout << " Angle a t=4000 : " << finalResult[4000] << endl;
-	cout << " Angle a t=6000 : " << finalResult[6000] << endl;
-	cout << " Angle a t=8000 : " << finalResult[8000] << endl;
-	cout << " Angle a t=9000 : " << finalResult[9000] << endl;
 
 	//We wait 2 seconds to output the files
 	t_Thread2.tv_sec++;
