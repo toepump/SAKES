@@ -863,6 +863,7 @@ void *testThread2(void *ptr) {
 
 		timespec_diff(&sendMessage1, &endReadMessage1, &totalTimeInLoop);
 		timeOutput[ticks_t2]=totalTimeInLoop.tv_sec+totalTimeInLoop.tv_nsec*1000000000;
+		cout << " ticks : " << ticks_t2 << endl;
 
 	  //Put the difference in loopTime
   	/*
@@ -915,9 +916,9 @@ void *testThread2(void *ptr) {
 
 	//fileTimespecA(sendingMessage, 10000);
 	//fileTimespecB(receivingMessage, 10000);
-	fileTimespecC(totalTime, 10000);
-	fileTimespecD(sendMessage, 10000);
-	fileTimespecF(endReadMessage, 10000);
+	//fileTimespecC(totalTime, 10000);
+	//fileTimespecD(sendMessage, 10000);
+	//fileTimespecF(endReadMessage, 10000);
 
 	fileIntG(timeOutput, 10000);
 
