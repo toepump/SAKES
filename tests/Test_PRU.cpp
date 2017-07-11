@@ -42,7 +42,7 @@ int storeIntoOutput(struct encoder *encKnee, struct encoder *encMotor, struct mo
 int storeEncoderStruct(struct encoder *encoder, struct outputEnc *output, int increment);
 int fileTestMotor(struct output *output);
 int fileOutputEncoder(struct outputEnc *output);
-int fileTimespec(struct timespec *time, int length, char s);
+int fileTimespec(struct timespec *time, int length, char *s);
 
 
 int setTimeOrigin(struct timeStruct *time);
@@ -369,19 +369,19 @@ int fileOutputEncoder(struct outputEnc *output){
 	return 0;
 }
 
-int fileTimespec(struct timespec *time, int length, char s){
+int fileTimespec(struct timespec *time, int length, char *s){
 
 	cout << "Printing of the output starts" << endl;
 
 	int i=0;
 	int timeMilli;
-	FILE *fj1=fopen(s,"w");
+	FILE *fj1=fopen(*s,"w");
 
 	fprintf(fj1,"indexOutput; Time (ms)";
 
 	while(i<length){
 
-		timeMilli=*time->tv_sec*1000000000+*time->tv_nsec;
+		timeMilli=time->tv_sec*1000000000+time->tv_nsec;
 		timeMilli=int(double(timeMilli)/1000.0);
 		fprintf(fj1,"%d;%f\r\n",i+1,timeMilli);
 		i++ ;
@@ -760,8 +760,8 @@ void *testThread2(void *ptr) {
 		timespec_diff(&readMessage[incrementOutput], &endReadMessage[incrementOutput], &recevingMessage[incrementOutput]);
 	}
 
-	fileTimespec(*sendingMessage, 10000, sendTime);
-	fileTimespec(*sendingMessage, 10000, readTime);
+	fileTimespec(*sendingMessage, 10000, &sendTime);
+	fileTimespec(*sendingMessage, 10000, &readTime);
 
 	cout << " Angle a t=0 : " << finalResult[0] << endl;
 	cout << " Angle a t=2000 : " << finalResult[2000] << endl;
