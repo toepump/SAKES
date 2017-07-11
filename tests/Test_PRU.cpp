@@ -379,7 +379,7 @@ int fileTimespecA(struct timespec *time, int length){
 	int timeNano;
 
 	FILE *fj1=fopen("FileA.dat","w");
-	fprintf(fj1,"indexOutput; Time (ms)");
+	fprintf(fj1,"indexOutput; Time (ns)\r\n");
 
 	while(i<length){
 
@@ -399,7 +399,7 @@ int fileTimespecB(struct timespec *time, int length){
 	int timeNano;
 
 	FILE *fj1=fopen("FileB.dat","w");
-	fprintf(fj1,"indexOutput; Time (ms)");
+	fprintf(fj1,"indexOutput; Time (ns)\r\n");
 
 	while(i<length){
 
@@ -419,7 +419,7 @@ int fileTimespecC(struct timespec *time, int length){
 	int timeNano;
 
 	FILE *fj1=fopen("FileC.dat","w");
-	fprintf(fj1,"indexOutput; Time (ms)");
+	fprintf(fj1,"indexOutput; Time (ns)\r\n");
 
 	while(i<length){
 
