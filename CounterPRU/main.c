@@ -102,43 +102,51 @@ void main(void)
 			if ((__R31 ^ prev_state_A) & CHECK_BIT_A){
 				if(prev_state_A==0)
 				{
-					prev_state_A=1;
+					prev_state_A=__R31 & CHECK_BIT_A;
 					if(encoder_state==1){
 						encoder_state=11;
 						angle=angle-1;
-					}else{
+					}else if(encoder_state==0){
 						encoder_state=10;
 						angle=angle+1;
+					}else{
+						angle=200;
 					}
 				}else{
-					prev_state_A=0;
+					prev_state_A=__R31 & CHECK_BIT_A;
 					if(encoder_state==10){
 						encoder_state=0;
 						angle=angle-1;
-					}else{
+					}else if(encoder_state==11){
 						encoder_state=1;
 						angle=angle+1;
+					}else{
+						angle=200;
 					}
 				}
-			}else if ((__R31 ^ prev_state_B) & CHECK_BIT_B){
+			}else if((__R31 ^ prev_state_B) & CHECK_BIT_B){
 				if(prev_state_B==0)
 				{
-					prev_state_B=1;
+					prev_state_B=__R31 & CHECK_BIT_B;
 					if(encoder_state==0){
 						encoder_state=1;
 						angle=angle-1;
-					}else{
+					}else if(encoder_state==10){
 						encoder_state=11;
 						angle=angle+1;
+					}else{
+						angle=200;
 					}
 				}else{
-					prev_state_B=0;
+					prev_state_B=__R31 & CHECK_BIT_B;
 					if(encoder_state==11){
 						encoder_state=10;
 						angle=angle-1;
-					}else{
+					}else if(encoder_state==1){
 						encoder_state=0;
 						angle=angle+1;
+					}else{
+						angle=200;
 					}
 				}
 			}
