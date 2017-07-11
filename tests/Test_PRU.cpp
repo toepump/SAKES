@@ -629,7 +629,7 @@ void *testThread1(void *ptr) {
 		//cout << "Loop number : " << ticks_t1 << endl;
 		ticks_t1=ticks_t1+1;
 		if(ticks_t1==1000){
-			for(i=0;i<100;i++){
+			for(i=0;i<1000;i++){
 				meanTimePRU = answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 + meanTimePRU;
 				if(answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 > maxTimePRU){
 					maxTimePRU=answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000;
@@ -642,7 +642,9 @@ void *testThread1(void *ptr) {
 
 
 			}
-			meanTimePRU=int(double(meanTimePRU)/100.0);
+			meanTimePRU=int(double(meanTimePRU)/1000.0);
+			meanTimeLoop=int(double(meanTimeLoop)/1000.0);
+
 			cout << " THe mean time of communication is : " << meanTimePRU << endl;
 			cout << " The max time of communication is : " << maxTimePRU << endl;
 
