@@ -369,7 +369,7 @@ int fileOutputEncoder(struct outputEnc *output){
 	return 0;
 }
 
-int fileTimespec(struct timespec *time, int length, char *s){
+int fileTimespec(struct timespec *time, int length, char s){
 
 	cout << "Printing of the output starts" << endl;
 
