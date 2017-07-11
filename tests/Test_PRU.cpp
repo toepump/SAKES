@@ -557,7 +557,9 @@ void *testThread1(void *ptr) {
 
 			//get the time of the beginning of this cycle and calculate the interval since the previous cycle
 			clock_gettime(CLOCK_MONOTONIC, &start);
-			timespec_diff(&previous_start, &start, &diff);
+			if(ticks_t1>0){
+				timespec_diff(&previous_start, &start, &diff);
+			}
 	  		//put the value of the variable of start to previous start
 		  	previous_start.tv_sec=start.tv_sec;
 		  	previous_start.tv_nsec=start.tv_nsec;
@@ -618,7 +620,7 @@ void *testThread1(void *ptr) {
 		ticks_t1=ticks_t1+1;
 		if(ticks_t1==1000){
 			cout << "End of loop, i=1000 " << endl;
-			for(i=0;i<1000;i++){
+			for(i=1;i<1000;i++){
 				meanTimePRU = answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 + meanTimePRU;
 				if(answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 > maxTimePRU){
 					maxTimePRU=answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000;
@@ -631,8 +633,8 @@ void *testThread1(void *ptr) {
 
 
 			}
-			meanTimePRU=int(double(meanTimePRU)/1000.0);
-			meanTimeLoop=int(double(meanTimeLoop)/1000.0);
+			meanTimePRU=int(double(meanTimePRU)/999.0);
+			meanTimeLoop=int(double(meanTimeLoop)/999.0);
 
 			cout << " THe mean time of communication is : " << meanTimePRU << endl;
 			cout << " The max time of communication is : " << maxTimePRU << endl;
