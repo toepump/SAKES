@@ -718,6 +718,7 @@ void *testThread2(void *ptr) {
 		if(answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 > maxTimePRU){
 			maxTimePRU=answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000;
 		}
+	}
 	meanTimePRU=int(double(meanTimePRU)/9999.0);
 
 	cout << " THe mean time of communication is : " << meanTimePRU << endl;
@@ -729,7 +730,7 @@ void *testThread2(void *ptr) {
 	cout << " Angle a t=6000 : " << finalResult[6000] << endl;
 	cout << " Angle a t=8000 : " << finalResult[8000] << endl;
 	cout << " Angle a t=9000 : " << finalResult[9000] << endl;
-	}
+
 
 	//We wait 2 seconds to output the files
 	t_Thread2.tv_sec++;
