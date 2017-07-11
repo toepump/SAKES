@@ -886,7 +886,7 @@ void *testThread2(void *ptr) {
 	  	  t_Thread2.tv_nsec += INTERVAL_T2;
 	  	  while (t_Thread2.tv_nsec >= NSEC_PER_SEC) {
 	  		  t_Thread2.tv_nsec -= NSEC_PER_SEC;
-	  		  Thread2.tv_sec++;
+	  		  t_Thread2.tv_sec++;
 	  	  }
   	}
 
