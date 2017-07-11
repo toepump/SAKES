@@ -42,13 +42,11 @@ int storeIntoOutput(struct encoder *encKnee, struct encoder *encMotor, struct mo
 int storeEncoderStruct(struct encoder *encoder, struct outputEnc *output, int increment);
 int fileTestMotor(struct output *output);
 int fileOutputEncoder(struct outputEnc *output);
-int fileTimespecA(struct timespec *time, int length);
-int fileTimespecB(struct timespec *time, int length);
-int fileTimespecC(struct timespec *time, int length);
 int fileTimespecD(struct timespec *time, int length);
 int fileTimespecE(struct timespec *time, int length);
 int fileTimespecF(struct timespec *time, int length);
 int fileIntG(int *table, int length);
+int fileIntAngle(int *table, int length);
 
 
 int setTimeOrigin(struct timeStruct *time);
@@ -552,6 +550,26 @@ int fileIntR(int *table, int length){
 	return 0;
 }
 
+int fileIntAngle(int *table, int length){
+
+	cout << "Printing of the output starts" << endl;
+
+	int i=0;
+	int timeNano;
+
+	FILE *fj1=fopen("FileAngle.dat","w+");
+	fprintf(fj1,"indexOutput; Time (ns)\r\n");
+
+	while(i<length){
+
+		timeNano=table[i];
+		fprintf(fj1,"%d;%d\r\n",i+1,timeNano);
+		i++ ;
+	}
+	fclose(fj1);
+	return 0;
+}
+
 int setTimeOrigin(struct timeStruct *time){
 
 	struct timespec timeFetcher;
@@ -731,7 +749,6 @@ void *testThread1(void *ptr) {
 
 	/*Coomunication with the PRU*/
 	struct timespec sendMessage1;
-	struct timespec middleMessage1;
 	struct timespec endReadMessage1;
 	struct timespec totalTimeInLoop;
 	struct pollfd pollfds[1];
@@ -746,8 +763,6 @@ void *testThread1(void *ptr) {
 	int result = 0;
 
 	int timeOutput[55000];
-	int timeSend[55000];
-	int timeRead[55000];
 
 	int sleepOK=0;
 
@@ -781,42 +796,34 @@ void *testThread1(void *ptr) {
 			//}
 	  		//put the value of the variable of start to previous start
 		  	//previous_start.tv_sec=start.tv_sec;
-		  	//previous_start.tv_nsec=start.tv_nsec;
+			//previous_start.tv_nsec=start.tv_nsec;
 
-			  //Get the time before sending a message
-			  clock_gettime(CLOCK_MONOTONIC, &sendMessage1);
+			//Get the time before sending a message
+			clock_gettime(CLOCK_MONOTONIC, &sendMessage1);
 
-			  //fetchDataBuffer(&angle);
+			//fetchDataBuffer(&angle);
 
-			  //Message to the PRU through the RPMsg channel
-			  result = write(pollfds[0].fd, &toPru, sizeof(int));
-			  clock_gettime(CLOCK_MONOTONIC, &middleMessage1);
-			  result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
+			//Message to the PRU through the RPMsg channel
+			result = write(pollfds[0].fd, &toPru, sizeof(int));
+			result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
 
-			  if(result > 0){
-				  number1= (int)(readBuf[0]);
-				  number2= (int)(readBuf[1]);
-				  number3= (int)(readBuf[2]);
-				  number4= (int)(readBuf[3]);
-			  }else{
-				  cout << "Result not superior to 0 :"<< endl;
-			  }
-			  angle=number1+number2*256+number3*256*256+number4*256*256*256;
-			  finalResult[ticks_t1]=angle;
+			if(result > 0){
+					number1= (int)(readBuf[0]);
+					number2= (int)(readBuf[1]);
+					number3= (int)(readBuf[2]);
+					number4= (int)(readBuf[3]);
+			}else{
+					cout << "Result not superior to 0 :"<< endl;
+			}
+			angle=number1+number2*256+number3*256*256+number4*256*256*256;
+			finalResult[ticks_t1]=angle;
 
-			  //Get time after receiving the message
-			  //clock_gettime(CLOCK_MONOTONIC, &endReadMessage[ticks_t2]);
-			  clock_gettime(CLOCK_MONOTONIC, &endReadMessage1);
+			//Get time after receiving the message
+			//clock_gettime(CLOCK_MONOTONIC, &endReadMessage[ticks_t2]);
+			clock_gettime(CLOCK_MONOTONIC, &endReadMessage1);
 
 			timespec_diff(&sendMessage1, &endReadMessage1, &totalTimeInLoop);
 			timeOutput[ticks_t1]=totalTimeInLoop.tv_sec*ONESECINNANO+totalTimeInLoop.tv_nsec;
-
-			timespec_diff(&sendMessage1, &middleMessage1, &totalTimeInLoop);
-			timeSend[ticks_t1]=totalTimeInLoop.tv_sec*ONESECINNANO+totalTimeInLoop.tv_nsec;
-
-			timespec_diff(&middleMessage1, &endReadMessage1, &totalTimeInLoop);
-			timeRead[ticks_t1]=totalTimeInLoop.tv_sec*ONESECINNANO+totalTimeInLoop.tv_nsec;
-
 
 			//test if we are respecting the time interval limit
 			/*
@@ -856,8 +863,7 @@ void *testThread1(void *ptr) {
 	cout << "End of the loop." << endl;
 
 	fileIntG(timeOutput, 55000);
-	fileIntS(timeSend, 55000);
-	fileIntR(timeRead, 55000);
+	fileIntAngle(timeOutput, 55000);
 	//We wait 2 seconds to output the files
 	waitTime.tv_sec+=1;
 	sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);

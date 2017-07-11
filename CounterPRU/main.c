@@ -67,8 +67,6 @@ void main(void)
 	angle=800;
 
 	//Initialization of the state
-
-	/*
 	if ((__R31 ^ prev_state_A) & CHECK_BIT_A) {
 		prev_state_A = 1;
 		if ((__R31 ^ prev_state_B) & CHECK_BIT_B) {
@@ -92,7 +90,7 @@ void main(void)
 			angle=8000;
 		}
 	}
-	*/
+
  
 	while (pru_rpmsg_channel(RPMSG_NS_CREATE, &transport, CHAN_NAME, CHAN_DESC, CHAN_PORT) != PRU_RPMSG_SUCCESS);
 	{
@@ -106,7 +104,7 @@ void main(void)
 					  CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
 					}
 
-					/*
+
 					if ((__R31 ^ prev_state_A) & CHECK_BIT_A){
 						if(prev_state_A==0)
 						{
@@ -159,7 +157,7 @@ void main(void)
 						}
 
 					}
-					*/
+
 
 
 					/*
