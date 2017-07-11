@@ -120,9 +120,7 @@ void main(void)
 						angle=angle+1;
 					}
 				}
-			}
-
-			if ((__R31 ^ prev_state_B) & CHECK_BIT_B){
+			}else if ((__R31 ^ prev_state_B) & CHECK_BIT_B){
 				if(prev_state_B==0)
 				{
 					prev_state_B=1;

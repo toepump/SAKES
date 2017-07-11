@@ -536,13 +536,15 @@ void *testThread1(void *ptr) {
 
 	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
 
-	cout << "Beginning of loop " << endl;
+
 
 	/* Open the rpmsg_pru character device file */
 	pollfds[0].fd = open(DEVICE_PATH, O_RDWR);
 	if (pollfds[0].fd < 0){
 		printf("Failed to open \n");
 	}
+
+	cout << "Beginning of loop " << endl;
 
 	while(ticks_t1<TIME_MAX+1){
 
