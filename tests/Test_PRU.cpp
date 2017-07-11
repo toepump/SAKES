@@ -489,7 +489,7 @@ int main(int argc, char* argv[]){
 	/* the process and all threads before the threads have completed.  */
 
 	pthread_join( thread1, NULL);
-	pthread_join( thread2, NULL);
+	//pthread_join( thread2, NULL);
 
 	exit(EXIT_SUCCESS);
 }
@@ -507,6 +507,7 @@ void *testThread1(void *ptr) {
 	struct timespec receiveMessage;
 	struct timespec durationCommuciation;
 	struct timespec answerTime[1000];
+	struct timespec loopTime[1000];
 
 	char readBuf[MAX_BUFFER_SIZE];
 	struct pollfd pollfds[1];
@@ -526,6 +527,8 @@ void *testThread1(void *ptr) {
 
 	int maxTimePRU=0;
 	int meanTimePRU=0;
+	int maxTimeLoop=0;
+	int meanTimeLoop=0;
 
 	//We set the begining if the thread in 1 second
 	clock_gettime(CLOCK_MONOTONIC, &waitTime);
@@ -555,6 +558,7 @@ void *testThread1(void *ptr) {
 			//get the time of the beginning of this cycle and calculate the interval since the previous cycle
 			clock_gettime(CLOCK_MONOTONIC, &start);
 			timespec_diff(&previous_start, &start, &diff);
+			loopTime[ticks_t1]=diff;
 
 
 			//cout << "Before send to the PRU " << endl;
@@ -593,11 +597,6 @@ void *testThread1(void *ptr) {
 					cout << "Result not superior to 0 :"<< endl;
 			}
 			finalResult[ticks_t1]=number1+number2*256+number3*256*256+number4*256*256*256;
-			if(ticks_t1%50==0){
-		        cout << "The ticks is : " << ticks_t1 << endl;
-		        cout << "The number send by the PRU is : " << finalResult[ticks_t1] << endl;
-			}
-
 
 			//Get time after receiving the message
 			clock_gettime(CLOCK_MONOTONIC, &receiveMessage);
@@ -635,10 +634,20 @@ void *testThread1(void *ptr) {
 				if(answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 > maxTimePRU){
 					maxTimePRU=answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000;
 				}
+
+				meanTimeLoop = loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000 + meanTimeLoop;
+				if(loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000 > maxTimeLoop){
+					maxTimeLoop=loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000;
+				}
+
+
 			}
 			meanTimePRU=int(double(meanTimePRU)/100.0);
-			cout << " THe mean time is : " << meanTimePRU << endl;
-			cout << " The max time is : " << maxTimePRU << endl;
+			cout << " THe mean time of communication is : " << meanTimePRU << endl;
+			cout << " The max time of communication is : " << maxTimePRU << endl;
+
+			cout << " THe mean time of loop is : " << meanTimeLoop << endl;
+			cout << " The max time of loop is : " << maxTimeLoop << endl;
 
 			cout << " Angle a t=0 : " << finalResult[0] << endl;
 			cout << " Angle a t=200 : " << finalResult[200] << endl;
@@ -648,17 +657,11 @@ void *testThread1(void *ptr) {
 			cout << " Angle a t=900 : " << finalResult[900] << endl;
 		}
 	}
-
-	cout << " Before closing : " << endl;
 	/* Close the rpmsg_pru character device file */
 	close(pollfds[0].fd);
-
-	cout << " After closing : "<< endl;
-
 	//We wait 2 seconds to output the files
 	waitTime.tv_sec+=1;
 	sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
-
 
 	return (void*) NULL;
 }

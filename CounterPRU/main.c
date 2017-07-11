@@ -82,7 +82,7 @@ void main(void)
 				angle=angle-1;
 			}
 
-			//if ((__R31 ^ prev_state_Z) & CHECK_BIT_Z) {
+			//if ((__R31 ^ prev_state_Z) & CHECK_BIT_Z){
 			//	prev_state_Z = __R31 & CHECK_BIT_Z;
 			//	angle=12000;
 			//}
