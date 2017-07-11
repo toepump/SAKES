@@ -56,7 +56,7 @@ const int TIME_MAX_ENC = 5110; // time max for the loop in ms
 
 const int INTERVALMS =1000000; // in nanosecond
 
-const int INTERVAL_T1 = 10000000; //in nanosecond, interval for the thread 2
+const int INTERVAL_T1 = 1000000; //in nanosecond, interval for the thread 2
 const int INTERVAL_T2 = 900000; //in nanosecond, interval for the thread 2
 
 const int ONESECINNANO = 1000000000; //one second in nanosecond unit
@@ -619,11 +619,12 @@ void *testThread1(void *ptr) {
 			return (void*) NULL;
 		}
 
-
+		/*
 		if(ticks_t1%1000==0){
 			cout << "Ticks: " << ticks_t1 << endl;
 			cout << "Angle: " << finalResult[ticks_t1] << endl;
 		}
+		*/
 		//cout << "Loop number : " << ticks_t1 << endl;
 		ticks_t1=ticks_t1+1;
 	}
