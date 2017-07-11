@@ -369,15 +369,17 @@ int fileOutputEncoder(struct outputEnc *output){
 	return 0;
 }
 
-int fileTimespec(struct timespec *time, int length, char s){
+int fileTimespec(struct timespec *time, int length, char *s){
 
 	cout << "Printing of the output starts" << endl;
 
+	char buf[0x100];
 	int i=0;
 	int timeMilli;
 	double TimeMilliDouble;
-	FILE *fj1=fopen("%s",s,"w");
+	snprintf(buf, sizeof(buf), "%s", s);
 
+	FILE *fj1=fopen(buf,"w");
 	fprintf(fj1,"indexOutput; Time (ms)");
 
 	while(i<length){
