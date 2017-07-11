@@ -760,8 +760,8 @@ void *testThread2(void *ptr) {
 		timespec_diff(&readMessage[incrementOutput], &endReadMessage[incrementOutput], &recevingMessage[incrementOutput]);
 	}
 
-	fileTimespec(sendingMessage, 10000, &sendTime);
-	fileTimespec(sendingMessage, 10000, &readTime);
+	fileTimespec(sendingMessage, 10000, sendTime);
+	fileTimespec(sendingMessage, 10000, readTime);
 
 	cout << " Angle a t=0 : " << finalResult[0] << endl;
 	cout << " Angle a t=2000 : " << finalResult[2000] << endl;
