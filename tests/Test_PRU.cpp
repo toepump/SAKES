@@ -796,7 +796,7 @@ void *testThread2(void *ptr) {
 	struct timespec totalTime[15000];
 	struct timespec totalTimeInLoop;
 
-	int finalResult[10000];
+	int finalResult[20000];
 	char filename[18] = "/dev/rpmsg_pru31";
 	int angle;
 	char readBuf[MAX_BUFFER_SIZE];
@@ -808,7 +808,7 @@ void *testThread2(void *ptr) {
 	int incrementOutput=0;
 
 	int testValue1;
-	int timeOutput[15000];
+	int timeOutput[20000];
 
 	toPru=30;
 
