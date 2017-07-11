@@ -489,7 +489,7 @@ int main(int argc, char* argv[]){
 
 	printf("pthread_create() 1 for returns: %d\n", iret1); // if it fails, return not 0
 
-	/*
+
 
 	checkAttrInit=pthread_attr_init(&attr2); //Initialize the thread attributes with default attribute
 	if(checkAttrInit!=0){
@@ -517,14 +517,14 @@ int main(int argc, char* argv[]){
 	iret2 = pthread_create(&thread2, &attr2, testThread2, (void*) message2);
 		printf("pthread_create() 2 for returns: %d\n", iret2);
 
-	*/
+
 
 	/* Wait till threads are complete before main continues. Unless we */
 	/* wait we run the risk of executing an exit which will terminate  */
 	/* the process and all threads before the threads have completed.  */
 
 	pthread_join( thread1, NULL);
-	//pthread_join( thread2, NULL);
+	pthread_join( thread2, NULL);
 
 	exit(EXIT_SUCCESS);
 }
@@ -539,7 +539,6 @@ void *testThread1(void *ptr) {
 	struct timespec diff;
 
 	int sleepOK=0;
-	int i=0;
 
 	//We set the begining if the thread in 1 second
 	clock_gettime(CLOCK_MONOTONIC, &waitTime);
@@ -551,7 +550,6 @@ void *testThread1(void *ptr) {
 
 		/* wait until next shot */
 		if(sleepOK == 0){
-			toPru=toPru+1;
 
 			//wait to continue until the next waiTime (next millisecond)
 			sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
@@ -599,9 +597,6 @@ void *testThread1(void *ptr) {
 		//cout << "Loop number : " << ticks_t1 << endl;
 		ticks_t1=ticks_t1+1;
 	}
-	/* Close the rpmsg_pru character device file */
-	close(pollfds[0].fd);
-
 
 	//We wait 2 seconds to output the files
 	waitTime.tv_sec+=1;
@@ -621,6 +616,8 @@ void *testThread2(void *ptr) {
 	double timeRatio=double(INTERVALMS)/double(INTERVAL_T2);
 	double maxTicks = double(TIME_MAX)*timeRatio+1000.0;
 
+	/* TO fecth Data Buffer */
+	struct pollfd pollfds[1];
 	int fd;
 
 	int maxTimePRU=0;
@@ -636,8 +633,10 @@ void *testThread2(void *ptr) {
 
 	int finalResult[10000];
 	char filename[18] = "/dev/rpmsg_pru31";
-	int fd;
 	int angle;
+	int i;
+
+	//End fetch data buffer
 
 
 	/*Stuff I want to do*/
@@ -725,9 +724,12 @@ void *testThread2(void *ptr) {
   	}
   }
 
-  //We wait 2 seconds to output the files
-  t_Thread2.tv_sec++;
-  t_Thread2.tv_sec++;
-  clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
+	/* Close the rpmsg_pru character device file */
+	close(pollfds[0].fd);
+
+	//We wait 2 seconds to output the files
+	t_Thread2.tv_sec++;
+	t_Thread2.tv_sec++;
+	clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &t_Thread2, NULL);
 
 }
