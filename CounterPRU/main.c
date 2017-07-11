@@ -67,7 +67,7 @@ void main(void)
 	        
 			/*Send message if one received from encoder */
 			if (pru_rpmsg_receive(&transport, &src, &dst, payload, &len) == PRU_RPMSG_SUCCESS){
-				pru_rpmsg_send(&transport,dst, src, &prev_state_A, sizeof(int));
+				pru_rpmsg_send(&transport,dst, src, &prev_state_Z, sizeof(int));
 			}else{
 			  CT_INTC.SICR_bit.STS_CLR_IDX = FROM_ARM_HOST;
 			}
@@ -82,10 +82,10 @@ void main(void)
 				angle=angle-1;
 			}
 
-			//if ((__R31 ^ prev_state_Z) & CHECK_BIT_Z){
-			//	prev_state_Z = __R31 & CHECK_BIT_Z;
-			//	angle=12000;
-			//}
+			if ((__R31 ^ prev_state_Z) & CHECK_BIT_Z){
+				prev_state_Z = __R31 & CHECK_BIT_Z;
+				angle=12000;
+			}
 
 		}
 	}
