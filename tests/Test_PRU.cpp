@@ -512,6 +512,46 @@ int fileIntG(int *table, int length){
 	return 0;
 }
 
+int fileIntS(int *table, int length){
+
+	cout << "Printing of the output starts" << endl;
+
+	int i=0;
+	int timeNano;
+
+	FILE *fj1=fopen("FileS.dat","w+");
+	fprintf(fj1,"indexOutput; Time (ns)\r\n");
+
+	while(i<length){
+
+		timeNano=table[i];
+		fprintf(fj1,"%d;%d\r\n",i+1,timeNano);
+		i++ ;
+	}
+	fclose(fj1);
+	return 0;
+}
+
+int fileIntR(int *table, int length){
+
+	cout << "Printing of the output starts" << endl;
+
+	int i=0;
+	int timeNano;
+
+	FILE *fj1=fopen("FileR.dat","w+");
+	fprintf(fj1,"indexOutput; Time (ns)\r\n");
+
+	while(i<length){
+
+		timeNano=table[i];
+		fprintf(fj1,"%d;%d\r\n",i+1,timeNano);
+		i++ ;
+	}
+	fclose(fj1);
+	return 0;
+}
+
 int setTimeOrigin(struct timeStruct *time){
 
 	struct timespec timeFetcher;
@@ -691,6 +731,7 @@ void *testThread1(void *ptr) {
 
 	/*Coomunication with the PRU*/
 	struct timespec sendMessage1;
+	struct timespec middleMessage1;
 	struct timespec endReadMessage1;
 	struct timespec totalTimeInLoop;
 	struct pollfd pollfds[1];
@@ -705,6 +746,8 @@ void *testThread1(void *ptr) {
 	int result = 0;
 
 	int timeOutput[55000];
+	int timeSend[55000];
+	int timeRead[55000];
 
 	int sleepOK=0;
 
@@ -747,6 +790,7 @@ void *testThread1(void *ptr) {
 
 			  //Message to the PRU through the RPMsg channel
 			  result = write(pollfds[0].fd, &toPru, sizeof(int));
+			  clock_gettime(CLOCK_MONOTONIC, &middleMessage1);
 			  result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
 
 			  if(result > 0){
@@ -766,6 +810,13 @@ void *testThread1(void *ptr) {
 
 			timespec_diff(&sendMessage1, &endReadMessage1, &totalTimeInLoop);
 			timeOutput[ticks_t1]=totalTimeInLoop.tv_sec*ONESECINNANO+totalTimeInLoop.tv_nsec;
+
+			timespec_diff(&sendMessage1, &middleMessage1, &totalTimeInLoop);
+			timeSend[ticks_t1]=totalTimeInLoop.tv_sec*ONESECINNANO+totalTimeInLoop.tv_nsec;
+
+			timespec_diff(&middleMessage1, &endReadMessage1, &totalTimeInLoop);
+			timeRead[ticks_t1]=totalTimeInLoop.tv_sec*ONESECINNANO+totalTimeInLoop.tv_nsec;
+
 
 			//test if we are respecting the time interval limit
 			/*
@@ -805,6 +856,8 @@ void *testThread1(void *ptr) {
 	cout << "End of the loop." << endl;
 
 	fileIntG(timeOutput, 55000);
+	fileIntS(timeSend, 55000);
+	fileIntR(timeRead, 55000);
 	//We wait 2 seconds to output the files
 	waitTime.tv_sec+=1;
 	sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
