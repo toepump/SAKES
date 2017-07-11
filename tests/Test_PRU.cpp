@@ -701,6 +701,10 @@ void *testThread2(void *ptr) {
 	struct timespec readMessage[10000];
 	struct timespec endReadMessage[10000];
 
+	struct timespec debut;
+	struct timespec fin;
+	struct timespec ecart;
+
 	struct timespec sendingMessage[10000];
 	struct timespec receivingMessage[10000];
 	struct timespec totalTime[10000];
@@ -798,9 +802,21 @@ void *testThread2(void *ptr) {
 	close(pollfds[0].fd);
 
 	for(incrementOutput=0;incrementOutput<10000;incrementOutput++){
-		timespec_diff(&sendMessage[incrementOutput], &readMessage[incrementOutput], &sendingMessage[incrementOutput]);
-		timespec_diff(&readMessage[incrementOutput], &endReadMessage[incrementOutput], &receivingMessage[incrementOutput]);
-		timespec_diff(&sendMessage[incrementOutput], &endReadMessage[incrementOutput], &totalTime[incrementOutput]);
+
+		debut=sendMessage[incrementOutput];
+		fin=readMessage[incrementOutput];
+		timespec_diff(&debut, &fin, &ecart);
+		sendingMessage[incrementOutput]=ecart;
+
+		debut=readMessage[incrementOutput];
+		fin=endReadMessage[incrementOutput];
+		timespec_diff(&debut, &fin, &ecart);
+		receivingMessage[incrementOutput]=ecart;
+
+		debut=sendMessage[incrementOutput];
+		fin=endReadMessage[incrementOutput];
+		timespec_diff(&debut, &fin, &ecart);
+		totalTime[incrementOutput]=ecart;
 	}
 
 	fileTimespecA(sendingMessage, 10000);
