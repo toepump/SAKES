@@ -383,7 +383,7 @@ int fileTimespecA(struct timespec *time, int length){
 
 	while(i<length){
 
-		timeMilli=time[i]->tv_sec*1000000000+time[i]->tv_nsec;
+		timeMilli=time[i].tv_sec*1000000000+time[i].tv_nsec;
 		TimeMilliDouble=double(timeMilli)/1000.0;
 		timeMilli=int(TimeMilliDouble);
 		fprintf(fj1,"%d;%d\r\n",i+1,timeMilli);
@@ -406,7 +406,7 @@ int fileTimespecB(struct timespec *time, int length){
 
 	while(i<length){
 
-		timeMilli=time[i]->tv_sec*1000000000+time[i]->tv_nsec;
+		timeMilli=time[i].tv_sec*1000000000+time[i].tv_nsec;
 		TimeMilliDouble=double(timeMilli)/1000.0;
 		timeMilli=int(TimeMilliDouble);
 		fprintf(fj1,"%d;%d\r\n",i+1,timeMilli);
