@@ -691,20 +691,10 @@ void *testThread2(void *ptr) {
 		if(answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000 > maxTimePRU){
 			maxTimePRU=answerTime[i].tv_nsec + answerTime[i].tv_sec*1000000000;
 		}
-		meanTimeLoop = loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000 + meanTimeLoop;
-		if(loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000 > maxTimeLoop){
-			maxTimeLoop=loopTime[i].tv_nsec + loopTime[i].tv_sec*1000000000;
-		}
-	}
-
 	meanTimePRU=int(double(meanTimePRU)/9999.0);
-	meanTimeLoop=int(double(meanTimeLoop)/9999.0);
 
 	cout << " THe mean time of communication is : " << meanTimePRU << endl;
 	cout << " The max time of communication is : " << maxTimePRU << endl;
-
-	cout << " THe mean time of loop is : " << meanTimeLoop << endl;
-	cout << " The max time of loop is : " << maxTimeLoop << endl;
 
 	cout << " Angle a t=0 : " << finalResult[0] << endl;
 	cout << " Angle a t=2000 : " << finalResult[2000] << endl;
