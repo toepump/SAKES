@@ -375,18 +375,15 @@ int fileTimespecA(struct timespec *time, int length){
 	cout << "Printing of the output starts" << endl;
 
 	int i=0;
-	int timeMilli;
-	double TimeMilliDouble;
+	int timeNano;
 
 	FILE *fj1=fopen("FileA.dat","w");
 	fprintf(fj1,"indexOutput; Time (ms)");
 
 	while(i<length){
 
-		timeMilli=time[i].tv_sec*1000000000+time[i].tv_nsec;
-		TimeMilliDouble=double(timeMilli)/1000.0;
-		timeMilli=int(TimeMilliDouble);
-		fprintf(fj1,"%d;%d\r\n",i+1,timeMilli);
+		timeNano=time[i].tv_sec*1000000000+time[i].tv_nsec;
+		fprintf(fj1,"%d;%d\r\n",i+1,timeNano);
 		i++ ;
 	}
 	fclose(fj1);
@@ -398,18 +395,15 @@ int fileTimespecB(struct timespec *time, int length){
 	cout << "Printing of the output starts" << endl;
 
 	int i=0;
-	int timeMilli;
-	double TimeMilliDouble;
+	int timeNano;
 
 	FILE *fj1=fopen("FileB.dat","w");
 	fprintf(fj1,"indexOutput; Time (ms)");
 
 	while(i<length){
 
-		timeMilli=time[i].tv_sec*1000000000+time[i].tv_nsec;
-		TimeMilliDouble=double(timeMilli)/1000.0;
-		timeMilli=int(TimeMilliDouble);
-		fprintf(fj1,"%d;%d\r\n",i+1,timeMilli);
+		timeNano=time[i].tv_sec*1000000000+time[i].tv_nsec;
+		fprintf(fj1,"%d;%d\r\n",i+1,timeNano);
 		i++ ;
 	}
 	fclose(fj1);
@@ -784,10 +778,6 @@ void *testThread2(void *ptr) {
 		timespec_diff(&sendMessage[incrementOutput], &readMessage[incrementOutput], &sendingMessage[incrementOutput]);
 		timespec_diff(&readMessage[incrementOutput], &endReadMessage[incrementOutput], &receivingMessage[incrementOutput]);
 	}
-
-	testValue1=readMessage[4000].tv_nsec;
-	cout << " Angle a t=2000 : " << testValue1 << endl;
-
 
 	fileTimespecA(sendingMessage, 10000);
 	fileTimespecB(receivingMessage, 10000);
