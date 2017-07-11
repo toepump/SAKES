@@ -747,11 +747,7 @@ void *testThread1(void *ptr) {
 
 			  //Message to the PRU through the RPMsg channel
 			  result = write(pollfds[0].fd, &toPru, sizeof(int));
-
-			  cout << "Caca3, result:" << result << endl;
-
 			  result = read(pollfds[0].fd, readBuf, MAX_BUFFER_SIZE);
-			  cout << "Caca4" << endl;
 
 			  if(result > 0){
 				  number1= (int)(readBuf[0]);
@@ -763,7 +759,6 @@ void *testThread1(void *ptr) {
 			  }
 			  angle=number1+number2*256+number3*256*256+number4*256*256*256;
 			  finalResult[ticks_t1]=angle;
-			  cout << "Caca4" << endl;
 
 			  //Get time after receiving the message
 			  //clock_gettime(CLOCK_MONOTONIC, &endReadMessage[ticks_t2]);
@@ -803,10 +798,6 @@ void *testThread1(void *ptr) {
 		*/
 		//cout << "Loop number : " << ticks_t1 << endl;
 		ticks_t1=ticks_t1+1;
-
-		if(ticks_t1%1000==0){
-			cout << "Caca" << endl;
-		}
 	}
 
 	/* Close the rpmsg_pru character device file */
