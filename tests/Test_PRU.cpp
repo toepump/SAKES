@@ -58,7 +58,7 @@ void *testThread1(void *ptr);
 void *testThread2(void *ptr);
 
 
-const int TIME_MAX = 50000; // time max for the loop in ms
+const int TIME_MAX = 100000; // time max for the loop in ms
 const int TIME_MAX_ENC = 5110; // time max for the loop in ms
 
 const int INTERVALMS =1000000; // in nanosecond
@@ -753,7 +753,7 @@ void *testThread1(void *ptr) {
 	struct timespec totalTimeInLoop;
 	struct pollfd pollfds[1];
 
-	int finalResult[55000];
+	int finalResult[105000];
 	char filename[18] = "/dev/rpmsg_pru31";
 	int angle;
 	char readBuf[MAX_BUFFER_SIZE];
@@ -762,7 +762,7 @@ void *testThread1(void *ptr) {
 	int toPru=30;
 	int result = 0;
 
-	int timeOutput[55000];
+	int timeOutput[105000];
 
 	int sleepOK=0;
 
@@ -862,8 +862,8 @@ void *testThread1(void *ptr) {
 	close(pollfds[0].fd);
 	cout << "End of the loop." << endl;
 
-	fileIntG(timeOutput, 55000);
-	fileIntAngle(finalResult, 55000);
+	fileIntG(timeOutput, 105000);
+	fileIntAngle(finalResult, 105000);
 	//We wait 2 seconds to output the files
 	waitTime.tv_sec+=1;
 	sleepOK=clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &waitTime, NULL);
