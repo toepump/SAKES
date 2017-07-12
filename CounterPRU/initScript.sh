@@ -28,6 +28,6 @@ echo "-Configuring pinmux"
 	config-pin -a $HEADER$PIN_NUMBER46 pruin
 	config-pin -q $HEADER$PIN_NUMBER46
 
-echo "********************************************************"
-echo -e "Done. Now \"echo S > /dev/rpmsg_pru31 && cat /dev/rpmsg_pru31\" and change the logical state of $HEADER$PIN_NUMBER"
-echo "********************************************************"
+# echo "********************************************************"
+# echo -e "Done. Now \"echo S > /dev/rpmsg_pru31 && cat /dev/rpmsg_pru31\" and change the logical state of $HEADER$PIN_NUMBER"
+# echo "********************************************************"

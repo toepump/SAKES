@@ -116,7 +116,7 @@ void main(void)
 								encoder_state=10;
 								angle=angle+1;
 							}else{
-								angle=200;
+								angle=2000;
 							}
 						}else{
 							prev_state_A=__R31 & CHECK_BIT_A;
@@ -127,7 +127,7 @@ void main(void)
 								encoder_state=1;
 								angle=angle+1;
 							}else{
-								angle=200;
+								angle=2200;
 							}
 						}
 					}else if((__R31 ^ prev_state_B) & CHECK_BIT_B){
@@ -141,7 +141,7 @@ void main(void)
 								encoder_state=11;
 								angle=angle+1;
 							}else{
-								angle=200;
+								angle=2400;
 							}
 						}else{
 							prev_state_B=__R31 & CHECK_BIT_B;
@@ -152,7 +152,7 @@ void main(void)
 								encoder_state=0;
 								angle=angle+1;
 							}else{
-								angle=200;
+								angle=2600;
 							}
 						}
 
